@@ -39,7 +39,36 @@ export const asyncRouterMap = [
           }
         ]
       },
-
+      // 组织架构
+      {
+        path: '/orgStructure',
+        redirect: '/orgStructure/org-tree-list',
+        component: PageView,
+        meta: { title: '组织架构', icon: 'solution', permission: ['orgStructure'] },
+        children: [
+          {
+            path: '/orgStructure/org-tree-list',
+            name: 'OrgTreeList',
+            component: () => import('@/views/orgStructure/OrgTreeList'),
+            meta: { title: '组织结构管理', keepAlive: true, permission: ['orgStructure'] }
+          }
+        ]
+      },
+      // 系统管理
+      {
+        path: '/system',
+        redirect: '/system/dictionary/list',
+        component: PageView,
+        meta: { title: '系统管理', icon: 'solution', permission: ['system'] },
+        children: [
+          {
+            path: '/system/dictionary/list',
+            name: 'DictList',
+            component: () => import('@/views/system/dictionary/list'),
+            meta: { title: '数据字典管理', keepAlive: true, permission: ['dictionary'] }
+          }
+        ]
+      },
       // forms
       {
         path: '/form',
