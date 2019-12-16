@@ -5,41 +5,39 @@
         <Tree
           showLine
           @select="onTreeSelect"
+          defaultExpandAll="true"
           :treeData="orgTree">
         </Tree>
       </a-col>
       <a-col :span="19">
-        <s-table
+        <a-table
           ref="table"
           size="default"
           :columns="columns"
-          :data="loadData"
-          :alert="false"
-          :rowSelection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
+          :dataSource="data"
+          :pagination="pagination"
+          :loading="loadingData"
+          @change="handleTableChange"
+          rowKey="id"
         >
           <span slot="action" slot-scope="text, record">
-            <template v-if="$auth('table.update')">
-              <a @click="handleEdit(record)">编辑</a>
-              <a-divider type="vertical" />
-            </template>
+            <a @click="$refs.form.open(record.id)">编辑</a>
+            <a-divider type="vertical" />
             <a-dropdown>
               <a class="ant-dropdown-link">
                 更多 <a-icon type="down" />
               </a>
               <a-menu slot="overlay">
                 <a-menu-item>
-                  <a href="javascript:;">详情</a>
+                  <a href="javascript:;" @click="$refs.detail.open(record.id)">详情</a>
                 </a-menu-item>
-                <a-menu-item v-if="$auth('table.disable')">
-                  <a href="javascript:;">禁用</a>
-                </a-menu-item>
-                <a-menu-item v-if="$auth('table.delete')">
-                  <a href="javascript:;">删除</a>
+                <a-menu-item>
+                  <a href="javascript:;" @click="remove(record.id)">删除</a>
                 </a-menu-item>
               </a-menu>
             </a-dropdown>
           </span>
-        </s-table>
+        </a-table>
       </a-col>
     </a-row>
 
@@ -52,6 +50,7 @@ import { Tree } from 'ant-design-vue'
 import { STable } from '@/components'
 import OrgModal from './modules/OrgModal'
 import { axios } from '@/utils/request'
+import list from '@/components/diboot/mixins/list'
 
 const api = {
   orgTree: '/iam/org/tree',
@@ -67,6 +66,7 @@ export default {
   },
   data () {
     return {
+      name: '',
       openKeys: ['key-01'],
 
       // 查询参数
@@ -119,6 +119,7 @@ export default {
       }
     })
   },
+  mixins: [ list ],
   methods: {
     getOrgTree (parameter) {
       return axios({
@@ -137,13 +138,34 @@ export default {
         params: parameter
       })
     },
-    onTreeSelect (selectedKeys, info) {
-      console.log('selectedKeys', selectedKeys)
-      // 准备表格查询参数，进行查询
-      this.queryParam = {
-        key: selectedKeys[0]
+    getList (parentNodeId) {
+      this.loadingData = true
+      // 过滤掉不存在值的属性
+      const tempQueryParam = {}
+      if (Object.keys(this.queryParam).length > 0) {
+        for (const key in this.queryParam) {
+          if (this.queryParam[key]) {
+            tempQueryParam[key] = this.queryParam[key]
+          }
+        }
       }
-      this.$refs.table.refresh(true)
+      console.log('query', tempQueryParam)
+      axios({
+        url: `/iam/org/childrenList/${parentNodeId}`,
+        params: tempQueryParam,
+        method: 'get'
+      }).then(res => {
+        this.data = res.data
+        console.log('list', res)
+        this.pagination.pageSize = res.page.pageSize
+        this.pagination.current = res.page.pageIndex
+        this.pagination.total = res.page.totalCount
+        this.loadingData = false
+      })
+    },
+    onTreeSelect (selectedKeys, info) {
+      // 准备表格查询参数，进行查询
+      this.getList(selectedKeys[0])
     },
     handleClick (e) {
       console.log('handleClick', e)

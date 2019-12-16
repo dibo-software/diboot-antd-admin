@@ -57,6 +57,35 @@ service.interceptors.response.use((response) => {
   return response.data
 }, err)
 
+// 自定义dibootApi请求快捷方式
+const dibootApi = {
+  get (url, params) {
+    return service.get(url, {
+      params
+    })
+  },
+  post (url, data) {
+    return service({
+      method: 'POST',
+      url,
+      data: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8'
+      }
+    })
+  },
+  put (url, data) {
+    return service({
+      method: 'PUT',
+      url,
+      data: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8'
+      }
+    })
+  }
+}
+
 const installer = {
   vm: {},
   install (Vue) {
@@ -66,5 +95,6 @@ const installer = {
 
 export {
   installer as VueAxios,
-  service as axios
+  service as axios,
+  dibootApi
 }
