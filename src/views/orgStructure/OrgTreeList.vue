@@ -4,12 +4,37 @@
       <a-col :span="5">
         <Tree
           showLine
+          v-if="defaultExpandAll"
           @select="onTreeSelect"
-          defaultExpandAll="true"
+          :defaultExpandAll="defaultExpandAll"
           :treeData="orgTree">
         </Tree>
       </a-col>
       <a-col :span="19">
+        <div class="table-page-search-wrapper">
+          <a-form layout="inline" @submit.native="getList">
+            <a-row :gutter="48">
+              <a-col :md="8" :sm="24">
+                <a-form-item label="类型名称">
+                  <a-input placeholder="名称" v-model="queryParam.itemName" />
+                </a-form-item>
+              </a-col>
+              <a-col :md="8" :sm="24">
+                <a-form-item label="类型编码">
+                  <a-input placeholder="编码" v-model="queryParam.type" />
+                </a-form-item>
+              </a-col>
+              <a-col :md="6" :sm="24">
+            <span class="table-page-search-submitButtons">
+              <a-button type="primary" htmlType="submit">查询</a-button>
+              <a-button @click="reset">重置</a-button>
+              <a-button icon="plus" type="primary" @click="$refs.form.open(undefined)">新建</a-button>
+            </span>
+              </a-col>
+            </a-row>
+          </a-form>
+        </div>
+
         <a-table
           ref="table"
           size="default"
@@ -40,17 +65,18 @@
         </a-table>
       </a-col>
     </a-row>
-
-    <org-modal ref="modal" @ok="handleSaveOk" @close="handleSaveClose" />
+    <diboot-form ref="form" @refreshList="getList"></diboot-form>
+    <diboot-detail ref="detail"></diboot-detail>
   </a-card>
 </template>
 
 <script>
 import { Tree } from 'ant-design-vue'
 import { STable } from '@/components'
-import OrgModal from './modules/OrgModal'
 import { axios } from '@/utils/request'
 import list from '@/components/diboot/mixins/list'
+import dibootForm from './form'
+import dibootDetail from './detail'
 
 const api = {
   orgTree: '/iam/org/tree',
@@ -62,20 +88,25 @@ export default {
   components: {
     STable,
     Tree,
-    OrgModal
+    dibootForm,
+    dibootDetail
   },
   data () {
     return {
       name: '',
-      openKeys: ['key-01'],
-
+      defaultExpandAll: false,
       // 查询参数
       queryParam: {},
+      currentNodeId: 0,
       // 表头
       columns: [
         {
           title: '#',
           dataIndex: 'id'
+        },
+        {
+          title: '简称',
+          dataIndex: 'shortName'
         },
         {
           title: '全称',
@@ -97,25 +128,14 @@ export default {
           scopedSlots: { customRender: 'action' }
         }
       ],
-      // 加载数据方法 必须为 Promise 对象
-      loadData: parameter => {
-        const queryObj = { parentNode: this.queryParam }
-        return this.getOrgChildrenList(Object.assign(parameter, queryObj))
-          .then(res => {
-            if (res.code === 0) {
-              return res.data
-            }
-          })
-      },
-      orgTree: [],
-      selectedRowKeys: [],
-      selectedRows: []
+      orgTree: []
     }
   },
   created () {
     this.getOrgTree().then(res => {
       if (res.code === 0) {
         this.orgTree = this.orgTreeListFormatter(res.data)
+        this.defaultExpandAll = true
       }
     })
   },
@@ -128,17 +148,7 @@ export default {
         params: parameter
       })
     },
-    getOrgChildrenList (parameter) {
-      let key = parameter.parentNode.key
-      key = key === undefined ? 1 : key
-      console.log('key===>', key)
-      return axios({
-        url: `${api.orgChildrenList}/${key}`,
-        method: 'get',
-        params: parameter
-      })
-    },
-    getList (parentNodeId) {
+    getList () {
       this.loadingData = true
       // 过滤掉不存在值的属性
       const tempQueryParam = {}
@@ -151,7 +161,7 @@ export default {
       }
       console.log('query', tempQueryParam)
       axios({
-        url: `/iam/org/childrenList/${parentNodeId}`,
+        url: `/iam/org/childrenList/${this.currentNodeId}`,
         params: tempQueryParam,
         method: 'get'
       }).then(res => {
@@ -164,37 +174,9 @@ export default {
       })
     },
     onTreeSelect (selectedKeys, info) {
+      this.currentNodeId = selectedKeys[0]
       // 准备表格查询参数，进行查询
-      this.getList(selectedKeys[0])
-    },
-    handleClick (e) {
-      console.log('handleClick', e)
-      this.queryParam = {
-        key: e.key
-      }
-      // this.$refs.table.refresh(true)
-    },
-    handleAdd (item) {
-      console.log('add button, item', item)
-      this.$message.info(`提示：你点了 ${item.key} - ${item.title} `)
-      this.$refs.modal.add(item.key)
-    },
-    handleTitleClick (item) {
-      console.log('handleTitleClick', item)
-    },
-    titleClick (e) {
-      console.log('titleClick', e)
-    },
-    handleSaveOk () {
-
-    },
-    handleSaveClose () {
-
-    },
-
-    onSelectChange (selectedRowKeys, selectedRows) {
-      this.selectedRowKeys = selectedRowKeys
-      this.selectedRows = selectedRows
+      this.getList()
     },
 
     /***
@@ -223,26 +205,12 @@ export default {
 }
 </script>
 
-<style lang="less">
+<style scoped lang="less">
+  .table-page-search-submitButtons {
+    display: flex;
+    justify-content: space-around;
+  }
   .custom-tree {
-
-    /deep/ .ant-menu-item-group-title {
-      position: relative;
-      &:hover {
-        .btn {
-          display: block;
-        }
-      }
-    }
-
-    /deep/ .ant-menu-item {
-      &:hover {
-        .btn {
-          display: block;
-        }
-      }
-    }
-
     /deep/ .btn {
       display: none;
       position: absolute;
