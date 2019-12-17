@@ -11,7 +11,7 @@
         <a-col :span="12">
           <a-form-item label="父级">
             <a-select
-              v-if="more.iamOrgKvList"
+              v-if="more.iamOrgKvList !== undefined"
               :getPopupContainer="getPopupContainer"
               placeholder="请选择父级"
               v-decorator="[
@@ -22,11 +22,11 @@
               ]"
             >
               <a-select-option
-                v-for="(iamOrg, index) in more.iamOrgKvList"
+                v-for="(org, index) in more.iamOrgKvList"
                 :key="index"
-                :value="iamOrg.v"
+                :value="org.k"
               >
-                {{ iamOrg.k }}
+                {{ org.v }}
               </a-select-option>
             </a-select>
           </a-form-item>
@@ -76,6 +76,31 @@
           </a-form-item>
         </a-col>
       </a-row>
+      <a-row :gutter="16">
+        <a-col :span="12">
+          <a-form-item label="类型">
+            <a-select
+              v-if="more.orgTypeKvList !== undefined"
+              :getPopupContainer="getPopupContainer"
+              placeholder="请选择类型"
+              v-decorator="[
+                'orgType',
+                {
+                  initialValue: model.orgType
+                }
+              ]"
+            >
+              <a-select-option
+                v-for="(type, index) in more.orgTypeKvList"
+                :key="index"
+                :value="type.v"
+              >
+                {{ type.k }}
+              </a-select-option>
+            </a-select>
+          </a-form-item>
+        </a-col>
+      </a-row>
     </a-form>
 
     <div class="footer">
@@ -102,7 +127,7 @@ export default {
   name: 'DictionaryDrawer',
   data () {
     return {
-      name: 'dictionary',
+      name: 'iam/org',
       form: this.$form.createForm(this),
       children: [],
       childItem: _.cloneDeep(CHILDREN_ITEM_DEFAULT),

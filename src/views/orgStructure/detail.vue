@@ -38,7 +38,7 @@ export default {
   name: 'DictionaryDetail',
   data () {
     return {
-      name: 'dictionary',
+      name: 'iam/org',
       children: []
     }
   },

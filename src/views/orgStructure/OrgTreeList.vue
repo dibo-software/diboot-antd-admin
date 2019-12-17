@@ -65,7 +65,7 @@
         </a-table>
       </a-col>
     </a-row>
-    <diboot-form ref="form" @refreshList="getList"></diboot-form>
+    <diboot-form :more="more" ref="form" @refreshList="getList"></diboot-form>
     <diboot-detail ref="detail"></diboot-detail>
   </a-card>
 </template>
@@ -74,7 +74,7 @@
 import { Tree } from 'ant-design-vue'
 import { STable } from '@/components'
 import { axios } from '@/utils/request'
-import list from '@/components/diboot/mixins/list'
+import treeList from '@/components/diboot/mixins/treeList'
 import dibootForm from './form'
 import dibootDetail from './detail'
 
@@ -93,11 +93,14 @@ export default {
   },
   data () {
     return {
-      name: '',
+      name: 'iam/org',
       defaultExpandAll: false,
       // 查询参数
       queryParam: {},
       currentNodeId: 0,
+      getMore: true,
+      getTreeListApiPrefix: '/iam/org/childrenList',
+      apiPrefix: '/iam/org',
       // 表头
       columns: [
         {
@@ -139,7 +142,7 @@ export default {
       }
     })
   },
-  mixins: [ list ],
+  mixins: [ treeList ],
   methods: {
     getOrgTree (parameter) {
       return axios({
@@ -148,31 +151,7 @@ export default {
         params: parameter
       })
     },
-    getList () {
-      this.loadingData = true
-      // 过滤掉不存在值的属性
-      const tempQueryParam = {}
-      if (Object.keys(this.queryParam).length > 0) {
-        for (const key in this.queryParam) {
-          if (this.queryParam[key]) {
-            tempQueryParam[key] = this.queryParam[key]
-          }
-        }
-      }
-      console.log('query', tempQueryParam)
-      axios({
-        url: `/iam/org/childrenList/${this.currentNodeId}`,
-        params: tempQueryParam,
-        method: 'get'
-      }).then(res => {
-        this.data = res.data
-        console.log('list', res)
-        this.pagination.pageSize = res.page.pageSize
-        this.pagination.current = res.page.pageIndex
-        this.pagination.total = res.page.totalCount
-        this.loadingData = false
-      })
-    },
+
     onTreeSelect (selectedKeys, info) {
       this.currentNodeId = selectedKeys[0]
       // 准备表格查询参数，进行查询
