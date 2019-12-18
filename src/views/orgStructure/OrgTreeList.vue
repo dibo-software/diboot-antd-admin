@@ -9,12 +9,11 @@
         </a-row>
         <a-tree
           showLine
-          v-if="defaultExpandAll"
+          v-if="showTree"
           @select="onTreeSelect"
           @expand="onExpand"
           :expandedKeys="expandedKeys"
           :autoExpandParent="autoExpandParent"
-          :defaultExpandAll="defaultExpandAll"
           :treeData="treeList">
           <template slot="title" slot-scope="{title}">
             <span v-if="title.indexOf(searchValue) > -1">
@@ -163,7 +162,14 @@ export default {
     },
     onSearchChange (e) {
       const value = e.target.value
-      this.expandedKeys = this.getExpandedKeys(this.treeList, value)
+      const expandedKeys = this.getExpandedKeys(this.treeList, value)
+      if (expandedKeys.length > 0) {
+        Object.assign(this, {
+          expandedKeys,
+          searchValue: value,
+          autoExpandParent: true
+        })
+      }
     },
     getExpandedKeys (list, value) {
       const allExpandedKeys = []
@@ -216,13 +222,26 @@ export default {
         const formatterOrg = {}
         formatterOrg.key = org.id
         formatterOrg.title = org.shortName
+        formatterOrg.scopedSlots = { title: 'title' }
         const children = this.treeListFormatter(org.children)
         if (children !== undefined) {
           formatterOrg.children = children
         }
         formatterOrgList.push(formatterOrg)
       })
+      // 如果需要默认展开所有，则初始化展开数据
+      this.expandedKeys = this.getInitExpandedKeys(formatterOrgList)
       return formatterOrgList
+    },
+    getInitExpandedKeys (list) {
+      const keys = []
+      list.forEach(item => {
+        if (item.children && item.children.length > 0) {
+          keys.push(item.key)
+          keys.push(...this.getInitExpandedKeys(item.children))
+        }
+      })
+      return keys
     }
   }
 }

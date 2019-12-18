@@ -3,7 +3,7 @@ export default {
   data () {
     return {
       treeList: {},
-      defaultExpandAll: false,
+      showTree: false,
       queryParam: {},
       data: [],
       getMore: false,
@@ -26,7 +26,7 @@ export default {
         method: 'get'
       }).then(res => {
         this.treeList = this.treeListFormatter(res.data)
-        this.defaultExpandAll = true
+        this.showTree = true
       })
     },
     onTreeSelect (selectedKeys, info) {
