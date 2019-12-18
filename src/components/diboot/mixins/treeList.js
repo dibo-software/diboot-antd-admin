@@ -30,9 +30,12 @@ export default {
       })
     },
     onTreeSelect (selectedKeys, info) {
-      this.currentNodeId = selectedKeys[0]
-      // 准备表格查询参数，进行查询
-      this.getList()
+      if (selectedKeys && selectedKeys.length > 0) {
+        // 设置当前节点
+        this.currentNodeId = selectedKeys[0]
+        // 准备表格查询参数，进行查询
+        this.getList()
+      }
     },
     refreshPage () {
       this.loadTree()

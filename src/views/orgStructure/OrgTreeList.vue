@@ -30,13 +30,28 @@
           <a-form layout="inline" @submit.native="getList">
             <a-row :gutter="48">
               <a-col :md="8" :sm="24">
-                <a-form-item label="类型名称">
-                  <a-input placeholder="名称" v-model="queryParam.itemName" />
+                <a-form-item label="名称">
+                  <a-input placeholder="名称" v-model="queryParam.name" />
                 </a-form-item>
               </a-col>
               <a-col :md="8" :sm="24">
-                <a-form-item label="类型编码">
-                  <a-input placeholder="编码" v-model="queryParam.type" />
+                <a-form-item label="类型">
+                  <a-select
+                    v-if="more.orgTypeKvList !== undefined"
+                    v-model="queryParam.type"
+                    placeholder="类型"
+                  >
+                    <a-select-option value="">
+                      不限
+                    </a-select-option>
+                    <a-select-option
+                      v-for="(type, index) in more.orgTypeKvList"
+                      :key="index"
+                      :value="type.v"
+                    >
+                      {{ type.k }}
+                    </a-select-option>
+                  </a-select>
                 </a-form-item>
               </a-col>
               <a-col :md="6" :sm="24">
