@@ -2,6 +2,8 @@ import { axios } from '@/utils/request'
 export default {
   data () {
     return {
+      treeList: {},
+      defaultExpandAll: false,
       queryParam: {},
       data: [],
       getMore: false,
@@ -18,8 +20,28 @@ export default {
     }
   },
   methods: {
+    loadTree () {
+      axios({
+        url: this.getTreeApi,
+        method: 'get'
+      }).then(res => {
+        this.treeList = this.treeListFormatter(res.data)
+        this.defaultExpandAll = true
+      })
+    },
+    onTreeSelect (selectedKeys, info) {
+      this.currentNodeId = selectedKeys[0]
+      // 准备表格查询参数，进行查询
+      this.getList()
+    },
+    refreshPage () {
+      this.loadTree()
+      this.getList()
+    },
+    treeListFormatter (treeList) {
+      return treeList
+    },
     handleTableChange (pagination) {
-      console.log('handleTableChange', '++++')
       this.queryParam.pageIndex = pagination.current
       this.queryParam.pageSize = pagination.pageSize
       this.getList()
@@ -79,12 +101,21 @@ export default {
             url: `/${_this.name}/${id}`,
             method: 'delete'
           }).then((res) => {
-            _this.$notification.success({
-              message: '删除成功',
-              description: '',
-              duration: 2
-            })
-            _this.getList()
+            if (res.code === 0) {
+              _this.$notification.success({
+                message: '删除成功',
+                description: '',
+                duration: 2
+              })
+              _this.loadTree()
+              _this.getList()
+            } else {
+              _this.$notification.error({
+                message: '删除失败',
+                description: res.msg,
+                duration: 2
+              })
+            }
           }).catch(err => {
             _this.$notification.error({
               message: '删除失败',
@@ -96,8 +127,10 @@ export default {
       })
     }
   },
+  created () {
+    this.loadTree()
+  },
   async mounted () {
-    console.log('mounted', this.getListFromMixin)
     if (this.getListFromMixin === true) {
       await this.getList()
     }

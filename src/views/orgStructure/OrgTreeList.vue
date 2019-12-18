@@ -7,7 +7,7 @@
           v-if="defaultExpandAll"
           @select="onTreeSelect"
           :defaultExpandAll="defaultExpandAll"
-          :treeData="orgTree">
+          :treeData="treeList">
         </Tree>
       </a-col>
       <a-col :span="19">
@@ -45,6 +45,14 @@
           @change="handleTableChange"
           rowKey="id"
         >
+          <span slot="type" slot-scope="text">
+            <template v-if="text && more.orgTypeKvMap && more.orgTypeKvMap[text]">
+              <a-tag :color="text==='COMP' ? 'blue' : 'cyan'" >{{ more.orgTypeKvMap[text]['k'] }}</a-tag>
+            </template>
+            <template v-else>
+              <span>-</span>
+            </template>
+          </span>
           <span slot="action" slot-scope="text, record">
             <a @click="$refs.form.open(record.id)">编辑</a>
             <a-divider type="vertical" />
@@ -65,15 +73,13 @@
         </a-table>
       </a-col>
     </a-row>
-    <diboot-form :more="more" ref="form" @refreshList="getList"></diboot-form>
-    <diboot-detail ref="detail"></diboot-detail>
+    <diboot-form :more="more" :currentNodeId="currentNodeId" ref="form" @refreshList="refreshPage"></diboot-form>
+    <diboot-detail :more="more" ref="detail"></diboot-detail>
   </a-card>
 </template>
 
 <script>
 import { Tree } from 'ant-design-vue'
-import { STable } from '@/components'
-import { axios } from '@/utils/request'
 import treeList from '@/components/diboot/mixins/treeList'
 import dibootForm from './form'
 import dibootDetail from './detail'
@@ -86,7 +92,6 @@ const api = {
 export default {
   name: 'OrgTreeList',
   components: {
-    STable,
     Tree,
     dibootForm,
     dibootDetail
@@ -94,12 +99,12 @@ export default {
   data () {
     return {
       name: 'iam/org',
-      defaultExpandAll: false,
       // 查询参数
       queryParam: {},
       currentNodeId: 0,
       getMore: true,
       getTreeListApiPrefix: '/iam/org/childrenList',
+      getTreeApi: api.orgTree,
       apiPrefix: '/iam/org',
       // 表头
       columns: [
@@ -117,12 +122,12 @@ export default {
         },
         {
           title: '类型',
-          dataIndex: 'type'
+          dataIndex: 'type',
+          scopedSlots: { customRender: 'type' }
         },
         {
           title: '创建时间',
-          dataIndex: 'createTime',
-          sorter: true
+          dataIndex: 'createTime'
         },
         {
           table: '操作',
@@ -130,40 +135,17 @@ export default {
           width: '150px',
           scopedSlots: { customRender: 'action' }
         }
-      ],
-      orgTree: []
+      ]
     }
-  },
-  created () {
-    this.getOrgTree().then(res => {
-      if (res.code === 0) {
-        this.orgTree = this.orgTreeListFormatter(res.data)
-        this.defaultExpandAll = true
-      }
-    })
   },
   mixins: [ treeList ],
   methods: {
-    getOrgTree (parameter) {
-      return axios({
-        url: api.orgTree,
-        method: 'get',
-        params: parameter
-      })
-    },
-
-    onTreeSelect (selectedKeys, info) {
-      this.currentNodeId = selectedKeys[0]
-      // 准备表格查询参数，进行查询
-      this.getList()
-    },
-
     /***
      * orgList格式化
      * @param orgList
      * @returns {undefined}
      */
-    orgTreeListFormatter (orgList) {
+    treeListFormatter (orgList) {
       if (!orgList || orgList.length === 0) {
         return undefined
       }
@@ -172,7 +154,7 @@ export default {
         const formatterOrg = {}
         formatterOrg.key = org.id
         formatterOrg.title = org.shortName
-        const children = this.orgTreeListFormatter(org.children)
+        const children = this.treeListFormatter(org.children)
         if (children !== undefined) {
           formatterOrg.children = children
         }

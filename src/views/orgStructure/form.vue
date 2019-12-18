@@ -9,18 +9,19 @@
     <a-form layout="vertical" :form="form">
       <a-row :gutter="16">
         <a-col :span="12">
-          <a-form-item label="父级">
+          <a-form-item label="上级部门">
             <a-select
               v-if="more.iamOrgKvList !== undefined"
               :getPopupContainer="getPopupContainer"
-              placeholder="请选择父级"
+              placeholder="请选择上级部门"
               v-decorator="[
                 'parentId',
                 {
-                  initialValue: model.parentId
+                  initialValue: parentId
                 }
               ]"
             >
+              <a-select-option :value="'0'">-无-</a-select-option>
               <a-select-option
                 v-for="(org, index) in more.iamOrgKvList"
                 :key="index"
@@ -84,9 +85,10 @@
               :getPopupContainer="getPopupContainer"
               placeholder="请选择类型"
               v-decorator="[
-                'orgType',
+                'type',
                 {
-                  initialValue: model.orgType
+                  initialValue: model.type,
+                  rules: [{ required: true, message: '类型不能为空', whitespace: true }]
                 }
               ]"
             >
@@ -124,7 +126,7 @@ const CHILDREN_BTN_CONFIG_DEFAULT = {
 // eslint-disable-next-line standard/object-curly-even-spacing
 const CHILDREN_ITEM_DEFAULT = { id: '', itemName: '', itemValue: '' }
 export default {
-  name: 'DictionaryDrawer',
+  name: 'OrgStructureDrawer',
   data () {
     return {
       name: 'iam/org',
@@ -226,11 +228,25 @@ export default {
       values.children = this.children
     }
   },
+  computed: {
+    parentId: function () {
+      if (this.model === undefined || !this.model.parentId) {
+        return this.currentNodeId.toString(10)
+      }
+      return this.model.parentId.toString(10)
+    }
+  },
   props: {
     more: {
       type: Object,
       default: () => {
         return {}
+      }
+    },
+    currentNodeId: {
+      type: Number,
+      default: () => {
+        return 0
       }
     }
   }

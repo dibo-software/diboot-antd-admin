@@ -8,18 +8,17 @@
   >
     <a-spin :spinning="spinning">
       <detail-list :col="2">
-        <detail-list-item term="类型名称">{{ model.itemName }}</detail-list-item>
-        <detail-list-item term="类型编码">{{ model.type }}</detail-list-item>
+        <detail-list-item term="上级部门">{{ parentName }}</detail-list-item>
+        <detail-list-item term="编码">{{ model.code }}</detail-list-item>
       </detail-list>
-      <detail-list :col="1">
-        <detail-list-item term="包含子项">
-          <template v-for="(item,i) in children">
-            <a-tag color="blue" :key="i">{{ item.itemName }}({{ item.itemValue }})</a-tag>
-          </template>
+      <detail-list :col="2">
+        <detail-list-item term="简称">{{ model.shortName }}</detail-list-item>
+        <detail-list-item term="全称">{{ model.name }}</detail-list-item>
+      </detail-list>
+      <detail-list :col="1" v-if="model.type && more.orgTypeKvMap && more.orgTypeKvMap[model.type]">
+        <detail-list-item term="类型">
+          <a-tag :color="model.type==='COMP' ? 'blue' : 'cyan'" >{{ more.orgTypeKvMap[model.type]['k'] }}</a-tag>
         </detail-list-item>
-      </detail-list>
-      <detail-list :col="1">
-        <detail-list-item term="备注">{{ model.comment || '-' }}</detail-list-item>
       </detail-list>
     </a-spin>
 
@@ -35,7 +34,7 @@ import { dibootApi } from '@/utils/request'
 import DetailList from '@/components/tools/DetailList'
 const DetailListItem = DetailList.Item
 export default {
-  name: 'DictionaryDetail',
+  name: 'OrgTreeDetail',
   data () {
     return {
       name: 'iam/org',
@@ -74,6 +73,22 @@ export default {
       this.visible = false
       this.model = {}
       this.children = []
+    }
+  },
+  computed: {
+    parentName: function () {
+      if (this.model === undefined || !this.model.parentShortName) {
+        return '-无-'
+      }
+      return this.model.parentShortName
+    }
+  },
+  props: {
+    more: {
+      type: Object,
+      default: () => {
+        return {}
+      }
     }
   }
 }
