@@ -2,13 +2,29 @@
   <a-card :bordered="false">
     <a-row :gutter="8">
       <a-col :span="5">
-        <Tree
+        <a-row>
+          <a-col :span="20">
+            <a-input-search style="margin-bottom: 8px" placeholder="请输入内容" @change="onSearchChange" />
+          </a-col>
+        </a-row>
+        <a-tree
           showLine
           v-if="defaultExpandAll"
           @select="onTreeSelect"
+          @expand="onExpand"
+          :expandedKeys="expandedKeys"
+          :autoExpandParent="autoExpandParent"
           :defaultExpandAll="defaultExpandAll"
           :treeData="treeList">
-        </Tree>
+          <template slot="title" slot-scope="{title}">
+            <span v-if="title.indexOf(searchValue) > -1">
+              {{ title.substr(0, title.indexOf(searchValue)) }}
+              <span style="color: #f50">{{ searchValue }}</span>
+              {{ title.substr(title.indexOf(searchValue) + searchValue.length) }}
+            </span>
+            <span v-else>{{ title }}</span>
+          </template>
+        </a-tree>
       </a-col>
       <a-col :span="19">
         <div class="table-page-search-wrapper">
@@ -25,11 +41,11 @@
                 </a-form-item>
               </a-col>
               <a-col :md="6" :sm="24">
-            <span class="table-page-search-submitButtons">
-              <a-button type="primary" htmlType="submit">查询</a-button>
-              <a-button @click="reset">重置</a-button>
-              <a-button icon="plus" type="primary" @click="$refs.form.open(undefined)">新建</a-button>
-            </span>
+                <span class="table-page-search-submitButtons">
+                  <a-button type="primary" htmlType="submit">查询</a-button>
+                  <a-button @click="reset">重置</a-button>
+                  <a-button icon="plus" type="primary" @click="$refs.form.open(undefined)">新建</a-button>
+                </span>
               </a-col>
             </a-row>
           </a-form>
@@ -99,13 +115,15 @@ export default {
   data () {
     return {
       name: 'iam/org',
-      // 查询参数
+      apiPrefix: '/iam/org',
       queryParam: {},
       currentNodeId: 0,
       getMore: true,
       getTreeListApiPrefix: '/iam/org/childrenList',
       getTreeApi: api.orgTree,
-      apiPrefix: '/iam/org',
+      expandedKeys: [],
+      searchValue: '',
+      autoExpandParent: true,
       // 表头
       columns: [
         {
@@ -140,6 +158,50 @@ export default {
   },
   mixins: [ treeList ],
   methods: {
+    onExpand (expandedKeys) {
+      this.expandedKeys = expandedKeys
+    },
+    onSearchChange (e) {
+      const value = e.target.value
+      this.expandedKeys = this.getExpandedKeys(this.treeList, value)
+    },
+    getExpandedKeys (list, value) {
+      const allExpandedKeys = []
+      const expandedKeys = list
+        .map(item => {
+          // 对children进行查找
+          if (item.children && item.children.length > 0) {
+            const childrenExpandedKeys = this.getExpandedKeys(item.children, value)
+            if (childrenExpandedKeys.length > 0) {
+              allExpandedKeys.push(...childrenExpandedKeys)
+            }
+          }
+          if (item.title.indexOf(value) > -1) {
+            return this.getParentKey(item.key, this.treeList)
+          }
+          return null
+        })
+        .filter((item, i, self) => item && self.indexOf(item) === i)
+      if (expandedKeys.length > 0) {
+        allExpandedKeys.push(...expandedKeys)
+      }
+
+      return allExpandedKeys
+    },
+    getParentKey (key, tree) {
+      let parentKey
+      for (let i = 0; i < tree.length; i++) {
+        const node = tree[i]
+        if (node.children) {
+          if (node.children.some(item => item.key === key)) {
+            parentKey = node.key
+          } else if (this.getParentKey(key, node.children)) {
+            parentKey = this.getParentKey(key, node.children)
+          }
+        }
+      }
+      return parentKey
+    },
     /***
      * orgList格式化
      * @param orgList
