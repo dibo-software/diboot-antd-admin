@@ -11,7 +11,7 @@ export default {
       queryParam: {},
       data: [],
       getMore: false,
-      getListFromMixin: true,
+      initList: true,
       more: {},
       loadingData: false,
       pagination: {
@@ -199,7 +199,7 @@ export default {
     this.loadTree()
   },
   async mounted () {
-    if (this.getListFromMixin === true) {
+    if (this.initList === true) {
       await this.getList()
     }
     if (this.getMore === true) {

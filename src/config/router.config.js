@@ -49,8 +49,14 @@ export const asyncRouterMap = [
           {
             path: '/orgStructure/org-tree-list',
             name: 'OrgTreeList',
-            component: () => import('@/views/orgStructure/OrgTreeList'),
+            component: () => import('@/views/orgStructure/org/OrgTreeList'),
             meta: { title: '组织结构管理', keepAlive: true, permission: ['orgStructure'] }
+          },
+          {
+            path: '/orgStructrue/role-permission-list',
+            name: 'RolePermissionList',
+            component: () => import('@/views/orgStructure/rolePermission/list'),
+            meta: { title: '角色权限管理', keeplive: true, permission: ['orgStructure'] }
           }
         ]
       },
