@@ -130,14 +130,9 @@ export default {
     return {
       name: 'iam/org',
       apiPrefix: '/iam/org',
-      queryParam: {},
-      currentNodeId: 0,
       getMore: true,
-      getTreeListApiPrefix: '/iam/org/childrenList',
+      getTreeListApiPrefix: api.orgChildrenList,
       getTreeApi: api.orgTree,
-      expandedKeys: [],
-      searchValue: '',
-      autoExpandParent: true,
       // 表头
       columns: [
         {
@@ -172,57 +167,6 @@ export default {
   },
   mixins: [ treeList ],
   methods: {
-    onExpand (expandedKeys) {
-      this.expandedKeys = expandedKeys
-    },
-    onSearchChange (e) {
-      const value = e.target.value
-      const expandedKeys = this.getExpandedKeys(this.treeList, value)
-      if (expandedKeys.length > 0) {
-        Object.assign(this, {
-          expandedKeys,
-          searchValue: value,
-          autoExpandParent: true
-        })
-      }
-    },
-    getExpandedKeys (list, value) {
-      const allExpandedKeys = []
-      const expandedKeys = list
-        .map(item => {
-          // 对children进行查找
-          if (item.children && item.children.length > 0) {
-            const childrenExpandedKeys = this.getExpandedKeys(item.children, value)
-            if (childrenExpandedKeys.length > 0) {
-              allExpandedKeys.push(...childrenExpandedKeys)
-            }
-          }
-          if (item.title.indexOf(value) > -1) {
-            return this.getParentKey(item.key, this.treeList)
-          }
-          return null
-        })
-        .filter((item, i, self) => item && self.indexOf(item) === i)
-      if (expandedKeys.length > 0) {
-        allExpandedKeys.push(...expandedKeys)
-      }
-
-      return allExpandedKeys
-    },
-    getParentKey (key, tree) {
-      let parentKey
-      for (let i = 0; i < tree.length; i++) {
-        const node = tree[i]
-        if (node.children) {
-          if (node.children.some(item => item.key === key)) {
-            parentKey = node.key
-          } else if (this.getParentKey(key, node.children)) {
-            parentKey = this.getParentKey(key, node.children)
-          }
-        }
-      }
-      return parentKey
-    },
     /***
      * orgList格式化
      * @param orgList
@@ -247,16 +191,6 @@ export default {
       // 如果需要默认展开所有，则初始化展开数据
       this.expandedKeys = this.getInitExpandedKeys(formatterOrgList)
       return formatterOrgList
-    },
-    getInitExpandedKeys (list) {
-      const keys = []
-      list.forEach(item => {
-        if (item.children && item.children.length > 0) {
-          keys.push(item.key)
-          keys.push(...this.getInitExpandedKeys(item.children))
-        }
-      })
-      return keys
     }
   }
 }
