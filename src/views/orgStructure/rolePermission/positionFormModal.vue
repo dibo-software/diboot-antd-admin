@@ -2,8 +2,8 @@
   <a-modal
     title="Title"
     :visible="state.visible"
-    @ok="handleOk"
-    :confirmLoading="confirmLoading"
+    @ok="onSubmit()"
+    :confirmLoading="state.submitBtn"
     @cancel="close"
   >
     <a-form :form="form">
@@ -34,19 +34,20 @@
       <a-form-item label="职级" :label-col="{ span: 5 }" :wrapper-col="{ span: 18 }">
         <a-select
           showSearch
+          @change="onGradeValueChanged"
           :filterOption="filterOption"
           v-decorator="[
-              'orgId',
+              'gradeValue',
               {
-                initialValue: currentNode
+                initialValue: model.gradeValue
               }
             ]"
           placeholder="请选择职级"
         >
           <a-select-option
-            v-for="kv in sourceKvList"
-            :key="kv.k"
-            :value="kv.k">
+            v-for="kv in reloadMore.positionGradeKvList"
+            :key="kv.v"
+            :value="kv.v">
             {{ kv.v }}
           </a-select-option>
         </a-select>
@@ -84,12 +85,19 @@ export default {
   data () {
     return {
       name: 'iam/position',
-      confirmLoading: false,
+      getMore: true,
       form: this.$form.createForm(this)
     }
   },
   mixins: [form],
   methods: {
+    onGradeValueChanged (value) {
+      if (value && this.reloadMore && this.reloadMore.positionGradeKvMap && this.reloadMore.positionGradeKvMap[value]) {
+        this.form.setFieldsValue({
+          gradeName: this.reloadMore.positionGradeKvMap[value]['k']
+        })
+      }
+    },
     async afterOpen (id) {
       if (id === undefined) {
         return

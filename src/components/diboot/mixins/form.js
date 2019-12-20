@@ -1,4 +1,4 @@
-import { dibootApi } from '@/utils/request'
+import { axios, dibootApi } from '@/utils/request'
 import { mapGetters } from 'vuex'
 import moment from 'moment'
 
@@ -15,6 +15,8 @@ export default {
       },
       model: {},
       title: '',
+      getMore: false,
+      reloadMore: {},
       state: {
         visible: false,
         submitBtn: false
@@ -52,7 +54,6 @@ export default {
           })
         }
       }
-      console.log('this.model--', this.model)
     },
     close () {
       this.state.visible = false
@@ -66,8 +67,6 @@ export default {
     validate () {
       return new Promise((resolve, reject) => {
         this.form.validateFields((err, values) => {
-          console.log(err)
-          console.log(values)
           if (!err) {
             resolve(values)
           } else {
@@ -93,7 +92,7 @@ export default {
     async add (values) {
       const res = await dibootApi.post(`/${this.name}/`, values)
       if (res.code === 0) {
-        return '添加记录成功'
+        return { data: res.data, msg: '添加记录成功' }
       } else {
         throw new Error(res.msg)
       }
@@ -106,7 +105,7 @@ export default {
     async update (values) {
       const res = await dibootApi.put(`/${this.name}/${this.model.id}`, values)
       if (res.code === 0) {
-        return '更新记录成功'
+        return { data: res.data, msg: '更新记录成功' }
       } else {
         throw new Error(res.msg)
       }
@@ -120,19 +119,19 @@ export default {
       const values = await this.validate()
       this.enhance(values)
       try {
-        let msg = ''
+        let result = {}
         if (this.model.id === undefined) {
           values.createBy = this.userInfo.currentUserId
           // 新增该记录
-          msg = await this.add(values)
+          result = await this.add(values)
         } else {
           // 更新该记录
           values['id'] = this.model.id
-          msg = await this.update(values)
+          result = await this.update(values)
         }
 
         // 执行提交失败后的一系列后续操作
-        this.submitSuccess(msg)
+        this.submitSuccess(result)
       } catch (e) {
         // 执行一系列后续操作
         this.submitFailed(e)
@@ -142,23 +141,37 @@ export default {
      * 提交成功之后的处理
      * @param msg
      */
-    submitSuccess (msg) {
+    submitSuccess (result) {
       this.$notification.success({
         message: '操作成功',
-        description: msg
+        description: result.msg
       })
       this.close()
       this.form.resetFields()
       this.$emit('refreshList')
+      console.log('result.data==>', result.data)
+      this.$emit('changeKey', result.data)
     },
     /***
      * 提交失败之后的处理
      * @param e
      */
     submitFailed (e) {
+      // 如果是字符串，直接提示
+      let msg
+      if (typeof e === 'string') {
+        msg = e
+      } else {
+        msg = e.message || e.msg
+      }
+
+      // 如果还没有消息内容，则可能是校验错误信息，进行校验错误信息提取
+      if (!msg && typeof e === 'object') {
+        msg = this.validateErrorToMsg(e)
+      }
       this.$notification.error({
         message: '操作失败',
-        description: e.message || e.msg || e
+        description: msg
       })
     },
     // 解决带有下拉框组件在滚动时下拉框不随之滚动的问题
@@ -171,6 +184,30 @@ export default {
      */
     afterOpen (id) {
 
+    },
+    attachMore () {
+      axios({
+        url: `/${this.name}/attachMore`,
+        method: 'get'
+      }).then(res => {
+        this.reloadMore = res.data
+      })
+    },
+    /***
+     * select选择框启用search功能后的过滤器
+     * @param input
+     * @param option
+     * @returns {boolean}
+     */
+    filterOption (input, option) {
+      return (
+        option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
+      )
+    }
+  },
+  async mounted () {
+    if (this.getMore === true) {
+      await this.attachMore()
     }
   }
 }

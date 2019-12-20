@@ -63,7 +63,10 @@
         </a-form-item>
       </a-form>
     </a-modal>
-    <position-form-modal ref="positionFormModal"></position-form-modal>
+    <position-form-modal
+      @refreshList="getTargetKvList"
+      @changeKey="changeTargetId"
+      ref="positionFormModal"></position-form-modal>
   </div>
 </template>
 
@@ -95,6 +98,19 @@ export default {
     }
   },
   methods: {
+    changeTargetId (obj) {
+      if (obj && obj.id) {
+        let value
+        if (typeof obj.id === 'number') {
+          value = obj.id.toString(10)
+        } else {
+          value = obj.id
+        }
+        this.form.setFieldsValue({
+          positionId: value
+        })
+      }
+    },
     async open () {
       this.visible = true
       await this.getSourceKvList()
@@ -223,7 +239,7 @@ export default {
       if (!error) {
         return error
       }
-      let msgs = []
+      const msgs = []
       _.forEach(error, (value, key) => {
         msgs.push(...value.errors.map(item => {
           return item.message
@@ -239,7 +255,12 @@ export default {
       return (
         option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
       )
-    }
+    },
+    close () {
+      this.visible = false
+      this.model = {}
+      this.form.resetFields()
+    },
   },
   computed: {
     currentNode: function () {
