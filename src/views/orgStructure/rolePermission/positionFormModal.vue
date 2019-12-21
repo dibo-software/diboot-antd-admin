@@ -26,7 +26,10 @@
                 'code',
                 {
                   initialValue: model.code,
-                  rules: [{ required: true, message: '编码不能为空', whitespace: true }]
+                  rules: [
+                    { required: true, message: '编码不能为空', whitespace: true },
+                    { validator: this.checkCodeRepeat }
+                    ]
                 }
               ]"
         />
@@ -98,40 +101,18 @@ export default {
         })
       }
     },
-    async afterOpen (id) {
-      if (id === undefined) {
-        return
-      }
-      const res = await dibootApi.get(`/${this.name}/${id}`)
-      if (res.code === 0) {
-        this.initSubItem(res.data)
-      } else {
-        this.$notification.error({
-          message: '获取数据失败',
-          description: res.msg
-        })
-      }
-    },
-    async checkTypeRepeat (rule, value, callback) {
+    async checkCodeRepeat (rule, value, callback) {
       if (!value) {
         callback()
         return
       }
-      const params = { id: this.model.id, type: value }
-      const res = await dibootApi.get(`/${this.name}/checkTypeRepeat`, params)
+      const params = { id: this.model.id, code: value }
+      const res = await dibootApi.get(`/${this.name}/checkCodeRepeat`, params)
       if (res.code === 0) {
         callback()
       } else {
         callback(res.msg.split(':')[1])
       }
-    },
-    close () {
-      this.state.visible = false
-      this.model = {}
-      this.form.resetFields()
-    },
-    enhance (values) {
-      values.children = this.children
     }
   }
 }

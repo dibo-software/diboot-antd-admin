@@ -40,7 +40,10 @@
                 'code',
                 {
                   initialValue: model.code,
-                  rules: [{ required: true, message: '编码不能为空', whitespace: true }]
+                  rules: [
+                    { required: true, message: '编码不能为空', whitespace: true },
+                    { validator: this.checkCodeRepeat }
+                  ]
                 }
               ]"
             />
@@ -124,108 +127,28 @@ const CHILDREN_BTN_CONFIG_DEFAULT = {
   currentIndex: undefined
 }
 // eslint-disable-next-line standard/object-curly-even-spacing
-const CHILDREN_ITEM_DEFAULT = { id: '', itemName: '', itemValue: '' }
 export default {
   name: 'OrgStructureDrawer',
   data () {
     return {
       name: 'iam/org',
-      form: this.$form.createForm(this),
-      children: [],
-      childItem: _.cloneDeep(CHILDREN_ITEM_DEFAULT),
-      childrenBtnConfig: _.cloneDeep(CHILDREN_BTN_CONFIG_DEFAULT)
+      form: this.$form.createForm(this)
     }
   },
   mixins: [ form ],
   methods: {
-    async afterOpen (id) {
-      if (id === undefined) {
-        return
-      }
-      const res = await dibootApi.get(`/${this.name}/${id}`)
-      if (res.code === 0) {
-        this.initSubItem(res.data)
-      } else {
-        this.$notification.error({
-          message: '获取数据失败',
-          description: res.msg
-        })
-      }
-    },
-    initSubItem (data) {
-      if (data.children && data.children.length > 0) {
-        var children = []
-        data.children.forEach(child => {
-          children.push({ id: child.id, itemName: child.itemName, itemValue: child.itemValue })
-        })
-        this.children = children
-      } else {
-        this.children = []
-      }
-    },
-    onTagClicked (item, i) {
-      this.childItem.id = item.id
-      this.childItem.itemName = item.itemName
-      this.childItem.itemValue = item.itemValue
-      this.childrenBtnConfig = {
-        label: '更新子项',
-        type: 'dashed',
-        editing: true,
-        currentIndex: i
-      }
-      return false
-    },
-    onTagClosed (e, i) {
-      e.stopPropagation()
-      if (this.children.length > i) {
-        this.children.splice(i, 1)
-      }
-      e.preventDefault()
-    },
-    async checkTypeRepeat (rule, value, callback) {
+    async checkCodeRepeat (rule, value, callback) {
       if (!value) {
         callback()
         return
       }
-      const params = { id: this.model.id, type: value }
-      const res = await dibootApi.get(`/${this.name}/checkTypeRepeat`, params)
+      const params = { id: this.model.id, code: value }
+      const res = await dibootApi.get(`/${this.name}/checkCodeRepeat`, params)
       if (res.code === 0) {
         callback()
       } else {
         callback(res.msg.split(':')[1])
       }
-    },
-    handleSubItem () {
-      if (this.childItem.itemName === '') {
-        this.$message.error('请输入数据字典子项名称')
-        return false
-      }
-      if (this.childItem.itemValue === '') {
-        this.$message.error('请输入数据字典子项编码')
-        return false
-      }
-
-      if (this.childrenBtnConfig.currentIndex === undefined ||
-        this.childrenBtnConfig.currentIndex >= this.children.length) {
-        this.children.push(this.childItem)
-      } else {
-        this.children[this.childrenBtnConfig.currentIndex].id = this.childItem.id
-        this.children[this.childrenBtnConfig.currentIndex].itemName = this.childItem.itemName
-        this.children[this.childrenBtnConfig.currentIndex].itemValue = this.childItem.itemValue
-      }
-
-      // 重置
-      this.childItem = _.cloneDeep(CHILDREN_ITEM_DEFAULT)
-      this.childrenBtnConfig = _.cloneDeep(CHILDREN_BTN_CONFIG_DEFAULT)
-    },
-    close () {
-      this.state.visible = false
-      this.model = {}
-      this.children = []
-      this.form.resetFields()
-    },
-    enhance (values) {
-      values.children = this.children
     }
   },
   computed: {
