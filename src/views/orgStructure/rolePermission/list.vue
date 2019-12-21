@@ -32,52 +32,23 @@
             </a-col>
             <a-col :md="4" :sm="24">
               <span class="table-page-search-submitButtons">
-                <a-button icon="plus" type="primary" @click="$refs.rolePositionModal.open()">新建岗位</a-button>
+                <a-button icon="plus" type="primary" @click="$refs.orgPositionModal.open()">新建岗位</a-button>
               </span>
             </a-col>
           </a-row>
         </div>
-        <a-table
-          ref="table"
-          size="default"
-          :columns="columns"
-          :dataSource="data"
-          :pagination="pagination"
-          :loading="loadingData"
-          @change="handleTableChange"
-          rowKey="id"
-        >
-          <span slot="type" slot-scope="text">
-            <template v-if="text && more.orgTypeKvMap && more.orgTypeKvMap[text]">
-              <a-tag :color="text==='COMP' ? 'blue' : 'cyan'" >{{ more.orgTypeKvMap[text]['k'] }}</a-tag>
-            </template>
-            <template v-else>
-              <span>-</span>
-            </template>
-          </span>
-          <span slot="action" slot-scope="text, record">
-            <a @click="$refs.form.open(record.id)">编辑</a>
-            <a-divider type="vertical" />
-            <a-dropdown>
-              <a class="ant-dropdown-link">
-                更多 <a-icon type="down" />
-              </a>
-              <a-menu slot="overlay">
-                <a-menu-item>
-                  <a href="javascript:;" @click="$refs.detail.open(record.id)">详情</a>
-                </a-menu-item>
-                <a-menu-item>
-                  <a href="javascript:;" @click="remove(record.id)">删除</a>
-                </a-menu-item>
-              </a-menu>
-            </a-dropdown>
-          </span>
-        </a-table>
+        <a-card
+          v-for="(item, index) in data"
+          :key="index"
+          :title="item.name">
+          <a-button slot="extra" icon="plus" type="primary" @click="$refs.positionRoleModal.open(item.id)">新建角色</a-button>
+        </a-card>
       </a-col>
     </a-row>
     <diboot-form :more="more" :currentNodeId="currentNodeId" ref="form" @refreshList="refreshPage"></diboot-form>
     <diboot-detail :more="more" ref="detail"></diboot-detail>
-    <role-position-modal :currentNodeId="currentNodeId" ref="rolePositionModal"></role-position-modal>
+    <org-position-modal :currentNodeId="currentNodeId" ref="orgPositionModal"></org-position-modal>
+    <position-role-modal ref="positionRoleModal"></position-role-modal>
   </a-card>
 </template>
 
@@ -86,12 +57,12 @@ import { Tree } from 'ant-design-vue'
 import treeList from '@/components/diboot/mixins/treeList'
 import dibootForm from './form'
 import dibootDetail from './detail'
-import rolePositionModal from '@/views/orgStructure/rolePermission/rolePositionModal'
-import positionFormModal from '@/views/orgStructure/rolePermission/positionFormModal'
+import orgPositionModal from '@/views/orgStructure/rolePermission/orgPositionModal'
+import positionRoleModal from '@/views/orgStructure/rolePermission/positionRoleModal'
 
 const api = {
   orgTree: '/iam/org/tree',
-  orgChildrenList: '/iam/org/childrenList'
+  positionList: '/iam/position/list'
 }
 
 export default {
@@ -100,8 +71,8 @@ export default {
     Tree,
     dibootForm,
     dibootDetail,
-    rolePositionModal,
-    positionFormModal
+    orgPositionModal,
+    positionRoleModal
   },
   data () {
     return {
@@ -109,38 +80,10 @@ export default {
       apiPrefix: '/iam/org',
       initList: false,
       getMore: false,
-      getTreeListApiPrefix: api.orgChildrenList,
+      getTreeListApiPrefix: api.positionList,
       getTreeApi: api.orgTree,
-      // 表头
-      columns: [
-        {
-          title: '#',
-          dataIndex: 'id'
-        },
-        {
-          title: '简称',
-          dataIndex: 'shortName'
-        },
-        {
-          title: '全称',
-          dataIndex: 'name'
-        },
-        {
-          title: '类型',
-          dataIndex: 'type',
-          scopedSlots: { customRender: 'type' }
-        },
-        {
-          title: '创建时间',
-          dataIndex: 'createTime'
-        },
-        {
-          table: '操作',
-          dataIndex: 'action',
-          width: '150px',
-          scopedSlots: { customRender: 'action' }
-        }
-      ]
+      // 记录当前添加角色的岗位id
+      currentPositionId: 0
     }
   },
   mixins: [ treeList ],

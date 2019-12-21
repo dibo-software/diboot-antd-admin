@@ -1,6 +1,6 @@
 <template>
   <a-modal
-    title="新建岗位"
+    title="新建角色"
     :visible="state.visible"
     @ok="onSubmit()"
     :confirmLoading="state.submitBtn"
@@ -34,46 +34,16 @@
               ]"
         />
       </a-form-item>
-      <a-form-item label="职级" :label-col="{ span: 5 }" :wrapper-col="{ span: 18 }">
-        <a-select
-          showSearch
-          @change="onGradeValueChanged"
-          :filterOption="filterOption"
+      <a-form-item label="备注" :label-col="{ span: 5 }" :wrapper-col="{ span: 18 }">
+        <a-textarea
+          placeholder="请输入备注"
+          :autosize="{ minRows: 2, maxRows: 6 }"
           v-decorator="[
-              'gradeValue',
-              {
-                initialValue: model.gradeValue
-              }
-            ]"
-          placeholder="请选择职级"
-        >
-          <a-select-option
-            v-for="kv in reloadMore.positionGradeKvList"
-            :key="kv.v"
-            :value="kv.v">
-            {{ kv.v }}
-          </a-select-option>
-        </a-select>
-      </a-form-item>
-      <a-form-item label="职级头衔" :label-col="{ span: 5 }" :wrapper-col="{ span: 18 }">
-        <a-input
-          placeholder="请输入职级头衔"
-          v-decorator="[
-                'gradeName',
+                'comment',
                 {
-                  initialValue: model.gradeName
+                  initialValue: model.comment
                 }
               ]"
-        />
-      </a-form-item>
-      <a-form-item label="虚拟岗位" :label-col="{ span: 5 }" :wrapper-col="{ span: 18 }">
-        <a-switch
-          v-decorator="[
-              'virtual',
-              {
-                initialValue: model.virtual
-              },
-            ]"
         />
       </a-form-item>
     </a-form>
@@ -84,23 +54,16 @@
 import form from '@/components/diboot/mixins/form'
 import { dibootApi } from '@/utils/request'
 export default {
-  name: 'PositionFormModal',
+  name: 'RoleFormModal',
   data () {
     return {
-      name: 'iam/position',
+      name: 'iam/role',
       getMore: true,
       form: this.$form.createForm(this)
     }
   },
   mixins: [form],
   methods: {
-    onGradeValueChanged (value) {
-      if (value && this.reloadMore && this.reloadMore.positionGradeKvMap && this.reloadMore.positionGradeKvMap[value]) {
-        this.form.setFieldsValue({
-          gradeName: this.reloadMore.positionGradeKvMap[value]['k']
-        })
-      }
-    },
     async checkCodeRepeat (rule, value, callback) {
       if (!value) {
         callback()
