@@ -37,12 +37,33 @@
             </a-col>
           </a-row>
         </div>
-        <a-card
-          v-for="(item, index) in data"
-          :key="index"
-          :title="item.name">
-          <a-button slot="extra" icon="plus" type="primary" @click="$refs.positionRoleModal.open(item.id)">新建角色</a-button>
-        </a-card>
+        <template
+          v-for="(item, index) in data">
+          <a-card
+            size="small"
+            :title="item.name"
+            style="margin-bottom: 15px;"
+            :key="index">
+            <a-button-group slot="extra">
+              <a-button size="small">删除岗位</a-button>
+              <a-button size="small" icon="plus" type="primary" @click="$refs.positionRoleModal.open(item.id)">添加角色</a-button>
+            </a-button-group>
+
+            <div v-if="item.roleList && item.roleList.length > 0">
+              <template v-for="(role,i) in item.roleList">
+                <a-tag
+                  closable
+                  color="blue"
+                  @click="onTagClicked(item, i)"
+                  @close="onTagClosed($event, item.roleList, i)"
+                  :key="i">{{ role.name }}</a-tag>
+              </template>
+            </div>
+            <div v-else>
+              <a-tag color="red">还没有角色列表</a-tag>
+            </div>
+          </a-card>
+        </template>
       </a-col>
     </a-row>
     <diboot-form :more="more" :currentNodeId="currentNodeId" ref="form" @refreshList="refreshPage"></diboot-form>
@@ -112,6 +133,17 @@ export default {
       // 如果需要默认展开所有，则初始化展开数据
       this.expandedKeys = this.getInitExpandedKeys(formatterOrgList)
       return formatterOrgList
+    },
+    onTagClicked (item, i) {
+      // TODO: 打开设置角色权限的抽屉
+      return false
+    },
+    onTagClosed (e, roleList, i) {
+      e.stopPropagation()
+      if (roleList.length > i) {
+        roleList.splice(i, 1)
+      }
+      e.preventDefault()
     }
   }
 }
