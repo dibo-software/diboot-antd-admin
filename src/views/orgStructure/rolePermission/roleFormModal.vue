@@ -28,7 +28,7 @@
                   initialValue: model.code,
                   rules: [
                     { required: true, message: '编码不能为空', whitespace: true },
-                    { validator: this.checkCodeRepeat }
+                    { validator: this.checkCodeDuplicate }
                     ]
                 }
               ]"
@@ -64,13 +64,13 @@ export default {
   },
   mixins: [form],
   methods: {
-    async checkCodeRepeat (rule, value, callback) {
+    async checkCodeDuplicate (rule, value, callback) {
       if (!value) {
         callback()
         return
       }
       const params = { id: this.model.id, code: value }
-      const res = await dibootApi.get(`/${this.name}/checkCodeRepeat`, params)
+      const res = await dibootApi.get(`/${this.name}/checkCodeDuplicate`, params)
       if (res.code === 0) {
         callback()
       } else {

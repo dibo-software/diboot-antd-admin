@@ -182,13 +182,13 @@ export default {
       }
       e.preventDefault()
     },
-    async checkTypeRepeat (rule, value, callback) {
+    async checkTypeDuplicate (rule, value, callback) {
       if (!value) {
         callback()
         return
       }
       const params = { id: this.model.id, type: value }
-      const res = await dibootApi.get(`/${this.name}/checkTypeRepeat`, params)
+      const res = await dibootApi.get(`/${this.name}/checkTypeDuplicate`, params)
       if (res.code === 0) {
         callback()
       } else {

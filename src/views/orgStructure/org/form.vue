@@ -42,7 +42,7 @@
                   initialValue: model.code,
                   rules: [
                     { required: true, message: '编码不能为空', whitespace: true },
-                    { validator: this.checkCodeRepeat }
+                    { validator: this.checkCodeDuplicate }
                   ]
                 }
               ]"
@@ -118,14 +118,6 @@
 <script>
 import form from '@/components/diboot/mixins/form'
 import { dibootApi } from '@/utils/request'
-import _ from 'lodash'
-// 定义默认值
-const CHILDREN_BTN_CONFIG_DEFAULT = {
-  editing: false,
-  type: 'primary',
-  label: '添加子项',
-  currentIndex: undefined
-}
 // eslint-disable-next-line standard/object-curly-even-spacing
 export default {
   name: 'OrgStructureDrawer',
@@ -137,13 +129,13 @@ export default {
   },
   mixins: [ form ],
   methods: {
-    async checkCodeRepeat (rule, value, callback) {
+    async checkCodeDuplicate (rule, value, callback) {
       if (!value) {
         callback()
         return
       }
       const params = { id: this.model.id, code: value }
-      const res = await dibootApi.get(`/${this.name}/checkCodeRepeat`, params)
+      const res = await dibootApi.get(`/${this.name}/checkTypeDuplicate`, params)
       if (res.code === 0) {
         callback()
       } else {

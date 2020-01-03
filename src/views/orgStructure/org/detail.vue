@@ -38,7 +38,6 @@ export default {
   data () {
     return {
       name: 'iam/org',
-      children: []
     }
   },
   components: {
@@ -47,32 +46,9 @@ export default {
   },
   mixins: [ detail ],
   methods: {
-    async afterOpen (id) {
-      const res = await dibootApi.get(`/${this.name}/${id}`)
-      if (res.code === 0) {
-        this.initSubItem(res.data)
-      } else {
-        this.$notification.error({
-          message: '获取数据失败',
-          description: res.msg
-        })
-      }
-    },
-    initSubItem: function (data) {
-      if (data.children && data.children.length > 0) {
-        var children = []
-        data.children.forEach(child => {
-          children.push({ id: child.id, itemName: child.itemName, itemValue: child.itemValue })
-        })
-        this.children = children
-      } else {
-        this.children = []
-      }
-    },
     close () {
       this.visible = false
       this.model = {}
-      this.children = []
     }
   },
   computed: {
