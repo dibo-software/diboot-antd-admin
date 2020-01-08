@@ -11,27 +11,27 @@
         <a-input
           placeholder="请输入名称"
           v-decorator="[
-                'name',
-                {
-                  initialValue: model.name,
-                  rules: [{ required: true, message: '名称不能为空', whitespace: true }]
-                }
-              ]"
+            'name',
+            {
+              initialValue: model.name,
+              rules: [{ required: true, message: '名称不能为空', whitespace: true }]
+            }
+          ]"
         />
       </a-form-item>
       <a-form-item label="编码" :label-col="{ span: 5 }" :wrapper-col="{ span: 18 }">
         <a-input
           placeholder="请输入编码"
           v-decorator="[
-                'code',
-                {
-                  initialValue: model.code,
-                  rules: [
-                    { required: true, message: '编码不能为空', whitespace: true },
-                    { validator: this.checkCodeDuplicate }
-                    ]
-                }
-              ]"
+            'code',
+            {
+              initialValue: model.code,
+              rules: [
+                { required: true, message: '编码不能为空', whitespace: true },
+                { validator: this.checkCodeDuplicate }
+              ]
+            }
+          ]"
         />
       </a-form-item>
       <a-form-item label="备注" :label-col="{ span: 5 }" :wrapper-col="{ span: 18 }">
@@ -39,11 +39,11 @@
           placeholder="请输入备注"
           :autosize="{ minRows: 2, maxRows: 6 }"
           v-decorator="[
-                'comment',
-                {
-                  initialValue: model.comment
-                }
-              ]"
+            'comment',
+            {
+              initialValue: model.comment
+            }
+          ]"
         />
       </a-form-item>
     </a-form>

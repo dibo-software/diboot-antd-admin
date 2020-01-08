@@ -11,27 +11,27 @@
         <a-input
           placeholder="请输入名称"
           v-decorator="[
-                'name',
-                {
-                  initialValue: model.name,
-                  rules: [{ required: true, message: '名称不能为空', whitespace: true }]
-                }
-              ]"
+            'name',
+            {
+              initialValue: model.name,
+              rules: [{ required: true, message: '名称不能为空', whitespace: true }]
+            }
+          ]"
         />
       </a-form-item>
       <a-form-item label="编码" :label-col="{ span: 5 }" :wrapper-col="{ span: 18 }">
         <a-input
           placeholder="请输入编码"
           v-decorator="[
-                'code',
-                {
-                  initialValue: model.code,
-                  rules: [
-                    { required: true, message: '编码不能为空', whitespace: true },
-                    { validator: this.checkCodeDuplicate }
-                    ]
-                }
-              ]"
+            'code',
+            {
+              initialValue: model.code,
+              rules: [
+                { required: true, message: '编码不能为空', whitespace: true },
+                { validator: this.checkCodeDuplicate }
+              ]
+            }
+          ]"
         />
       </a-form-item>
       <a-form-item label="职级" :label-col="{ span: 5 }" :wrapper-col="{ span: 18 }">
@@ -40,11 +40,11 @@
           @change="onGradeValueChanged"
           :filterOption="filterOption"
           v-decorator="[
-              'gradeValue',
-              {
-                initialValue: model.gradeValue
-              }
-            ]"
+            'gradeValue',
+            {
+              initialValue: model.gradeValue
+            }
+          ]"
           placeholder="请选择职级"
         >
           <a-select-option
@@ -59,21 +59,21 @@
         <a-input
           placeholder="请输入职级头衔"
           v-decorator="[
-                'gradeName',
-                {
-                  initialValue: model.gradeName
-                }
-              ]"
+            'gradeName',
+            {
+              initialValue: model.gradeName
+            }
+          ]"
         />
       </a-form-item>
       <a-form-item label="虚拟岗位" :label-col="{ span: 5 }" :wrapper-col="{ span: 18 }">
         <a-switch
           v-decorator="[
-              'virtual',
-              {
-                initialValue: model.virtual
-              },
-            ]"
+            'virtual',
+            {
+              initialValue: model.virtual
+            },
+          ]"
         />
       </a-form-item>
     </a-form>

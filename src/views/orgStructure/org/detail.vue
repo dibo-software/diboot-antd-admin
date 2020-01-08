@@ -37,7 +37,7 @@ export default {
   name: 'OrgTreeDetail',
   data () {
     return {
-      name: 'iam/org',
+      name: 'iam/org'
     }
   },
   components: {
