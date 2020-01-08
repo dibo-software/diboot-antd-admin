@@ -17,10 +17,10 @@
             <a-input
               size="large"
               type="text"
-              placeholder="账户: admin"
+              placeholder="请输入用户名"
               v-decorator="[
                 'username',
-                {rules: [{ required: true, message: '请输入帐户名或邮箱地址' }, { validator: handleUsernameOrEmail }], validateTrigger: 'change'}
+                {rules: [{ required: true, message: '请输入用户名' }, { validator: handleUsernameOrEmail }], validateTrigger: 'change'}
               ]"
             >
               <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
@@ -32,7 +32,7 @@
               size="large"
               type="password"
               autocomplete="false"
-              placeholder="密码: admin or ant.design"
+              placeholder="请输入密码"
               v-decorator="[
                 'password',
                 {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
@@ -88,6 +88,7 @@
           :loading="state.loginBtn"
           :disabled="state.loginBtn"
         >确定</a-button>
+        <a-button type="primary" @click="handleGetInfo">获取信息测试</a-button>
       </a-form-item>
 
       <div class="user-login-other">
@@ -154,7 +155,7 @@ export default {
     // this.requiredTwoStepCaptcha = true
   },
   methods: {
-    ...mapActions(['Login', 'Logout']),
+    ...mapActions(['Login', 'Logout', 'GetInfo']),
     // handler
     handleUsernameOrEmail (rule, value, callback) {
       const { state } = this
@@ -169,6 +170,12 @@ export default {
     handleTabClick (key) {
       this.customActiveKey = key
       // this.form.resetFields()
+    },
+    handleGetInfo () {
+      const { GetInfo } = this
+      GetInfo().then((res) => {
+        console.log(res)
+      })
     },
     handleSubmit (e) {
       e.preventDefault()
@@ -189,7 +196,8 @@ export default {
           const loginParams = { ...values }
           delete loginParams.username
           loginParams[!state.loginType ? 'email' : 'username'] = values.username
-          loginParams.password = md5(values.password)
+          // loginParams.password = md5(values.password)
+          loginParams.password = values.password
           Login(loginParams)
             .then((res) => this.loginSuccess(res))
             .catch(err => this.requestFailed(err))

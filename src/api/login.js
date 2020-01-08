@@ -30,17 +30,14 @@ export function getSmsCaptcha (parameter) {
 
 export function getInfo () {
   return axios({
-    url: '/user/info',
-    method: 'get',
-    headers: {
-      'Content-Type': 'application/json;charset=UTF-8'
-    }
+    url: '/iam/account/getInfo',
+    method: 'get'
   })
 }
 
 export function logout () {
   return axios({
-    url: '/auth/logout',
+    url: '/logout',
     method: 'post',
     headers: {
       'Content-Type': 'application/json;charset=UTF-8'
