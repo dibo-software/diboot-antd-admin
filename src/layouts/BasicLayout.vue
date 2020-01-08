@@ -72,7 +72,7 @@ import GlobalHeader from '@/components/GlobalHeader'
 import GlobalFooter from '@/components/GlobalFooter'
 import SettingDrawer from '@/components/SettingDrawer'
 // TODO: 恢复权限控制
-import { asyncRouterMap } from '@/config/router.config.js'
+// import { constantRouterMap, asyncRouterMap } from '@/config/router.config.js'
 
 export default {
   name: 'BasicLayout',
@@ -114,8 +114,8 @@ export default {
   },
   created () {
     // TODO: 恢复权限控制
-    // this.menus = this.mainMenu.find(item => item.path === '/').children
-    this.menus = asyncRouterMap.find((item) => item.path === '/').children
+    this.menus = this.mainMenu.find(item => item.path === '/').children
+    // this.menus = asyncRouterMap.find((item) => item.path === '/').children
     this.collapsed = !this.sidebarOpened
   },
   mounted () {
