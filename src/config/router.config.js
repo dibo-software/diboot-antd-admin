@@ -9,7 +9,7 @@ export const asyncRouterMap = [
     name: 'index',
     component: BasicLayout,
     meta: { title: '首页' },
-    redirect: '/dashboard/workplace',
+    redirect: '/orgStructure/org-tree-list',
     children: [
       // dashboard
       {
@@ -44,19 +44,19 @@ export const asyncRouterMap = [
         path: '/orgStructure',
         redirect: '/orgStructure/org-tree-list',
         component: PageView,
-        meta: { title: '组织架构', icon: 'solution', permission: ['orgStructure'] },
+        meta: { title: '组织架构', icon: 'solution', permission: ['IamRole'] },
         children: [
           {
             path: '/orgStructure/org-tree-list',
             name: 'OrgTreeList',
             component: () => import('@/views/orgStructure/org/OrgTreeList'),
-            meta: { title: '组织结构管理', keepAlive: true, permission: ['orgStructure'] }
+            meta: { title: '组织结构管理', keepAlive: true, permission: ['IamRole'] }
           },
           {
             path: '/orgStructrue/role-permission-list',
             name: 'RolePermissionList',
             component: () => import('@/views/orgStructure/rolePermission/list'),
-            meta: { title: '角色权限管理', keeplive: true, permission: ['orgStructure'] }
+            meta: { title: '角色权限管理', keeplive: true, permission: ['IamRole'] }
           }
         ]
       },

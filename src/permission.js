@@ -22,15 +22,11 @@ router.beforeEach((to, from, next) => {
       next({ path: '/dashboard/workplace' })
       NProgress.done()
     } else {
-      console.log('roles===>', store.getters.roles)
       if (store.getters.roles.length === 0) {
         store
           .dispatch('GetInfo')
           .then(res => {
-            const roles = res.result && res.data.role
-            // 更改permission的默认的列表字段
-            roles.permissions = permissionListToPermissions(res.role.permissionList)
-            roles.permissionList = roles.permissions.map(permission => { return permission.code })
+            const roles = res.data && res.data.role
             store.dispatch('GenerateRoutes', { roles }).then(() => {
               // 根据roles权限生成可访问的路由表
               // 动态添加可访问路由表
