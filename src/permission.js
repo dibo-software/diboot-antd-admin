@@ -7,6 +7,7 @@ import 'nprogress/nprogress.css' // progress bar style
 import notification from 'ant-design-vue/es/notification'
 import { setDocumentTitle, domTitle } from '@/utils/domUtil'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
+import { permissionListToPermissions } from '@/utils/permissions'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
@@ -21,11 +22,15 @@ router.beforeEach((to, from, next) => {
       next({ path: '/dashboard/workplace' })
       NProgress.done()
     } else {
+      console.log('roles===>', store.getters.roles)
       if (store.getters.roles.length === 0) {
         store
           .dispatch('GetInfo')
           .then(res => {
-            const roles = res.result && res.result.role
+            const roles = res.result && res.data.role
+            // 更改permission的默认的列表字段
+            roles.permissions = permissionListToPermissions(res.role.permissionList)
+            roles.permissionList = roles.permissions.map(permission => { return permission.code })
             store.dispatch('GenerateRoutes', { roles }).then(() => {
               // 根据roles权限生成可访问的路由表
               // 动态添加可访问路由表

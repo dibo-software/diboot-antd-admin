@@ -2,6 +2,7 @@ import Vue from 'vue'
 import { login, getInfo, logout } from '@/api/login'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 import { welcome } from '@/utils/util'
+import { permissionListToPermissions } from '@/utils/permissions'
 
 const user = {
   state: {
@@ -51,18 +52,12 @@ const user = {
     GetInfo ({ commit }) {
       return new Promise((resolve, reject) => {
         getInfo().then(response => {
-          const result = response.result
-
-          if (result.role && result.role.permissions.length > 0) {
+          const result = response.data
+          if (result.role && result.role.permissionList.length > 0) {
             const role = result.role
-            role.permissions = result.role.permissions
-            role.permissions.map(per => {
-              if (per.actionEntitySet != null && per.actionEntitySet.length > 0) {
-                const action = per.actionEntitySet.map(action => { return action.action })
-                per.actionList = action
-              }
-            })
-            role.permissionList = role.permissions.map(permission => { return permission.permissionId })
+            // 更改permission的默认的列表字段
+            role.permissions = permissionListToPermissions(result.role.permissionList)
+            role.permissionList = role.permissions.map(permission => { return permission.code })
             commit('SET_ROLES', result.role)
             commit('SET_INFO', result)
           } else {
