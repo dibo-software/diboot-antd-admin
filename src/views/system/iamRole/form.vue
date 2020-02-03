@@ -210,7 +210,7 @@ export default {
     },
     changePermission (e, permission) {
       this.permissionIdsMap[permission.id] = e
-      permission.indeterminate = !!this.permissionIdsMap[permission.id].length && this.permissionIdsMap[permission.id].length <  permission.children.length
+      permission.indeterminate = !!this.permissionIdsMap[permission.id].length && this.permissionIdsMap[permission.id].length < permission.children.length
       permission.checked = this.permissionIdsMap[permission.id].length === permission.children.length
       this.$forceUpdate()
     },

@@ -84,6 +84,12 @@ export const asyncRouterMap = [
             name: 'IamRoleList',
             component: () => import('@/views/system/iamRole/list'),
             meta: { title: '角色列表管理', keepAlive: true }
+          },
+          {
+            path: '/system/iamUser/list',
+            name: 'IamUserList',
+            component: () => import('@/views/system/iamUser/list'),
+            meta: { title: '系统用户管理', keepAlive: true }
           }
         ]
       },
