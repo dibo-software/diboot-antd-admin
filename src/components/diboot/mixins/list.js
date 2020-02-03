@@ -1,8 +1,10 @@
+import merge from 'lodash.merge'
 import { axios } from '@/utils/request'
 export default {
   data () {
     return {
       baseApi: '/',
+      customQueryParam: {},
       queryParam: {},
       data: [],
       getMore: false,
@@ -29,13 +31,10 @@ export default {
       this.loadingData = true
       // 过滤掉不存在值的属性
       const tempQueryParam = {}
-      if (Object.keys(this.queryParam).length > 0) {
-        for (const key in this.queryParam) {
-          if (this.queryParam[key]) {
-            tempQueryParam[key] = this.queryParam[key]
-          }
-        }
-      }
+      // 合并自定义查询参数
+      merge(tempQueryParam, this.customQueryParam)
+      // 合并搜索参数
+      merge(tempQueryParam, this.queryParam)
       console.log('query', tempQueryParam)
       axios({
         url: `${this.baseApi}/list`,

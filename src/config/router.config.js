@@ -72,6 +72,12 @@ export const asyncRouterMap = [
             name: 'DictList',
             component: () => import('@/views/system/dictionary/list'),
             meta: { title: '数据字典管理', keepAlive: true }
+          },
+          {
+            path: '/system/iamPermission/list',
+            name: 'IamPermissionList',
+            component: () => import('@/views/system/iamPermission/list'),
+            meta: { title: '系统权限管理', keepAlive: true }
           }
         ]
       },

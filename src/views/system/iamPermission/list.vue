@@ -4,13 +4,13 @@
       <a-form layout="inline" @submit.native="getList">
         <a-row :gutter="48">
           <a-col :md="8" :sm="24">
-            <a-form-item label="编码">
-              <a-input placeholder="请输入" v-model="queryParam.menuCode" />
+            <a-form-item label="权限名称">
+              <a-input placeholder="请输入" v-model="queryParam.name" />
             </a-form-item>
           </a-col>
           <a-col :md="8" :sm="24">
-            <a-form-item label="权限名称">
-              <a-input placeholder="请输入" v-model="queryParam.menuName" />
+            <a-form-item label="编码">
+              <a-input placeholder="请输入" v-model="queryParam.code" />
             </a-form-item>
           </a-col>
           <a-col :md="8" :sm="24">
@@ -30,11 +30,13 @@
       :dataSource="data"
       :pagination="pagination"
       :loading="loadingData"
+      :expandIcon="expandIcon"
+      :expandIconAsCell="false"
       @change="handleTableChange"
       rowKey="id"
     >
       <span slot="actions" slot-scope="text, record">
-        <a-tag color="cyan" v-for="(permission, index) in record.permissionList" :key="index">{{ permission.permissionName }}</a-tag>
+        <a-tag color="cyan" v-for="(permission, index) in record.children" :key="index">{{ permission.operationName }}</a-tag>
       </span>
 
       <span slot="action">
@@ -54,16 +56,17 @@ export default {
   data () {
     return {
       baseApi: '/iam/permission',
+      customQueryParam: { parentId: 0 },
       getMore: false,
       // 表头
       columns: [
         {
-          title: '编码',
-          dataIndex: 'menuCode'
+          title: '权限名称',
+          dataIndex: 'name'
         },
         {
-          title: '权限名称',
-          dataIndex: 'menuName'
+          title: '编码',
+          dataIndex: 'code'
         },
         {
           title: '可操作权限',
@@ -77,6 +80,11 @@ export default {
           scopedSlots: { customRender: 'action' }
         }
       ]
+    }
+  },
+  methods: {
+    expandIcon () {
+      return undefined
     }
   }
 }
