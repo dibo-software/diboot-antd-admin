@@ -122,7 +122,6 @@ export default {
       try {
         let result = {}
         if (this.model.id === undefined) {
-          values.createBy = this.userInfo.currentUserId
           // 新增该记录
           result = await this.add(values)
         } else {
