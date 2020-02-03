@@ -2,6 +2,7 @@ import { axios } from '@/utils/request'
 export default {
   data () {
     return {
+      baseApi: '/',
       queryParam: {},
       data: [],
       getMore: false,
@@ -37,7 +38,7 @@ export default {
       }
       console.log('query', tempQueryParam)
       axios({
-        url: `/${this.name}/list`,
+        url: `${this.baseApi}/list`,
         params: tempQueryParam,
         method: 'get'
       }).then(res => {
@@ -51,7 +52,7 @@ export default {
     },
     attachMore () {
       axios({
-        url: `/${this.name}/attachMore`,
+        url: `${this.baseApi}/attachMore`,
         method: 'get'
       }).then(res => {
         this.more = res.data
@@ -72,7 +73,7 @@ export default {
         cancelText: '取消',
         onOk () {
           axios({
-            url: `/${_this.name}/${id}`,
+            url: `${_this.baseApi}/${id}`,
             method: 'delete'
           }).then((res) => {
             _this.$notification.success({

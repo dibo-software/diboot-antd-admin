@@ -192,7 +192,7 @@ export default {
       permissionList: null,
       // 加载数据方法 必须为 Promise 对象
       loadData: parameter => {
-        return this.$http.get('/permission', {
+        return this.$http.get('/iamPermission', {
           params: Object.assign(parameter, this.queryParam)
         }).then(res => {
           const result = res.result

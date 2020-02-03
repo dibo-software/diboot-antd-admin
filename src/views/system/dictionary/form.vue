@@ -122,7 +122,7 @@ export default {
   name: 'DictionaryDrawer',
   data () {
     return {
-      name: 'dictionary',
+      baseApi: '/dictionary',
       form: this.$form.createForm(this),
       children: [],
       childItem: _.cloneDeep(CHILDREN_ITEM_DEFAULT),
@@ -135,7 +135,7 @@ export default {
       if (id === undefined) {
         return
       }
-      const res = await dibootApi.get(`/${this.name}/${id}`)
+      const res = await dibootApi.get(`${this.baseApi}/${id}`)
       if (res.code === 0) {
         this.initSubItem(res.data)
       } else {
@@ -181,7 +181,7 @@ export default {
         return
       }
       const params = { id: this.model.id, type: value }
-      const res = await dibootApi.get(`/${this.name}/checkTypeDuplicate`, params)
+      const res = await dibootApi.get(`${this.baseApi}/checkTypeDuplicate`, params)
       if (res.code === 0) {
         callback()
       } else {

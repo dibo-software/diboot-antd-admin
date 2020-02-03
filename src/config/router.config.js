@@ -53,7 +53,7 @@ export const asyncRouterMap = [
             meta: { title: '组织结构管理', keepAlive: true, permission: ['IamRole'] }
           },
           {
-            path: '/orgStructrue/role-permission-list',
+            path: '/orgStructrue/iamRole-iamPermission-list',
             name: 'RolePermissionList',
             component: () => import('@/views/orgStructure/rolePermission/list'),
             meta: { title: '角色权限管理', keeplive: true, permission: ['IamRole'] }
@@ -65,13 +65,13 @@ export const asyncRouterMap = [
         path: '/system',
         redirect: '/system/dictionary/list',
         component: PageView,
-        meta: { title: '系统管理', icon: 'solution', permission: ['system'] },
+        meta: { title: '系统管理', icon: 'solution' },
         children: [
           {
             path: '/system/dictionary/list',
             name: 'DictList',
             component: () => import('@/views/system/dictionary/list'),
-            meta: { title: '数据字典管理', keepAlive: true, permission: ['dictionary'] }
+            meta: { title: '数据字典管理', keepAlive: true }
           }
         ]
       },
@@ -331,19 +331,19 @@ export const asyncRouterMap = [
                 meta: { title: '用户列表', keepAlive: true }
               },
               {
-                path: '/other/list/role-list',
+                path: '/other/list/iamRole-list',
                 name: 'RoleList',
                 component: () => import('@/views/other/RoleList'),
                 meta: { title: '角色列表', keepAlive: true }
               },
               {
-                path: '/other/list/system-role',
+                path: '/other/list/system-iamRole',
                 name: 'SystemRole',
                 component: () => import('@/views/role/RoleList'),
                 meta: { title: '角色列表2', keepAlive: true }
               },
               {
-                path: '/other/list/permission-list',
+                path: '/other/list/iamPermission-list',
                 name: 'PermissionList',
                 component: () => import('@/views/other/PermissionList'),
                 meta: { title: '权限列表', keepAlive: true }

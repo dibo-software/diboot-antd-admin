@@ -77,8 +77,8 @@ import refMultiForm from '@/components/diboot/mixins/refMultiForm'
 
 const API = {
   sourceKvListAPI: '/iam/position/kvList',
-  targetKvListAPI: '/iam/role/kvList',
-  addTargetAPI: '/iam/role/'
+  targetKvListAPI: '/iam/iamRole/kvList',
+  addTargetAPI: '/iam/iamRole/'
 }
 export default {
   name: 'PositionRoleModal',

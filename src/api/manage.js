@@ -2,10 +2,10 @@ import { axios } from '@/utils/request'
 
 const api = {
   user: '/user',
-  role: '/role',
+  role: '/iamRole',
   service: '/service',
-  permission: '/permission',
-  permissionNoPager: '/permission/no-pager',
+  permission: '/iamPermission',
+  permissionNoPager: '/iamPermission/no-pager',
   // orgTree: '/org/tree'
   orgTree: '/iam/org/tree'
 }

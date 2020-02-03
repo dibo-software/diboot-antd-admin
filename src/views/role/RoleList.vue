@@ -23,7 +23,7 @@
             </a-form-item>
 
             <a-form-item label="角色名称">
-              <a-input v-decorator="[ 'name', {rules: [{ required: true, message: 'Please input role name!' }]} ]" placeholder="请填写角色名称" />
+              <a-input v-decorator="[ 'name', {rules: [{ required: true, message: 'Please input iamRole name!' }]} ]" placeholder="请填写角色名称" />
             </a-form-item>
 
             <a-form-item label="状态">
@@ -34,7 +34,7 @@
             </a-form-item>
 
             <a-form-item label="备注说明">
-              <a-textarea :row="3" v-decorator="[ 'describe', {rules: [{ required: true, message: 'Please input role name!' }]} ]" placeholder="请填写角色名称" />
+              <a-textarea :row="3" v-decorator="[ 'describe', {rules: [{ required: true, message: 'Please input iamRole name!' }]} ]" placeholder="请填写角色名称" />
             </a-form-item>
 
             <a-form-item label="拥有权限">
@@ -134,7 +134,7 @@ export default {
       permission.checkedAll = permission.selected.length === permission.actionsOptions.length
     },
     onChangeCheckAll (e, permission) {
-      console.log('permission:', permission)
+      console.log('iamPermission:', permission)
 
       Object.assign(permission, {
         selected: e.target.checked ? permission.actionsOptions.map(obj => obj.value) : [],

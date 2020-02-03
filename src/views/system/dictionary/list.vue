@@ -71,7 +71,7 @@ export default {
   mixins: [ list ],
   data () {
     return {
-      name: 'dictionary',
+      baseApi: '/dictionary',
       getMore: false,
       columns: [
         {

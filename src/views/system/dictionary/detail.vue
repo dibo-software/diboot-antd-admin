@@ -38,7 +38,7 @@ export default {
   name: 'DictionaryDetail',
   data () {
     return {
-      name: 'dictionary',
+      baseApi: '/dictionary',
       children: []
     }
   },
@@ -49,7 +49,7 @@ export default {
   mixins: [ detail ],
   methods: {
     async afterOpen (id) {
-      const res = await dibootApi.get(`/${this.name}/${id}`)
+      const res = await dibootApi.get(`${this.baseApi}/${id}`)
       if (res.code === 0) {
         this.initSubItem(res.data)
       } else {

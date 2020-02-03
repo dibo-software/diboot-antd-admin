@@ -5,6 +5,7 @@ import moment from 'moment'
 export default {
   data () {
     return {
+      baseApi: '/',
       labelCol: {
         xs: { span: 24 },
         sm: { span: 5 }
@@ -40,7 +41,7 @@ export default {
         this.afterOpen()
       } else {
         // 否则作为更新处理
-        const res = await dibootApi.get(`/${this.name}/${id}`)
+        const res = await dibootApi.get(`${this.baseApi}/${id}`)
         if (res.code === 0) {
           console.log(res.data)
           this.model = res.data
@@ -90,7 +91,7 @@ export default {
      * @returns {Promise<string>}
      */
     async add (values) {
-      const res = await dibootApi.post(`/${this.name}/`, values)
+      const res = await dibootApi.post(`${this.baseApi}/`, values)
       if (res.code === 0) {
         return { data: res.data, msg: '添加记录成功' }
       } else {
@@ -103,7 +104,7 @@ export default {
      * @returns {Promise<string>}
      */
     async update (values) {
-      const res = await dibootApi.put(`/${this.name}/${this.model.id}`, values)
+      const res = await dibootApi.put(`${this.baseApi}/${this.model.id}`, values)
       if (res.code === 0) {
         return { data: res.data, msg: '更新记录成功' }
       } else {
@@ -187,7 +188,7 @@ export default {
     },
     attachMore () {
       axios({
-        url: `/${this.name}/attachMore`,
+        url: `${this.baseApi}/attachMore`,
         method: 'get'
       }).then(res => {
         this.reloadMore = res.data

@@ -57,7 +57,7 @@ export default {
   name: 'RoleFormModal',
   data () {
     return {
-      name: 'iam/role',
+      name: 'iam/iamRole',
       getMore: true,
       form: this.$form.createForm(this)
     }
