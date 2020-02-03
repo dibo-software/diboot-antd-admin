@@ -22,7 +22,6 @@ export default {
   },
   methods: {
     handleTableChange (pagination) {
-      console.log('handleTableChange', '++++')
       this.queryParam.pageIndex = pagination.current
       this.queryParam.pageSize = pagination.pageSize
       this.getList()
@@ -42,10 +41,12 @@ export default {
         method: 'get'
       }).then(res => {
         this.data = res.data
-        console.log('list', res)
+        this.afterLoadList(this.data)
         this.pagination.pageSize = res.page.pageSize
         this.pagination.current = res.page.pageIndex
         this.pagination.total = res.page.totalCount
+        this.loadingData = false
+      }).catch(e => {
         this.loadingData = false
       })
     },
@@ -90,6 +91,9 @@ export default {
           })
         }
       })
+    },
+    afterLoadList (list) {
+
     }
   },
   async mounted () {

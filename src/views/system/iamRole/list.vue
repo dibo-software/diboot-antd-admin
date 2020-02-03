@@ -43,17 +43,17 @@
         <a-row
           :gutter="16"
           :style="{ marginBottom: '12px' }">
-          <template v-if="record.menuList && record.menuList.length > 0">
+          <template v-if="record.permissionList && record.permissionList.length > 0">
             <a-col v-if="record.admin === true ">
               <a-tag color="blue">拥有所有权限</a-tag>
             </a-col>
-            <a-col v-else :span="24" v-for="(role, index) in record.menuList" :key="index" class="roleItem">
+            <a-col v-else :span="24" v-for="(per, index) in record.permissions" :key="index" class="roleItem">
               <a-col :span="3">
-                <span>{{ role.menuName }}：</span>
+                <span>{{ per.name }}：</span>
               </a-col>
-              <a-col :span="18" v-if="role.permissionList.length > 0">
-                <a-tag color="cyan" v-for="(action, k) in role.permissionList" :key="k">
-                  {{ action.permissionName }}
+              <a-col :span="18" v-if="per.children && per.children.length > 0">
+                <a-tag color="cyan" v-for="(p, k) in per.children" :key="k">
+                  {{ p.operationName }}
                 </a-tag>
               </a-col>
               <a-col :span="18" v-else>-</a-col>
@@ -100,6 +100,7 @@
 <script>
 import dibootForm from './form'
 import list from '@/components/diboot/mixins/list'
+import forEach from 'lodash.foreach'
 
 export default {
   name: 'TableList',
@@ -135,6 +136,31 @@ export default {
     }
   },
   methods: {
+    afterLoadList (list) {
+      list.forEach(role => {
+        if (role.permissionList && role.permissionList.length > 0) {
+          const childrenListMap = {}
+          role.permissionList.forEach(per => {
+            if (per.parentId !== 0) {
+              if (childrenListMap[per.parentId] === undefined) {
+                childrenListMap[per.parentId] = []
+              }
+              childrenListMap[per.parentId].push(per)
+            }
+          })
+          // 合并childrenListMap为permissions
+          const permissions = []
+          forEach(childrenListMap, (values, key) => {
+            if (values && values.length > 0) {
+              const per = { name: values[0]['name'] }
+              per.children = values
+              permissions.push(per)
+            }
+          })
+          role.permissions = permissions
+        }
+      })
+    }
   }
 }
 </script>
