@@ -161,7 +161,8 @@ export default {
       if (this.model && this.model.code && this.model.code.toUpperCase() === 'SUPER_ADMIN') {
         this.isAdmin = true
       }
-      // 获取permissionList
+
+      // 获取系统中所有的permissionList
       const res = await dibootApi.get(`/iam/permission/list`, {parentId: 0})
       if (res.code === 0) {
         this.permissionList = res.data
@@ -183,6 +184,10 @@ export default {
           })
         }
         this.permissionIdsMap[per.id] = selectIds
+
+        // 对全选按钮的选中状态进行处理
+        per.indeterminate = !!selectIds.length && selectIds.length < per.children.length
+        per.checked = selectIds.length === per.children.length
       })
     },
     onCheckAllChange (e, permission) {
