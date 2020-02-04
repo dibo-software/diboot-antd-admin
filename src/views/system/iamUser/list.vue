@@ -11,9 +11,8 @@
           <a-col :md="8" :sm="24">
             <a-form-item label="状态">
               <a-select placeholder="请选择" default-value="" v-model="queryParam.status">
-                <a-select-option value="">全部</a-select-option>
                 <a-select-option
-                  v-for="(status, index) in more.statusKvList"
+                  v-for="(status, index) in more.userStatusKvList"
                   :key="index"
                   :value="status.v"
                 >
@@ -91,6 +90,7 @@
 import list from '@/components/diboot/mixins/list'
 import dibootForm from './form'
 import dibootDetail from './detail'
+import { axios } from '@/utils/request'
 
 export default {
   name: 'SysUserList',
@@ -134,6 +134,36 @@ export default {
     exportUser () {
       console.log('export user!')
       console.log(window.location.href)
+    },
+
+    remove (id) {
+      var _this = this
+      _this.$confirm({
+        title: '删除',
+        content: `确定删除该数据吗？`,
+        okText: '确定',
+        okType: 'danger',
+        cancelText: '取消',
+        onOk () {
+          axios({
+            url: `${_this.baseApi}/delete/${id}`,
+            method: 'delete'
+          }).then((res) => {
+            _this.$notification.success({
+              message: '删除成功',
+              description: '',
+              duration: 2
+            })
+            _this.getList()
+          }).catch(err => {
+            _this.$notification.error({
+              message: '删除失败',
+              description: err.msg,
+              duration: 2
+            })
+          })
+        }
+      })
     }
   },
   components: {

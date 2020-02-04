@@ -56,7 +56,6 @@ export default {
         method: 'get'
       }).then(res => {
         this.more = res.data
-        console.log('more', this.more)
       })
     },
     reset () {
