@@ -104,7 +104,7 @@
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item label="账户状态">
+          <a-form-item label="状态">
             <a-select
               v-if="more.userStatusKvList"
               :getPopupContainer="getPopupContainer"

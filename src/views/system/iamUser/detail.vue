@@ -8,7 +8,11 @@
   >
     <a-spin :spinning="spinning">
       <detail-list :col="2">
-        <detail-list-item term="用户名">{{ model.username }}</detail-list-item>
+        <detail-list-item term="用户名">{{ username }}</detail-list-item>
+        <detail-list-item term="用户编号">{{ model.userNum }}</detail-list-item>
+      </detail-list>
+      <detail-list :col="2">
+        <detail-list-item term="姓名">{{ model.realname }}</detail-list-item>
         <detail-list-item term="性别">{{ model.genderLabel || '-' }}</detail-list-item>
       </detail-list>
       <detail-list :col="2">
@@ -23,11 +27,11 @@
         <detail-list-item term="状态">{{ model.statusLabel || '-' }}</detail-list-item>
       </detail-list>
       <detail-list :col="2">
-        <detail-list-item term="电话">{{ model.phone || '-' }}</detail-list-item>
+        <detail-list-item term="电话">{{ model.mobilePhone || '-' }}</detail-list-item>
         <detail-list-item term="邮箱">{{ model.email || '-' }}</detail-list-item>
       </detail-list>
-      <detail-list :col="1">
-        <detail-list-item term="备注">{{ model.comment || '-' }}</detail-list-item>
+      <detail-list :col="2">
+        <detail-list-item term="出生日期">{{ model.birthday || '-' }}</detail-list-item>
       </detail-list>
     </a-spin>
 
@@ -40,12 +44,23 @@
 <script>
 import detail from '@/components/diboot/mixins/detail'
 import DetailList from '@/components/tools/DetailList'
+import { dibootApi } from '@/utils/request'
 const DetailListItem = DetailList.Item
 export default {
   name: 'IamUserDetail',
   data () {
     return {
-      baseApi: '/iam/user'
+      baseApi: '/iam/user',
+      username: ''
+    }
+  },
+  methods: {
+    async afterOpen (id) {
+      // 获取account的username信息到表单中
+      const res = await dibootApi.get(`${this.baseApi}/getUsername/${id}`)
+      if (res.code === 0) {
+        this.username = res.data
+      }
     }
   },
   components: {
