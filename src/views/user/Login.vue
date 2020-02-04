@@ -198,7 +198,17 @@ export default {
           // loginParams.password = md5(values.password)
           loginParams.password = values.password
           Login(loginParams)
-            .then((res) => this.loginSuccess(res))
+            .then((res) => {
+              if (res.code === 0) {
+                this.loginSuccess(res)
+              } else {
+                this.$notification.error({
+                  message: '登录失败',
+                  description: res.msg,
+                  duration: 2
+                })
+              }
+            })
             .catch(err => this.requestFailed(err))
             .finally(() => {
               state.loginBtn = false
