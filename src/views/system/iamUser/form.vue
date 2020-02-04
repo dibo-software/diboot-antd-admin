@@ -130,41 +130,6 @@
       </a-row>
       <a-row :gutter="16">
         <a-col :span="12">
-          <a-form-item label="密码">
-            <a-button
-              v-if="setPassword === false"
-              @click="setPassword = true"
-              size="small"
-              type="primary">重设密码</a-button>
-            <a-input
-              v-if="setPassword === true"
-              type="password"
-              v-decorator="[
-                'password',
-                {
-                  initialValue: '',
-                  rules: [{ required: true, message: '密码不能为空', whitespace: true }]
-                }
-              ]"
-            />
-          </a-form-item>
-        </a-col>
-        <a-col :span="12">
-          <a-form-item label="出生日期">
-            <a-date-picker
-              format="YYYY-MM-DD HH:mm"
-              v-decorator="[
-                'birthDate',
-                {
-                  initialValue: model.birthDate ? moment(model.birthDate) : undefined
-                }
-              ]"
-            />
-          </a-form-item>
-        </a-col>
-      </a-row>
-      <a-row :gutter="16">
-        <a-col :span="12">
           <a-form-item label="电话">
             <a-input
               placeholder="手机号"
@@ -185,6 +150,28 @@
                 'email',
                 {
                   initialValue: model.email
+                }
+              ]"
+            />
+          </a-form-item>
+        </a-col>
+      </a-row>
+      <a-row :gutter="16">
+        <a-col :span="12">
+          <a-form-item label="密码">
+            <a-button
+              v-if="setPassword === false"
+              @click="setPassword = true"
+              size="small"
+              type="primary">重设密码</a-button>
+            <a-input
+              v-if="setPassword === true"
+              type="password"
+              v-decorator="[
+                'password',
+                {
+                  initialValue: '',
+                  rules: [{ required: true, message: '密码不能为空', whitespace: true }]
                 }
               ]"
             />
