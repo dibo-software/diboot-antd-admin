@@ -109,7 +109,7 @@ export default {
         },
         {
           title: '电话',
-          dataIndex: 'phone',
+          dataIndex: 'mobilePhone',
           customRender: (text) => text || '-'
         },
         {

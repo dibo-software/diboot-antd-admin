@@ -152,10 +152,11 @@
         <a-col :span="12">
           <a-form-item label="出生日期">
             <a-date-picker
+              format="YYYY-MM-DD HH:mm"
               v-decorator="[
-                'birthday',
+                'birthDate',
                 {
-                  initialValue: model.birthday
+                  initialValue: model.birthDate ? moment(model.birthDate) : undefined
                 }
               ]"
             />
@@ -280,6 +281,8 @@ export default {
     },
     enhance (values) {
       values.orgId = 0
+
+      console.log('values==>', values)
     }
   },
   props: {

@@ -12,7 +12,7 @@ import {
 // token在Header中的key
 const JWT_HEADER_KEY = 'authtoken'
 // tokan自动刷新（发送心跳）的时间间隔
-const TOKEN_REFRESH_EXPIRE = 0.2
+const TOKEN_REFRESH_EXPIRE = 10
 // 心跳计时器
 let pingTimer = {}
 setPingTimer()
