@@ -30,9 +30,6 @@
         <detail-list-item term="电话">{{ model.mobilePhone || '-' }}</detail-list-item>
         <detail-list-item term="邮箱">{{ model.email || '-' }}</detail-list-item>
       </detail-list>
-      <detail-list :col="2">
-        <detail-list-item term="出生日期">{{ model.birthday || '-' }}</detail-list-item>
-      </detail-list>
     </a-spin>
 
     <div class="footer">
