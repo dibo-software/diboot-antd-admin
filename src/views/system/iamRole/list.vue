@@ -42,26 +42,28 @@
         <a-row
           :gutter="16"
           :style="{ marginBottom: '12px' }">
-          <template v-if="record.permissionList && record.permissionList.length > 0">
-            <a-col v-if="record.admin === true ">
-              <a-tag color="blue">拥有所有权限</a-tag>
-            </a-col>
-            <a-col v-else :span="24" v-for="(per, index) in record.permissions" :key="index" class="roleItem">
-              <a-col :span="3">
-                <span>{{ per.name }}：</span>
-              </a-col>
-              <a-col :span="18" v-if="per.children && per.children.length > 0">
-                <a-tag color="cyan" v-for="(p, k) in per.children" :key="k">
-                  {{ p.operationName }}
-                </a-tag>
-              </a-col>
-              <a-col :span="18" v-else>-</a-col>
-            </a-col>
-          </template>
+          <a-col v-if="record.superAdmin === true">
+            <a-tag color="blue">拥有所有权限</a-tag>
+          </a-col>
           <template v-else>
-            <a-col :span="12">
-              <a-tag color="red">暂无相关权限</a-tag>
-            </a-col>
+            <template v-if="record.permissionList && record.permissionList.length > 0">
+              <a-col :span="24" v-for="(per, index) in record.permissions" :key="index" class="roleItem">
+                <a-col :span="3">
+                  <span>{{ per.name }}：</span>
+                </a-col>
+                <a-col :span="18" v-if="per.children && per.children.length > 0">
+                  <a-tag color="cyan" v-for="(p, k) in per.children" :key="k">
+                    {{ p.operationName }}
+                  </a-tag>
+                </a-col>
+                <a-col :span="18" v-else>-</a-col>
+              </a-col>
+            </template>
+            <template v-else>
+              <a-col :span="12">
+                <a-tag color="red">暂无相关权限</a-tag>
+              </a-col>
+            </template>
           </template>
         </a-row>
       </div>
@@ -71,7 +73,7 @@
       </span>
 
       <span slot="action" slot-scope="text, record">
-        <div v-if="record.admin === true">
+        <div v-if="record.superAdmin === true">
           -
         </div>
         <div v-else>
@@ -110,7 +112,7 @@ export default {
   data () {
     return {
       baseApi: '/iam/role',
-      getMore: true,
+      getMore: false,
       // 表头
       columns: [
         {

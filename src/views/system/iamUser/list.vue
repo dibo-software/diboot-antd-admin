@@ -143,12 +143,20 @@ export default {
             url: `${_this.baseApi}/delete/${id}`,
             method: 'delete'
           }).then((res) => {
-            _this.$notification.success({
-              message: '删除成功',
-              description: '',
-              duration: 2
-            })
-            _this.getList()
+            if (res.code === 0) {
+              _this.$notification.success({
+                message: '删除成功',
+                description: '',
+                duration: 2
+              })
+              _this.getList()
+            } else {
+              _this.$notification.error({
+                message: '删除失败',
+                description: res.msg,
+                duration: 2
+              })
+            }
           }).catch(err => {
             _this.$notification.error({
               message: '删除失败',
