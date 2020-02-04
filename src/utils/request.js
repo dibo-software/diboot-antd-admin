@@ -9,6 +9,9 @@ import {
   ACCESS_TOKEN
 } from '@/store/mutation-types'
 
+// token在Header中的key
+const JWT_HEADER_KEY = 'authtoken'
+
 // 创建 axios 实例
 const service = axios.create({
   baseURL: '/api', // api base_url
@@ -47,13 +50,20 @@ const err = (error) => {
 service.interceptors.request.use(config => {
   const token = Vue.ls.get(ACCESS_TOKEN)
   if (token) {
-    config.headers['authtoken'] = token // 让每个请求携带自定义 token 请根据实际情况自行修改
+    config.headers[JWT_HEADER_KEY] = token // 让每个请求携带自定义 token 请根据实际情况自行修改
   }
   return config
 }, err)
 
 // response interceptor
 service.interceptors.response.use((response) => {
+  // 检查是否携带有新的token
+  const newToken = response.headers[JWT_HEADER_KEY]
+  if (newToken) {
+    // 将该token设置到vuex以及本地存储中
+    Vue.ls.set(ACCESS_TOKEN, newToken, 7 * 24 * 60 * 60 * 1000)
+    store.commit('SET_TOKEN', newToken)
+  }
   return response.data
 }, err)
 
