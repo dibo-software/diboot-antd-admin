@@ -74,10 +74,10 @@ export const asyncRouterMap = [
             meta: { title: '数据字典管理', keepAlive: true }
           },
           {
-            path: '/system/iamPermission/list',
-            name: 'IamPermissionList',
-            component: () => import('@/views/system/iamPermission/list'),
-            meta: { title: '系统权限管理', keepAlive: true }
+            path: '/system/iamUser/list',
+            name: 'IamUserList',
+            component: () => import('@/views/system/iamUser/list'),
+            meta: { title: '系统用户管理', keepAlive: true }
           },
           {
             path: '/system/iamRole/list',
@@ -86,10 +86,16 @@ export const asyncRouterMap = [
             meta: { title: '角色列表管理', keepAlive: true }
           },
           {
-            path: '/system/iamUser/list',
-            name: 'IamUserList',
-            component: () => import('@/views/system/iamUser/list'),
-            meta: { title: '系统用户管理', keepAlive: true }
+            path: '/system/iamPermission/list',
+            name: 'IamPermissionList',
+            component: () => import('@/views/system/iamPermission/list'),
+            meta: { title: '系统权限查看', keepAlive: true }
+          },
+          {
+            path: '/system/iamLoginTrace/list',
+            name: 'IamLoginTraceList',
+            component: () => import('@/views/system/iamLoginTrace/list'),
+            meta: { title: '登录日志查看', keepAlive: true }
           }
         ]
       },

@@ -33,7 +33,6 @@
 
     <div class="table-operator">
       <a-button style="margin-right: 8px" type="primary" icon="plus" @click="$refs.form.open(undefined)">新建</a-button>
-      <a-button type="dashed" icon="download" @click="exportUser">导出</a-button>
     </div>
 
     <a-table
@@ -131,11 +130,6 @@ export default {
     }
   },
   methods: {
-    exportUser () {
-      console.log('export user!')
-      console.log(window.location.href)
-    },
-
     remove (id) {
       var _this = this
       _this.$confirm({

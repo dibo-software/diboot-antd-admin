@@ -13,18 +13,17 @@
               <a-input placeholder="请输入编码" v-model="queryParam.code" />
             </a-form-item>
           </a-col>
-          <a-col :md="4" :sm="24">
+          <a-col :md="8" :sm="24">
             <span class="table-page-search-submitButtons">
               <a-button type="primary" htmlType="submit">查询</a-button>
               <a-button style="margin-left: 8px" @click="reset">重置</a-button>
             </span>
           </a-col>
-          <a-col :md="1" :sm="0"></a-col>
-          <a-col :md="1" :sm="24">
-            <a-button style="margin-right: 8px" type="primary" icon="plus" @click="$refs.form.open(undefined)">新建</a-button>
-          </a-col>
         </a-row>
       </a-form>
+    </div>
+    <div class="table-operator">
+      <a-button style="margin-right: 8px" type="primary" icon="plus" @click="$refs.form.open(undefined)">新建</a-button>
     </div>
     <a-table
       ref="table"
