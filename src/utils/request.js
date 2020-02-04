@@ -11,6 +11,11 @@ import {
 
 // token在Header中的key
 const JWT_HEADER_KEY = 'authtoken'
+// tokan自动刷新（发送心跳）的时间间隔
+const TOKEN_REFRESH_EXPIRE = 0.2
+// 心跳计时器
+let pingTimer = {}
+setPingTimer()
 
 // 创建 axios 实例
 const service = axios.create({
@@ -64,6 +69,10 @@ service.interceptors.response.use((response) => {
     Vue.ls.set(ACCESS_TOKEN, newToken, 7 * 24 * 60 * 60 * 1000)
     store.commit('SET_TOKEN', newToken)
   }
+  // 如果请求成功，则重置心跳定时器
+  if (response.status === 200) {
+    resetPingTimer()
+  }
   return response.data
 }, err)
 
@@ -101,6 +110,24 @@ const installer = {
   install (Vue) {
     Vue.use(VueAxios, service)
   }
+}
+
+/***
+ * 设置一个心跳定时器
+ */
+function setPingTimer () {
+  pingTimer = setTimeout(() => {
+    dibootApi.post('/iam/ping')
+    resetPingTimer()
+  }, TOKEN_REFRESH_EXPIRE * 60 * 1000)
+}
+
+/***
+ * 重置一个心跳定时器
+ */
+function resetPingTimer () {
+  clearTimeout(pingTimer)
+  setPingTimer()
 }
 
 export {
