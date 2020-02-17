@@ -33,8 +33,16 @@ export function permissionListToPermissions (permissionList) {
       actionListMap[per.code] = actionList
     }
     if (per.operationCode) {
+      const oprationCode = per.operationCode
+      let action = ''
+      if (oprationCode) {
+        const codes = oprationCode.split(':')
+        if (codes.length === 2) {
+          action = codes[1]
+        }
+      }
       actionList.push({
-        action: per.operationCode,
+        action,
         describe: per.operationName,
         defaultCheck: false
       })
@@ -43,7 +51,12 @@ export function permissionListToPermissions (permissionList) {
 
   // 对于每个不重复的permission设置actionList
   permissions.map(per => {
-    per.actionList = actionListMap[per.code]
+    per.permissionId = per.code
+    per.permissionName = per.name
+    per.actionEntitySet = actionListMap[per.code]
+    per.actionList = actionListMap[per.code].map(item => {
+      return item.action
+    })
   })
 
   return permissions
