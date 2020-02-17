@@ -88,7 +88,6 @@
           :loading="state.loginBtn"
           :disabled="state.loginBtn"
         >确定</a-button>
-        <a-button type="primary" @click="handleGetInfo">获取信息测试</a-button>
       </a-form-item>
 
       <div class="user-login-other">
