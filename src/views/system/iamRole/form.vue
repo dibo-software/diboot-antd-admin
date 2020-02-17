@@ -234,7 +234,10 @@ export default {
     enhance (values) {
       const permissionIds = []
       forEach(this.permissionIdsMap, (value, key) => {
-        permissionIds.push(...value)
+        if (value && value.length > 0) {
+          permissionIds.push(parseInt(key))
+          permissionIds.push(...value)
+        }
       })
       values.permissionIdList = permissionIds
     }

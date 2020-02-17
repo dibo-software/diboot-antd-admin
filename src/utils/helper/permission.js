@@ -1,5 +1,6 @@
 const PERMISSION_ENUM = {
   'list': { key: 'list', label: '列表' },
+  'detail': { key: 'detail', label: '详情' },
   'create': { key: 'create', label: '新增' },
   'update': { key: 'update', label: '更改' },
   'delete': { key: 'delete', label: '删除' },

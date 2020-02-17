@@ -31,7 +31,7 @@
       </a-form>
     </div>
 
-    <div class="table-operator">
+    <div v-action:create class="table-operator">
       <a-button v-action:create style="margin-right: 8px" type="primary" icon="plus" @click="$refs.form.open(undefined)">新建</a-button>
     </div>
 
@@ -55,7 +55,7 @@
       </span>
 
       <span slot="action" slot-scope="text, record">
-        <a @click="$refs.form.open(record.id)">编辑</a>
+        <a v-action:update @click="$refs.form.open(record.id)">编辑</a>
         <a-divider type="vertical"/>
         <a-dropdown>
           <a class="ant-dropdown-link">
@@ -63,10 +63,10 @@
           </a>
           <a-menu slot="overlay">
             <a-menu-item>
-              <a href="javascript:;" @click="$refs.detail.open(record.id)">详情</a>
+              <a v-action:detail href="javascript:;" @click="$refs.detail.open(record.id)">详情</a>
             </a-menu-item>
             <a-menu-item>
-              <a href="javascript:;" @click="remove(record.id)">删除</a>
+              <a v-action:delete href="javascript:;" @click="remove(record.id)">删除</a>
             </a-menu-item>
           </a-menu>
         </a-dropdown>
