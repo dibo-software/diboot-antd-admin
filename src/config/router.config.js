@@ -77,7 +77,46 @@ export const asyncRouterMap = [
             meta: { title: '500', permission: [ 'exception' ] }
           }
         ]
-      }
+      },
+
+      // account
+      {
+        path: '/account',
+        component: RouteView,
+        redirect: '/account/center',
+        name: 'account',
+        meta: { title: '个人页', icon: 'user', keepAlive: true },
+        children: [
+          {
+            path: '/account/center',
+            name: 'center',
+            component: () => import('@/views/account/center/Index'),
+            meta: { title: '个人中心', keepAlive: true }
+          },
+          {
+            path: '/account/settings',
+            name: 'settings',
+            component: () => import('@/views/account/settings/Index'),
+            meta: { title: '个人设置', hideHeader: true },
+            redirect: '/account/settings/base',
+            hideChildrenInMenu: true,
+            children: [
+              {
+                path: '/account/settings/base',
+                name: 'BaseSettings',
+                component: () => import('@/views/account/settings/BaseSetting'),
+                meta: { title: '基本设置', hidden: true }
+              },
+              {
+                path: '/account/settings/security',
+                name: 'SecuritySettings',
+                component: () => import('@/views/account/settings/Security'),
+                meta: { title: '安全设置', hidden: true, keepAlive: true }
+              }
+            ]
+          }
+        ]
+      },
     ]
   },
   {
