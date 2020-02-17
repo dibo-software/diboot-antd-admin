@@ -163,7 +163,7 @@ export default {
       }
 
       // 获取系统中所有的permissionList
-      const res = await dibootApi.get(`/iam/permission/list`, {parentId: 0})
+      const res = await dibootApi.get(`/iam/permission/list`, { parentId: 0 })
       if (res.code === 0) {
         this.permissionList = res.data
       }
