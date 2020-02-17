@@ -50,18 +50,30 @@ export default {
         )
           .then(res => {
             this.loadingData = false
-            this.data = res.data
-            this.afterLoadList(this.data)
-            this.pagination.pageSize = res.page.pageSize
-            this.pagination.current = res.page.pageIndex
-            this.pagination.total = res.page.totalCount
-            // eslint-disable-next-line no-undef
-            resolve(this.data)
+            if (res.code === 0) {
+              this.data = res.data
+              this.afterLoadList(this.data)
+              this.pagination.pageSize = res.page.pageSize
+              this.pagination.current = res.page.pageIndex
+              this.pagination.total = res.page.totalCount
+              // eslint-disable-next-line no-undef
+              resolve(this.data)
+            } else {
+              this.$notification.error({
+                message: '获取列表数据失败',
+                description: res.msg
+              })
+              reject(res.msg)
+            }
           })
-          .catch(() => {
+          .catch(err => {
             this.loadingData = false
             // eslint-disable-next-line prefer-promise-reject-errors
-            reject()
+            this.$notification.error({
+              message: '获取列表数据失败',
+              description: err
+            })
+            reject(err)
           })
       })
     },
@@ -79,16 +91,28 @@ export default {
           tempQueryParam
         ).then(res => {
           this.loadingData = false
-          this.data = res.data
-          this.afterLoadList(this.data)
-          this.pagination.pageSize = res.page.pageSize
-          this.pagination.current = res.page.pageIndex
-          this.pagination.total = res.page.totalCount
-          resolve(this.data)
-        }).catch(() => {
+          if (res.code === 0){
+            this.data = res.data
+            this.afterLoadList(this.data)
+            this.pagination.pageSize = res.page.pageSize
+            this.pagination.current = res.page.pageIndex
+            this.pagination.total = res.page.totalCount
+            resolve(this.data)
+          } else {
+            this.$notification.error({
+              message: '获取列表数据失败',
+              description: res.msg
+            })
+            reject(res.msg)
+          }
+        }).catch(err => {
           this.loadingData = false
           // eslint-disable-next-line prefer-promise-reject-errors
-          reject()
+          this.$notification.error({
+            message: '获取列表数据失败',
+            description: err
+          })
+          reject(err)
         })
       })
     },

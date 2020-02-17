@@ -21,31 +21,31 @@ export const asyncRouterMap = [
             path: '/system/dictionary/list',
             name: 'DictList',
             component: () => import('@/views/system/dictionary/list'),
-            meta: { title: '数据字典管理', keepAlive: true }
+            meta: { title: '数据字典管理', keepAlive: true, permission: ['Dictionary'] }
           },
           {
             path: '/system/iamUser/list',
             name: 'IamUserList',
             component: () => import('@/views/system/iamUser/list'),
-            meta: { title: '系统用户管理', keepAlive: true }
+            meta: { title: '系统用户管理', keepAlive: true, permission: ['IamUser'] }
           },
           {
             path: '/system/iamRole/list',
             name: 'IamRoleList',
             component: () => import('@/views/system/iamRole/list'),
-            meta: { title: '角色列表管理', keepAlive: true }
+            meta: { title: '角色列表管理', keepAlive: true, permission: ['IamRole'] }
           },
           {
             path: '/system/iamPermission/list',
             name: 'IamPermissionList',
             component: () => import('@/views/system/iamPermission/list'),
-            meta: { title: '系统权限查看', keepAlive: true }
+            meta: { title: '系统权限查看', keepAlive: true, permission: ['IamPermission'] }
           },
           {
             path: '/system/iamLoginTrace/list',
             name: 'IamLoginTraceList',
             component: () => import('@/views/system/iamLoginTrace/list'),
-            meta: { title: '登录日志查看', keepAlive: true }
+            meta: { title: '登录日志查看', keepAlive: true, permission: ['IamLoginTrace'] }
           }
         ]
       },
