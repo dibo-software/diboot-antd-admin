@@ -1,4 +1,4 @@
-import { axios, dibootApi } from '@/utils/request'
+import { dibootApi } from '@/utils/request'
 import { mapGetters } from 'vuex'
 import moment from 'moment'
 
@@ -43,7 +43,6 @@ export default {
         // 否则作为更新处理
         const res = await dibootApi.get(`${this.baseApi}/${id}`)
         if (res.code === 0) {
-          console.log(res.data)
           this.model = res.data
           this.title = '更新'
           this.state.visible = true
@@ -149,7 +148,6 @@ export default {
       this.close()
       this.form.resetFields()
       this.$emit('refreshList')
-      console.log('result.data==>', result.data)
       this.$emit('changeKey', result.data)
     },
     /***
@@ -186,11 +184,13 @@ export default {
 
     },
     attachMore () {
-      axios({
-        url: `${this.baseApi}/attachMore`,
-        method: 'get'
-      }).then(res => {
-        this.reloadMore = res.data
+      return new Promise((resolve, reject) => {
+        dibootApi.get(`${this.baseApi}/attachMore`).then((res) => {
+          this.reloadMore = res.data
+          resolve(res.data)
+        }).catch(err => {
+          reject(err)
+        })
       })
     },
     /***
