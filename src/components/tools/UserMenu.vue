@@ -1,12 +1,12 @@
 <template>
   <div class="user-wrapper">
     <div class="content-box">
-      <a href="https://pro.loacg.com/docs/getting-started" target="_blank">
+      <a href="https://www.diboot.com/" target="_blank">
         <span class="action">
           <a-icon type="question-circle-o"></a-icon>
         </span>
       </a>
-      <notice-icon class="action"/>
+<!--      <notice-icon class="action"/>-->
       <a-dropdown>
         <span class="action ant-dropdown-link user-dropdown-menu">
           <a-avatar class="avatar" size="small" :src="avatar()"/>
@@ -14,23 +14,19 @@
         </span>
         <a-menu slot="overlay" class="user-dropdown-menu-wrapper">
           <a-menu-item key="0">
-            <router-link :to="{ name: 'center' }">
+            <router-link :to="{ name: 'account' }">
               <a-icon type="user"/>
               <span>个人中心</span>
             </router-link>
           </a-menu-item>
           <a-menu-item key="1">
-            <router-link :to="{ name: 'settings' }">
+            <router-link :to="{ name: 'ChangePwdSettings' }">
               <a-icon type="setting"/>
-              <span>账户设置</span>
+              <span>更改密码</span>
             </router-link>
           </a-menu-item>
-          <a-menu-item key="2" disabled>
-            <a-icon type="setting"/>
-            <span>测试</span>
-          </a-menu-item>
           <a-menu-divider/>
-          <a-menu-item key="3">
+          <a-menu-item key="2">
             <a href="javascript:;" @click="handleLogout">
               <a-icon type="logout"/>
               <span>退出登录</span>

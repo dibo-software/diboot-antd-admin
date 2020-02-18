@@ -53,6 +53,7 @@
 import form from '@/components/diboot/mixins/form'
 import { dibootApi } from '@/utils/request'
 export default {
+  name: 'ChangePwdSettings',
   data () {
     return {
       baseApi: '/iam/user',
