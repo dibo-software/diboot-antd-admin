@@ -2,57 +2,71 @@
   <div class="account-settings-info-view">
     <a-row :gutter="16">
       <a-col :md="24" :lg="16">
-
-        <a-form layout="vertical">
-          <a-form-item
-            label="昵称"
-          >
-            <a-input placeholder="给自己起个名字" />
+        <a-form layout="vertical" :form="form">
+          <a-form-item label="姓名">
+            <a-input
+              placeholder="请输入姓名"
+              v-decorator="[
+                'realname',
+                {
+                  initialValue: model.realname,
+                  rules: [{ required: true, message: '姓名不能为空', whitespace: true }]
+                }
+              ]"
+            />
           </a-form-item>
-          <a-form-item
-            label="Bio"
-          >
-            <a-textarea rows="4" placeholder="You are not alone."/>
-          </a-form-item>
-
-          <a-form-item
-            label="电子邮件"
-            :required="false"
-          >
-            <a-input placeholder="exp@admin.com"/>
-          </a-form-item>
-          <a-form-item
-            label="加密方式"
-            :required="false"
-          >
-            <a-select defaultValue="aes-256-cfb">
-              <a-select-option value="aes-256-cfb">aes-256-cfb</a-select-option>
-              <a-select-option value="aes-128-cfb">aes-128-cfb</a-select-option>
-              <a-select-option value="chacha20">chacha20</a-select-option>
+          <a-form-item label="性别">
+            <a-select
+              v-if="more.genderKvList"
+              :getPopupContainer="getPopupContainer"
+              placeholder="请选择"
+              v-decorator="[
+                'gender',
+                {
+                  initialValue: model.gender,
+                  rules: [{ required: true, message: '性别不能为空' }]
+                }
+              ]"
+            >
+              <a-select-option
+                v-for="(gender, index) in more.genderKvList"
+                :key="index"
+                :value="gender.v"
+              >
+                {{ gender.k }}
+              </a-select-option>
             </a-select>
           </a-form-item>
-          <a-form-item
-            label="连接密码"
-            :required="false"
-          >
-            <a-input placeholder="h3gSbecd"/>
+          <a-form-item label="电话">
+            <a-input
+              placeholder="手机号"
+              v-decorator="[
+                'mobilePhone',
+                {
+                  initialValue: model.mobilePhone
+                }
+              ]"
+            />
           </a-form-item>
-          <a-form-item
-            label="登录密码"
-            :required="false"
-          >
-            <a-input placeholder="密码"/>
+          <a-form-item label="邮箱">
+            <a-input
+              placeholder="xxx@xxx.com"
+              v-decorator="[
+                'email',
+                {
+                  initialValue: model.email
+                }
+              ]"
+            />
           </a-form-item>
-
           <a-form-item>
-            <a-button type="primary">提交</a-button>
-            <a-button style="margin-left: 8px">保存</a-button>
+            <a-button @click="onSubmit" type="primary">保存</a-button>
           </a-form-item>
         </a-form>
 
       </a-col>
       <a-col :md="24" :lg="8" :style="{ minHeight: '180px' }">
-        <div class="ant-upload-preview" @click="$refs.modal.edit(1)" >
+        <div class="ant-upload-preview" @click="$refs.modal.edit(1)" style="display: none">
           <a-icon type="cloud-upload-o" class="upload-icon"/>
           <div class="mask">
             <a-icon type="plus" />
@@ -71,6 +85,9 @@
 
 <script>
 import AvatarModal from './AvatarModal'
+import form from '@/components/diboot/mixins/form'
+import { dibootApi } from '@/utils/request'
+import { welcome } from '@/utils/util'
 
 export default {
   components: {
@@ -78,6 +95,10 @@ export default {
   },
   data () {
     return {
+      baseApi: '/iam/user',
+      more: {},
+      model: {},
+      form: this.$form.createForm(this),
       // cropper
       preview: {},
       option: {
@@ -98,7 +119,51 @@ export default {
     }
   },
   methods: {
-
+    async getCurrentUserInfo () {
+      const res = await dibootApi.get('/iam/user/getCurrentUserInfo')
+      if (res.code === 0) {
+        this.model = res.data
+      } else {
+        this.$message.error(res.msg)
+      }
+    },
+    /***
+     * 更新记录的提交
+     * @param values
+     * @returns {Promise<string>}
+     */
+    async update (values) {
+      const res = await dibootApi.post(`${this.baseApi}/updateCurrentUserInfo`, values)
+      if (res.code === 0) {
+        return { data: res.data, msg: '保存成功' }
+      } else {
+        throw new Error(res.msg)
+      }
+    },
+    /***
+     * 提交成功之后的处理
+     * @param msg
+     */
+    submitSuccess (result) {
+      this.$notification.success({
+        message: '操作成功',
+        description: result.msg
+      })
+      this.$store.commit('SET_NAME', { name: this.form.getFieldValue('realname'), welcome: '' })
+    },
+    async loadMore () {
+      const res = await dibootApi.get('/iam/user/attachMore')
+      if (res.code === 0) {
+        this.more = res.data
+      } else {
+        this.$message.error('获取关联列表数据失败')
+      }
+    }
+  },
+  mixins: [ form ],
+  async mounted () {
+    await this.getCurrentUserInfo()
+    await this.loadMore()
   }
 }
 </script>
