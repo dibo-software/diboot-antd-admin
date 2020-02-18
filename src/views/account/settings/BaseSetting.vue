@@ -87,7 +87,6 @@
 import AvatarModal from './AvatarModal'
 import form from '@/components/diboot/mixins/form'
 import { dibootApi } from '@/utils/request'
-import { welcome } from '@/utils/util'
 
 export default {
   components: {

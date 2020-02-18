@@ -1,67 +1,47 @@
 <template>
   <div class="account-change-pwd-view">
-
     <a-row :gutter="16">
       <a-col :md="24" :lg="16">
         <a-form layout="vertical" :form="form">
-          <a-form-item label="姓名">
+          <a-form-item label="旧密码">
             <a-input
-              placeholder="请输入姓名"
+              type="password"
+              placeholder="请输入旧密码"
               v-decorator="[
-                'realname',
+                'oldPassword',
                 {
-                  initialValue: model.realname,
-                  rules: [{ required: true, message: '姓名不能为空', whitespace: true }]
+                  rules: [{ required: true, message: '旧密码不能为空', whitespace: true }]
                 }
               ]"
             />
           </a-form-item>
-          <a-form-item label="性别">
-            <a-select
-              v-if="more.genderKvList"
-              :getPopupContainer="getPopupContainer"
-              placeholder="请选择"
-              v-decorator="[
-                'gender',
-                {
-                  initialValue: model.gender,
-                  rules: [{ required: true, message: '性别不能为空' }]
-                }
-              ]"
-            >
-              <a-select-option
-                v-for="(gender, index) in more.genderKvList"
-                :key="index"
-                :value="gender.v"
-              >
-                {{ gender.k }}
-              </a-select-option>
-            </a-select>
-          </a-form-item>
-          <a-form-item label="电话">
+          <a-form-item label="新密码">
             <a-input
-              placeholder="手机号"
+              type="password"
+              placeholder="请输入新密码"
               v-decorator="[
-                'mobilePhone',
+                'password',
                 {
-                  initialValue: model.mobilePhone
+                  rules: [{ required: true, message: '新密码不能为空', whitespace: true }]
                 }
               ]"
             />
           </a-form-item>
-          <a-form-item label="邮箱">
+          <a-form-item label="确认密码">
             <a-input
-              placeholder="xxx@xxx.com"
+              type="password"
+              placeholder="请确认新密码"
               v-decorator="[
-                'email',
+                'confirmPassword',
                 {
-                  initialValue: model.email
+                  rules: [{ required: true, message: '确认密码不能为空', whitespace: true }, { validator: confirmPwdValidator }],
+                  validateTrigger: 'change'
                 }
               ]"
             />
           </a-form-item>
           <a-form-item>
-            <a-button @click="onSubmit" type="primary">提交</a-button>
+            <a-button @click="onSubmit" type="primary">更改密码</a-button>
           </a-form-item>
         </a-form>
       </a-col>
@@ -70,11 +50,51 @@
 </template>
 
 <script>
+import form from '@/components/diboot/mixins/form'
+import { dibootApi } from '@/utils/request'
 export default {
   data () {
     return {
+      baseApi: '/iam/user',
+      form: this.$form.createForm(this),
     }
-  }
+  },
+  methods: {
+    /***
+     * 新建记录的提交
+     * @param values
+     * @returns {Promise<string>}
+     */
+    async add (values) {
+      const res = await dibootApi.post(`${this.baseApi}/changePwd`, values)
+      if (res.code === 0) {
+        return { data: res.data, msg: '更改密码成功' }
+      } else {
+        throw new Error(res.msg)
+      }
+    },
+    /***
+     * 提交成功之后的处理
+     * @param msg
+     */
+    submitSuccess (result) {
+      this.$notification.success({
+        message: '操作成功',
+        description: result.msg
+      })
+      this.form.resetFields()
+    },
+    confirmPwdValidator (rule, value, callback) {
+      if (!value) {
+        callback()
+      }
+      if (value === this.form.getFieldValue('password')) {
+        callback()
+      }
+      callback(new Error('确认密码与新密码不一致'))
+    }
+  },
+  mixins: [ form ]
 }
 </script>
 
