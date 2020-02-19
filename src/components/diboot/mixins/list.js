@@ -3,7 +3,12 @@ import { dibootApi } from '@/utils/request'
 export default {
   data () {
     return {
+      // 请求接口基础路径
       baseApi: '/',
+      // 列表数据接口
+      listApi: '',
+      // 删除接口
+      deleteApiPrefix: '',
       // 自定义参数（不被查询表单重置和改变的参数）
       customQueryParam: {},
       // 与查询条件绑定的参数（会被查询表单重置和改变的参数）
@@ -134,12 +139,13 @@ export default {
           okType: 'danger',
           cancelText: '取消',
           onOk () {
-            dibootApi.delete(`${_this.baseApi}/${id}`).then(async (res) => {
+            const deleteApiPrefix = _this.deleteApiPrefix ? _this.deleteApiPrefix : ''
+            dibootApi.delete(`${_this.baseApi}${deleteApiPrefix}/${id}`).then(async (res) => {
               if (res.code === 0) {
                 _this.$notification.success({
                   message: '删除成功',
-                  description: '',
-                  duration: 2
+                  description: '已删除该数据',
+                  duration: 3
                 })
                 await _this.getList()
                 resolve(res.data)
@@ -147,7 +153,7 @@ export default {
                 _this.$notification.error({
                   message: '删除失败',
                   description: res.msg,
-                  duration: 2
+                  duration: 3
                 })
                 // eslint-disable-next-line prefer-promise-reject-errors
                 reject(res.msg)
@@ -156,7 +162,7 @@ export default {
               _this.$notification.error({
                 message: '删除失败',
                 description: err.msg,
-                duration: 2
+                duration: 3
               })
               reject(err.msg)
             })
