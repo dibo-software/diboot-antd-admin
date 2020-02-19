@@ -92,7 +92,7 @@ import dibootDetail from './detail'
 import { axios } from '@/utils/request'
 
 export default {
-  name: 'SysUserList',
+  name: 'IamUserList',
   data () {
     return {
       baseApi: '/iam/user',

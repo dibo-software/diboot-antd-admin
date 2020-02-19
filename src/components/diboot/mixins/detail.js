@@ -4,6 +4,7 @@ import moment from 'moment'
 export default {
   data () {
     return {
+      baseApi: '/',
       visible: false,
       model: {},
       title: '',

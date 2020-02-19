@@ -19,7 +19,7 @@
         </detail-list-item>
       </detail-list>
       <detail-list :col="1">
-        <detail-list-item term="备注">{{ model.comment || '-' }}</detail-list-item>
+        <detail-list-item term="备注">{{ model.description || '-' }}</detail-list-item>
       </detail-list>
     </a-spin>
 
@@ -49,15 +49,7 @@ export default {
   mixins: [ detail ],
   methods: {
     async afterOpen (id) {
-      const res = await dibootApi.get(`${this.baseApi}/${id}`)
-      if (res.code === 0) {
-        this.initSubItem(res.data)
-      } else {
-        this.$notification.error({
-          message: '获取数据失败',
-          description: res.msg
-        })
-      }
+      this.initSubItem(this.model)
     },
     initSubItem: function (data) {
       if (data.children && data.children.length > 0) {

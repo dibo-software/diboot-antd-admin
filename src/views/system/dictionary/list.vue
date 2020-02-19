@@ -72,7 +72,7 @@ export default {
   data () {
     return {
       baseApi: '/dictionary',
-      queryParam: { parentId: 0 },
+      customQueryParam: { parentId: 0 },
       getMore: false,
       columns: [
         {

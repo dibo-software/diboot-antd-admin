@@ -25,9 +25,6 @@ export default {
     }
   },
   computed: {
-    // userInfo () {
-    //   return this.$store.getters.userInfo
-    // },
     ...mapGetters(['userInfo'])
   },
   methods: {

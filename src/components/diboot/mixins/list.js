@@ -188,7 +188,6 @@ export default {
     }
   },
   async mounted () {
-    console.log('mounted', this.getListFromMixin)
     if (this.getListFromMixin === true) {
       await this.getList()
     }
