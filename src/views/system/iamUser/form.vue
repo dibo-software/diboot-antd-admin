@@ -58,7 +58,7 @@
               v-if="more.roleKvList"
               :getPopupContainer="getPopupContainer"
               mode="multiple"
-              placeholder="请选择"
+              placeholder="请选择角色"
               v-decorator="[
                 'roleIdList',
                 {
@@ -132,7 +132,7 @@
         <a-col :span="12">
           <a-form-item label="电话">
             <a-input
-              placeholder="手机号"
+              placeholder="请输入电话"
               v-decorator="[
                 'mobilePhone',
                 {
@@ -268,8 +268,6 @@ export default {
     },
     enhance (values) {
       values.orgId = 0
-
-      console.log('values==>', values)
     }
   },
   props: {
