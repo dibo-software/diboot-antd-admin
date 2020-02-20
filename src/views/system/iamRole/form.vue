@@ -182,9 +182,10 @@ export default {
               selectIds.push(item.id)
             }
           })
+        } else {
+          per.children = []
         }
         this.permissionIdsMap[per.id] = selectIds
-
         // 对全选按钮的选中状态进行处理
         per.indeterminate = !!selectIds.length && selectIds.length < per.children.length
         per.checked = selectIds.length === per.children.length
