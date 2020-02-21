@@ -11,7 +11,7 @@ import {
 
 // token在Header中的key
 const JWT_HEADER_KEY = 'authtoken'
-// tokan自动刷新（发送心跳）的时间间隔
+// tokan自动刷新（发送心跳）的时间间隔（分钟）
 const TOKEN_REFRESH_EXPIRE = 10
 // 心跳计时器
 let pingTimer = {}
@@ -20,7 +20,6 @@ setPingTimer()
 // 创建 axios 实例
 const service = axios.create({
   baseURL: '/api', // api base_url
-  // baseURL: '/iam', // api base_url
   timeout: 6000 // 请求超时时间
 })
 

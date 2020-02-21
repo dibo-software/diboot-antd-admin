@@ -39,7 +39,7 @@
           </a-form-item>
           <a-form-item label="电话">
             <a-input
-              placeholder="手机号"
+              placeholder="电话"
               v-decorator="[
                 'mobilePhone',
                 {
@@ -89,6 +89,7 @@ import form from '@/components/diboot/mixins/form'
 import { dibootApi } from '@/utils/request'
 
 export default {
+  name: 'BaseSetting',
   components: {
     AvatarModal
   },

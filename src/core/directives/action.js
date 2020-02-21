@@ -24,8 +24,6 @@ const action = Vue.directive('action', {
       if (!permissionId.includes(p.permissionId)) {
         return
       }
-      console.log('actionList===>', p.actionList)
-      console.log('actionName===>', actionName)
       if (p.actionList && !p.actionList.includes(actionName)) {
         el.parentNode && el.parentNode.removeChild(el) || (el.style.display = 'none')
       }

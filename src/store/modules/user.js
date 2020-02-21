@@ -61,7 +61,7 @@ const user = {
             commit('SET_ROLES', result.role)
             commit('SET_INFO', result)
           } else {
-            reject(new Error('getInfo: roles must be a non-null array !'))
+            reject(new Error('请配置该账号的角色与权限！'))
           }
 
           commit('SET_NAME', { name: result.name, welcome: welcome() })

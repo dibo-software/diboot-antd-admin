@@ -57,7 +57,7 @@ export default {
   data () {
     return {
       baseApi: '/iam/user',
-      form: this.$form.createForm(this),
+      form: this.$form.createForm(this)
     }
   },
   methods: {
