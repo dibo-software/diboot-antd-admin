@@ -25,11 +25,16 @@
                 @click="reset">重置</a-button>
             </span>
           </a-col>
+          <a-col :md="2" :sm="24">
+            <a-button
+              v-action:create
+              block
+              type="primary"
+              icon="plus"
+              @click="$refs.form.open(undefined)">新建</a-button>
+          </a-col>
         </a-row>
       </a-form>
-    </div>
-    <div v-action:create class="table-operator">
-      <a-button style="margin-right: 8px" type="primary" icon="plus" @click="$refs.form.open(undefined)">新建</a-button>
     </div>
     <a-table
       ref="table"
@@ -84,17 +89,21 @@
         </div>
         <div v-else>
           <a v-action:update @click="$refs.form.open(record.id)">编辑</a>
-          <a-divider type="vertical"/>
-          <a-dropdown v-action:delete>
+        <a-divider v-action:detail v-permission="['delete']" type="vertical" />
+          <a-dropdown
+            v-permission="['delete']">
             <a class="ant-dropdown-link">
-              更多 <a-icon type="down"/>
+              更多 <a-icon type="down" />
             </a>
             <a-menu slot="overlay">
               <a-menu-item>
-                <a href="javascript:;" @click="remove(record.id)">删除</a>
+                <a v-action:delete href="javascript:;" @click="remove(record.id)">删除</a>
               </a-menu-item>
             </a-menu>
           </a-dropdown>
+          <span v-permission-missing="['update', 'delete']">
+            -
+          </span>
         </div>
       </span>
     </a-table>
@@ -179,11 +188,7 @@ export default {
   .roleItem {
     margin-bottom: 10px;
   }
-
   .roleItem:last-child {
     margin: auto;
-  }
-  .table-operator {
-    margin-bottom: 18px;
   }
 </style>

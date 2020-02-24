@@ -13,6 +13,8 @@ import VueClipboard from 'vue-clipboard2'
 import PermissionHelper from '@/utils/helper/permission'
 // import '@/components/use'
 import './directives/action'
+import './directives/permission'
+import './directives/permissionMissing'
 
 VueClipboard.config.autoSetContainer = true
 
