@@ -28,6 +28,7 @@ export default {
         pageSize: 10,
         current: 1,
         total: 0,
+        showTotal: (total, range) => `当前显示 ${range[0]} - ${range[1]} 条/共 ${total} 条`,
         showSizeChanger: true,
         pageSizeOptions: ['10', '20', '30', '50', '100']
       }
