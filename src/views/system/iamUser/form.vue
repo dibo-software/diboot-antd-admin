@@ -195,6 +195,8 @@ export default {
   data () {
     return {
       baseApi: '/iam/user',
+      createApi: '/create',
+      updateApiPrefix: '/update',
       setPassword: false,
       form: this.$form.createForm(this)
     }
@@ -212,32 +214,6 @@ export default {
         if (res.code === 0) {
           this.form.setFieldsValue({ username: res.data })
         }
-      }
-    },
-    /***
-     * 新建记录的提交
-     * @param values
-     * @returns {Promise<string>}
-     */
-    async add (values) {
-      const res = await dibootApi.post(`${this.baseApi}/create`, values)
-      if (res.code === 0) {
-        return { data: res.data, msg: '添加记录成功' }
-      } else {
-        throw new Error(res.msg)
-      }
-    },
-    /***
-     * 更新记录的提交
-     * @param values
-     * @returns {Promise<string>}
-     */
-    async update (values) {
-      const res = await dibootApi.put(`${this.baseApi}/update/${this.model.id}`, values)
-      if (res.code === 0) {
-        return { data: res.data, msg: '更新记录成功' }
-      } else {
-        throw new Error(res.msg)
       }
     },
     async checkUsernameDuplicate (rule, value, callback) {

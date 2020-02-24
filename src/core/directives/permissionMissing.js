@@ -12,7 +12,7 @@ const permissionMissing = Vue.directive('permissionMissing', {
     const elVal = vnode.context.$route.meta.permission
     const permissionId = elVal instanceof String && [elVal] || elVal
 
-    // 此处的权限列表判断为或关系，也就是v-permission的参数中的权限有一个满足，就将显示该元素
+    // 此处的权限列表判断为或关系，也就是v-permission的参数中的权限有一个满足，就不显示该元素
     if (value && value instanceof Array && value.length > 0) {
       // 当前允许的权限列表
       const actions = value
@@ -38,7 +38,7 @@ const permissionMissing = Vue.directive('permissionMissing', {
         el.parentNode && el.parentNode.removeChild(el) || (el.style.display = 'none')
       }
     } else {
-      throw new Error(`需要配置权限! Like v-permission="['create','update']"`)
+      throw new Error(`需要配置权限! Like v-permission-missing="['create','update']"`)
     }
   }
 })

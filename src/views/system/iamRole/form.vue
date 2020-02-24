@@ -123,6 +123,8 @@ export default {
   data () {
     return {
       baseApi: '/iam/role',
+      createApi: '/create',
+      updateApiPrefix: '/update',
       form: this.$form.createForm(this),
       isAdmin: false,
       permissionList: [],
@@ -130,32 +132,6 @@ export default {
     }
   },
   methods: {
-    /***
-     * 新建记录的提交
-     * @param values
-     * @returns {Promise<string>}
-     */
-    async add (values) {
-      const res = await dibootApi.post(`${this.baseApi}/create`, values)
-      if (res.code === 0) {
-        return { data: res.data, msg: '添加记录成功' }
-      } else {
-        throw new Error(res.msg)
-      }
-    },
-    /***
-     * 更新记录的提交
-     * @param values
-     * @returns {Promise<string>}
-     */
-    async update (values) {
-      const res = await dibootApi.put(`${this.baseApi}/update/${this.model.id}`, values)
-      if (res.code === 0) {
-        return { data: res.data, msg: '更新记录成功' }
-      } else {
-        throw new Error(res.msg)
-      }
-    },
     async afterOpen (id) {
       // 是否为超级管理员
       if (this.model && this.model.code && this.model.code.toUpperCase() === 'SUPER_ADMIN') {
