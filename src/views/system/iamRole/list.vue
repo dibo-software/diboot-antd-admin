@@ -13,10 +13,16 @@
               <a-input placeholder="请输入编码" v-model="queryParam.code" />
             </a-form-item>
           </a-col>
-          <a-col :md="8" :sm="24">
+          <a-col :md="6" :sm="24">
             <span class="table-page-search-submitButtons">
-              <a-button type="primary" htmlType="submit">查询</a-button>
-              <a-button style="margin-left: 8px" @click="reset">重置</a-button>
+              <a-button
+                icon="search"
+                type="primary"
+                htmlType="submit">查询</a-button>
+              <a-button
+                icon="redo"
+                style="margin-left: 8px"
+                @click="reset">重置</a-button>
             </span>
           </a-col>
         </a-row>
@@ -122,6 +128,10 @@ export default {
         {
           title: '编码',
           dataIndex: 'code'
+        },
+        {
+          title: '描述',
+          dataIndex: 'description'
         },
         {
           title: '创建时间',

@@ -15,10 +15,23 @@
           </a-col>
           <a-col :md="6" :sm="24">
             <span class="table-page-search-submitButtons">
-              <a-button type="primary" htmlType="submit">查询</a-button>
-              <a-button @click="reset">重置</a-button>
-              <a-button v-action:create icon="plus" type="primary" @click="$refs.form.open(undefined)">新建</a-button>
+              <a-button
+                icon="search"
+                type="primary"
+                htmlType="submit">查询</a-button>
+              <a-button
+                icon="redo"
+                style="margin-left: 8px"
+                @click="reset">重置</a-button>
             </span>
+          </a-col>
+          <a-col :md="2" :sm="24">
+            <a-button
+              v-action:create
+              block
+              type="primary"
+              icon="plus"
+              @click="$refs.form.open(undefined)">新建</a-button>
           </a-col>
         </a-row>
       </a-form>
@@ -35,17 +48,17 @@
       rowKey="id"
     >
       <span slot="action" slot-scope="text, record">
-        <a v-action:update @click="$refs.form.open(record.id)">编辑</a>
-        <a-divider type="vertical" />
+        <a v-action:detail href="javascript:;" @click="$refs.detail.open(record.id)">详情</a>
+        <a-divider v-action:detail type="vertical" />
         <a-dropdown>
           <a class="ant-dropdown-link">
             更多 <a-icon type="down" />
           </a>
           <a-menu slot="overlay">
             <a-menu-item>
-              <a v-action:detail href="javascript:;" @click="$refs.detail.open(record.id)">详情</a>
             </a-menu-item>
             <a-menu-item>
+              <a v-action:update @click="$refs.form.open(record.id)">编辑</a>
               <a v-action:delete href="javascript:;" @click="remove(record.id)">删除</a>
             </a-menu-item>
           </a-menu>
@@ -84,6 +97,10 @@ export default {
           dataIndex: 'type'
         },
         {
+          title: '备注',
+          dataIndex: 'description'
+        },
+        {
           title: '创建时间',
           dataIndex: 'createTime'
         },
@@ -100,8 +117,4 @@ export default {
 </script>
 
 <style scoped>
-  .table-page-search-submitButtons {
-    display: flex;
-    justify-content: space-around;
-  }
 </style>

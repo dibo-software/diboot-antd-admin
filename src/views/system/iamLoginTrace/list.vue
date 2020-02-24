@@ -28,8 +28,14 @@
           </a-col>
           <a-col :md="6" :sm="24">
             <span class="table-page-search-submitButtons">
-              <a-button type="primary" htmlType="submit">查询</a-button>
-              <a-button style="margin-left: 8px" @click="reset">重置</a-button>
+              <a-button
+                icon="search"
+                type="primary"
+                htmlType="submit">查询</a-button>
+              <a-button
+                icon="redo"
+                style="margin-left: 8px"
+                @click="reset">重置</a-button>
             </span>
           </a-col>
         </a-row>

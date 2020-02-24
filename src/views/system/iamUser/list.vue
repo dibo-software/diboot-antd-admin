@@ -21,20 +21,29 @@
               </a-select>
             </a-form-item>
           </a-col>
-          <a-col :md="8" :sm="24">
+          <a-col :md="6" :sm="24">
             <span class="table-page-search-submitButtons">
-              <a-button type="primary" htmlType="submit">查询</a-button>
-              <a-button style="margin-left: 8px" @click="reset">重置</a-button>
+              <a-button
+                icon="search"
+                type="primary"
+                htmlType="submit">查询</a-button>
+              <a-button
+                icon="redo"
+                style="margin-left: 8px"
+                @click="reset">重置</a-button>
             </span>
+          </a-col>
+          <a-col :md="2" :sm="24">
+            <a-button
+              v-action:create
+              block
+              type="primary"
+              icon="plus"
+              @click="$refs.form.open(undefined)">新建</a-button>
           </a-col>
         </a-row>
       </a-form>
     </div>
-
-    <div v-action:create class="table-operator">
-      <a-button v-action:create style="margin-right: 8px" type="primary" icon="plus" @click="$refs.form.open(undefined)">新建</a-button>
-    </div>
-
     <a-table
       ref="table"
       size="default"
@@ -138,7 +147,4 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  .table-operator {
-    margin-bottom: 18px;
-  }
 </style>
