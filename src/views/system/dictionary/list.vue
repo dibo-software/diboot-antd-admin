@@ -13,7 +13,7 @@
               <a-input placeholder="编码" v-model="queryParam.type" />
             </a-form-item>
           </a-col>
-          <a-col :md="6" :sm="24">
+          <a-col :md="5" :sm="24">
             <span class="table-page-search-submitButtons">
               <a-button
                 icon="search"
@@ -25,10 +25,9 @@
                 @click="reset">重置</a-button>
             </span>
           </a-col>
-          <a-col :md="2" :sm="24">
+          <a-col :lg="3" :sm="24" style="text-align: right;">
             <a-button
               v-action:create
-              block
               type="primary"
               icon="plus"
               @click="$refs.form.open(undefined)">新建</a-button>
