@@ -31,7 +31,6 @@
 
 <script>
 import detail from '@/components/diboot/mixins/detail'
-import { dibootApi } from '@/utils/request'
 import DetailList from '@/components/tools/DetailList'
 const DetailListItem = DetailList.Item
 export default {

@@ -14,9 +14,9 @@
           type="text"
           placeholder="请输入用户名"
           v-decorator="[
-                'username',
-                {rules: [{ required: true, message: '请输入用户名' }, { validator: handleUsernameOrEmail }], validateTrigger: 'change'}
-              ]"
+            'username',
+            {rules: [{ required: true, message: '请输入用户名' }, { validator: handleUsernameOrEmail }], validateTrigger: 'change'}
+          ]"
         >
           <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
         </a-input>
@@ -29,9 +29,9 @@
           autocomplete="false"
           placeholder="请输入密码"
           v-decorator="[
-                'password',
-                {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
-              ]"
+            'password',
+            {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
+          ]"
         >
           <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }"/>
         </a-input>

@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard">
-    <h2>欢迎您，{{nickname()}}！</h2>
+    <h2>欢迎您，{{ nickname() }}！</h2>
   </div>
 </template>
 

@@ -97,7 +97,7 @@ export default {
           tempQueryParam
         ).then(res => {
           this.loadingData = false
-          if (res.code === 0){
+          if (res.code === 0) {
             this.data = res.data
             this.afterLoadList(this.data)
             this.pagination.pageSize = res.page.pageSize

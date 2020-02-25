@@ -88,7 +88,7 @@
         </div>
         <div v-else>
           <a v-action:update @click="$refs.form.open(record.id)">编辑</a>
-        <a-divider v-action:detail v-permission="['delete']" type="vertical" />
+          <a-divider v-action:detail v-permission="['delete']" type="vertical" />
           <a-dropdown
             v-permission="['delete']">
             <a class="ant-dropdown-link">
