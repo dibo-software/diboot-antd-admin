@@ -3,6 +3,7 @@ import { login, getInfo, logout } from '@/api/login'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 import { welcome } from '@/utils/util'
 import { permissionListToPermissions } from '@/utils/permissions'
+import defaultAvatar from '@/assets/logo.png'
 
 const user = {
   state: {
@@ -23,7 +24,11 @@ const user = {
       state.welcome = welcome
     },
     SET_AVATAR: (state, avatar) => {
-      state.avatar = avatar
+      if (avatar) {
+        state.avatar = avatar
+      } else {
+        state.avatar = defaultAvatar
+      }
     },
     SET_ROLES: (state, roles) => {
       state.roles = roles

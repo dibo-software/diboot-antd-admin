@@ -14,19 +14,25 @@
         </span>
         <a-menu slot="overlay" class="user-dropdown-menu-wrapper">
           <a-menu-item key="0">
+            <router-link :to="{ name: 'dashboard' }">
+              <a-icon type="appstore"/>
+              <span>工作台</span>
+            </router-link>
+          </a-menu-item>
+          <a-menu-item key="1">
             <router-link :to="{ name: 'account' }">
               <a-icon type="user"/>
               <span>个人中心</span>
             </router-link>
           </a-menu-item>
-          <a-menu-item key="1">
+          <a-menu-item key="2">
             <router-link :to="{ name: 'ChangePwdSettings' }">
               <a-icon type="setting"/>
               <span>更改密码</span>
             </router-link>
           </a-menu-item>
           <a-menu-divider/>
-          <a-menu-item key="2">
+          <a-menu-item key="3">
             <a href="javascript:;" @click="handleLogout">
               <a-icon type="logout"/>
               <span>退出登录</span>

@@ -17,7 +17,7 @@ export const asyncRouterMap = [
         redirect: '/dashboard/index',
         component: PageView,
         hideChildrenInMenu: true,
-        meta: { title: '我的工作台', keepAlive: true, icon: 'dashboard' },
+        meta: { title: '我的工作台', keepAlive: true, icon: 'appstore' },
         children: [{
           path: '/dashboard/index',
           name: 'DashboardIndex',
