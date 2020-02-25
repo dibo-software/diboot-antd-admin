@@ -8,8 +8,24 @@ export const asyncRouterMap = [
     name: 'index',
     component: BasicLayout,
     meta: { title: '首页', hiddenHeaderContent: true },
-    redirect: '/system/dictionary/list',
+    redirect: '/dashboard',
     children: [
+      // 工作台
+      {
+        path: '/dashboard',
+        name: 'dashboard',
+        redirect: '/dashboard/index',
+        component: PageView,
+        hideChildrenInMenu: true,
+        meta: { title: '我的工作台', keepAlive: true, icon: 'dashboard' },
+        children: [{
+          path: '/dashboard/index',
+          name: 'DashboardIndex',
+          hidden: true,
+          component: () => import('@/views/dashboard/Index'),
+          meta: { title: '我的工作台', keepAlive: true }
+        }]
+      },
       // 系统管理
       {
         path: '/system',
