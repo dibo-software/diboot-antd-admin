@@ -166,6 +166,7 @@ export default {
               if (res.code === 0) {
                 this.loginSuccess(res)
               } else {
+                ++this.captchaParam
                 this.$notification.error({
                   message: '登录失败',
                   description: res.msg,
