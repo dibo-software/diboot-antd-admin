@@ -9,6 +9,8 @@ import {
   ACCESS_TOKEN
 } from '@/store/mutation-types'
 
+// baseURL
+const BASE_URL = '/api'
 // token在Header中的key
 const JWT_HEADER_KEY = 'authtoken'
 // tokan自动刷新（发送心跳）的时间间隔（分钟）
@@ -19,7 +21,7 @@ setPingTimer()
 
 // 创建 axios 实例
 const service = axios.create({
-  baseURL: '/api', // api base_url
+  baseURL: BASE_URL, // api base_url
   timeout: 6000 // 请求超时时间
 })
 
@@ -183,5 +185,6 @@ function resetPingTimer () {
 export {
   installer as VueAxios,
   service as axios,
+  BASE_URL as baseURL,
   dibootApi
 }

@@ -37,6 +37,31 @@
         </a-input>
       </a-form-item>
 
+      <a-row :gutter="16">
+        <a-col class="gutter-row" :span="16">
+          <a-form-item>
+            <a-input
+              size="large"
+              type="text"
+              placeholder="验证码"
+              v-decorator="[
+                  'captcha',
+                  {rules: [{ required: true, message: '请输入验证码' }], validateTrigger: 'blur'}
+                ]"
+            >
+              <a-icon slot="prefix" type="key" :style="{ color: 'rgba(0,0,0,.25)' }"/>
+            </a-input>
+          </a-form-item>
+        </a-col>
+        <a-col class="gutter-row" :span="8">
+          <img
+            :src="`${baseURL}/auth/captcha?p=${captchaParam}`"
+            @click="++captchaParam"
+            alt="验证码"
+            style="height: 40px; cursor: pointer;">
+        </a-col>
+      </a-row>
+
       <a-form-item style="margin-top:24px">
         <a-button
           size="large"
@@ -63,6 +88,7 @@ import TwoStepCaptcha from '@/components/tools/TwoStepCaptcha'
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
 import { getSmsCaptcha, get2step } from '@/api/login'
+import { baseURL } from '@/utils/request'
 
 export default {
   components: {
@@ -83,7 +109,9 @@ export default {
         // login type: 0 email, 1 username, 2 telephone
         loginType: 0,
         smsSendBtn: false
-      }
+      },
+      baseURL,
+      captchaParam: 0
     }
   },
   created () {
@@ -111,7 +139,6 @@ export default {
     },
     handleTabClick (key) {
       this.customActiveKey = key
-      // this.form.resetFields()
     },
     handleGetInfo () {
       const { GetInfo } = this
@@ -124,22 +151,16 @@ export default {
       const {
         form: { validateFields },
         state,
-        customActiveKey,
         Login
       } = this
 
       state.loginBtn = true
 
-      const validateFieldsKey = customActiveKey === 'tab1' ? ['username', 'password'] : ['mobile', 'captcha']
+      const validateFieldsKey = ['username', 'password', 'captcha']
 
       validateFields(validateFieldsKey, { force: true }, (err, values) => {
         if (!err) {
-          console.log('login form', values)
           const loginParams = { ...values }
-          delete loginParams.username
-          loginParams[!state.loginType ? 'email' : 'username'] = values.username
-          // loginParams.password = md5(values.password)
-          loginParams.password = values.password
           Login(loginParams)
             .then((res) => {
               if (res.code === 0) {
