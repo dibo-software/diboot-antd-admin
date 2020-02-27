@@ -8,9 +8,13 @@
   >
     <a-form layout="vertical" :form="form">
       <a-form-item label="父级菜单">
-        <a-select
-          v-if="more.iamFrontendPermissionList"
+        <a-tree-select
+          v-if="menuTreeData.length > 0"
           placeholder="请选择父级菜单"
+          :dropdownStyle="{ maxHeight: '400px', overflow: 'auto' }"
+          :treeData="menuTreeData"
+          showSearch
+          treeDefaultExpandAll
           v-decorator="[
             'parentId',
             {
@@ -19,20 +23,7 @@
             }
           ]"
         >
-          <a-select-option
-            key="a_0"
-            :value="`0`"
-          >
-            顶级菜单
-          </a-select-option>
-          <a-select-option
-            v-for="(item, index) in more.iamFrontendPermissionList"
-            :key="index"
-            :value="`${item.id}`"
-          >
-            {{ item.displayName }}
-          </a-select-option>
-        </a-select>
+        </a-tree-select>
       </a-form-item>
       <a-row :gutter="16">
         <a-col :span="12">
@@ -58,7 +49,7 @@
                 {
                   initialValue: model.frontendCode,
                   rules: [
-                      { required: true, message: '类型编码不能为空', whitespace: true },
+                    { required: true, message: '类型编码不能为空', whitespace: true },
                     { validator: this.checkCodeDuplicate }
                   ]
                 }
@@ -75,13 +66,13 @@
             ? innerFormItemLayout
             : innerFormItemLayoutWithOutLabel
         "
-        :label="apiIdx === 0 ? '接口列表' : ''"
+        :label="apiIdx === 0 ? '页面内接口列表' : ''"
         :required="false"
       >
         <a-input
           @change="$forceUpdate()"
           v-model="apiSetList[apiIdx]"
-          placeholder="请输入接口列表"
+          placeholder="请输入页面需要请求的接口"
           style="width: 80%; margin-right: 8px"
         />
         <a-icon
@@ -124,7 +115,7 @@
               v-if="permissionList.length > 0"
               defaultActiveKey="0"
               v-model="currentPermissionActiveKey"
-              tabPosition="left">
+            >
               <a-tab-pane
                 v-for="(permission, index) in permissionList"
                 :tab="permission.displayName"
@@ -161,13 +152,13 @@
                       ? innerFormItemLayout
                       : innerFormItemLayoutWithOutLabel
                   "
-                  :label="apiIdx === 0 ? '接口列表' : ''"
+                  :label="apiIdx === 0 ? '所需接口列表' : ''"
                   :required="false"
                 >
                   <a-input
                     @change="$forceUpdate()"
                     v-model="permission['apiSetList'][apiIdx]"
-                    placeholder="请输入接口列表"
+                    placeholder="请输入按钮/权限所需接口"
                     style="width: 80%; margin-right: 8px"
                   />
                   <a-icon
@@ -204,6 +195,7 @@
 <script>
 import form from '@/components/diboot/mixins/form'
 import { dibootApi } from '@/utils/request'
+import { treeListFormatter } from '@/utils/treeDataUtil'
 import _ from 'lodash'
 
 const NEW_PERMISSION_ITEM = {
@@ -225,6 +217,7 @@ export default {
       currentPermissionActiveKey: 0,
       apiSetList: [''],
       permissionList: [],
+      menuTreeData: [],
       innerFormItemLayout: {
         labelCol: {
           xs: { span: 24 },
@@ -248,9 +241,21 @@ export default {
     async afterOpen (id) {
       if (id) {
         // 设置当前菜单项的接口列表
-        this.apiSetList = this.model.apiSetList
+        if (this.model.apiSetList && this.model.apiSetList.length > 0){
+          this.apiSetList = this.model.apiSetList
+        }
         // 设置当前菜单项的按钮/权限列表
         this.permissionList = this.model.permissionList
+        this.permissionList.forEach(item => {
+          if (!item.apiSetList || item.apiSetList.length === 0) {
+            item.apiSetList = ['']
+          }
+        })
+      }
+      // 将more中的menuList树状数据格式化
+      if (this.more && this.more.menuList && this.more.menuList.length > 0) {
+        this.menuTreeData = treeListFormatter(this.more.menuList, 'id', 'displayName', true)
+        this.menuTreeData.splice(0, 0, { key: '0', value: '0', title: '顶级菜单' })
       }
     },
     /***
@@ -332,6 +337,14 @@ export default {
         })
       })
     },
+    onPermissionListTabsEdit (targetKey, action) {
+      console.log('targetKey==>', targetKey)
+      if (action === 'add') {
+        this.addNewPermission()
+      } else if (action === 'remove') {
+        this.removePermission(targetKey)
+      }
+    },
     addNewPermission () {
       const newPermission = _.cloneDeep(NEW_PERMISSION_ITEM)
       this.permissionList.push(newPermission)
@@ -398,7 +411,7 @@ export default {
     close () {
       this.state.visible = false
       this.model = {}
-      this.apiSetList = []
+      this.apiSetList = ['']
       this.permissionList = []
       this.form.resetFields()
     }
