@@ -1,0 +1,376 @@
+<template>
+  <a-drawer
+    :title="title"
+    width="720"
+    :visible="state.visible"
+    @close="close"
+    :wrapStyle="{height: 'calc(100% - 108px)',overflow: 'auto',paddingBottom: '108px'}"
+  >
+    <a-form layout="vertical" :form="form">
+      <a-row :gutter="16">
+        <a-col :span="12">
+          <a-form-item label="权限类型">
+
+            <a-radio-group
+              v-decorator="[
+                'displayType',
+                {
+                  initialValue: model.displayType,
+                  rules: [{ required: true, message: '权限类型不能为空', whitespace: true }]
+                }
+              ]"
+            >
+              <a-radio value="MENU">顶级菜单</a-radio>
+              <a-radio value="SUBMENU">子级菜单</a-radio>
+            </a-radio-group>
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
+        </a-col>
+      </a-row>
+      <a-row :gutter="16">
+        <a-col :span="12">
+          <a-form-item label="菜单名称">
+            <a-input
+              placeholder="菜单名称"
+              v-decorator="[
+                'displayName',
+                {
+                  initialValue: model.displayName,
+                  rules: [{ required: true, message: '类型名称不能为空', whitespace: true }]
+                }
+              ]"
+            />
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item label="菜单编码">
+            <a-input
+              placeholder="菜单编码"
+              v-decorator="[
+                'frontendCode',
+                {
+                  initialValue: model.frontendCode,
+                  rules: [
+                    { required: true, message: '类型编码不能为空', whitespace: true },
+                    { validator: this.checkTypeDuplicate }
+                  ]
+                }
+              ]"
+            />
+          </a-form-item>
+        </a-col>
+      </a-row>
+      <a-form-item
+        v-for="(api, apiIdx) in apiSetList"
+        :key="`a_${apiIdx}`"
+        v-bind="
+          apiIdx === 0
+            ? innerFormItemLayout
+            : innerFormItemLayoutWithOutLabel
+        "
+        :label="apiIdx === 0 ? '接口列表' : ''"
+        :required="false"
+      >
+        <a-input
+          @change="$forceUpdate()"
+          v-model="apiSetList[apiIdx]"
+          placeholder="请输入接口列表"
+          style="width: 80%; margin-right: 8px"
+        />
+        <a-icon
+          v-if="apiSetList.length > 1"
+          class="dynamic-delete-button"
+          type="minus-circle-o"
+          style="cursor: pointer;"
+          @click="() => removeMenuApiSet(apiIdx)"
+        />
+      </a-form-item>
+      <a-form-item v-bind="innerFormItemLayoutWithOutLabel">
+        <a-button
+          type="dashed"
+          style="width: 80%"
+          @click="addMenuApiSet()"
+        >
+          <a-icon type="plus" /> 添加接口API
+        </a-button>
+      </a-form-item>
+      <a-row :gutter="16">
+        <a-col :span="24">
+          <a-card size="small" title="按钮/权限管理">
+            <a-button-group slot="extra">
+              <a-button
+                @click="addNewPermission"
+                type="primary"
+                size="small"
+                icon="plus"
+              ></a-button>
+              <a-button
+                @click="removePermission(currentPermissionActiveKey)"
+                v-if="permissionList.length > 0"
+                type="danger"
+                size="small"
+                icon="delete"
+              ></a-button>
+            </a-button-group>
+
+            <a-tabs
+              v-if="permissionList.length > 0"
+              defaultActiveKey="0"
+              v-model="currentPermissionActiveKey"
+              tabPosition="left">
+              <a-tab-pane
+                v-for="(permission, index) in permissionList"
+                :tab="permission.displayName"
+                :key="index">
+                <a-form-item :required="true" label="按钮/权限名称">
+                  <a-input
+                    placeholder="按钮/权限名称"
+                    v-model="permission.displayName"
+                  />
+                </a-form-item>
+                <a-form-item :required="true" label="按钮/权限编码">
+                  <a-input
+                    placeholder="按钮/权限编码"
+                    v-model="permission.frontendCode"
+                  />
+                </a-form-item>
+                <a-form-item
+                  v-for="(api, apiIdx) in permission.apiSetList"
+                  :key="`a_${apiIdx}`"
+                  v-bind="
+                    apiIdx === 0
+                      ? innerFormItemLayout
+                      : innerFormItemLayoutWithOutLabel
+                  "
+                  :label="apiIdx === 0 ? '接口列表' : ''"
+                  :required="false"
+                >
+                  <a-input
+                    @change="$forceUpdate()"
+                    v-model="permission['apiSetList'][apiIdx]"
+                    placeholder="请输入接口列表"
+                    style="width: 80%; margin-right: 8px"
+                  />
+                  <a-icon
+                    v-if="permission['apiSetList'].length > 1"
+                    class="dynamic-delete-button"
+                    type="minus-circle-o"
+                    style="cursor: pointer;"
+                    @click="() => removeApiSet(permission, apiIdx)"
+                  />
+                </a-form-item>
+                <a-form-item v-bind="innerFormItemLayoutWithOutLabel">
+                  <a-button
+                    type="dashed"
+                    style="width: 80%"
+                    @click="addApiSet(permission)"
+                  >
+                    <a-icon type="plus" /> 添加接口API
+                  </a-button>
+                </a-form-item>
+              </a-tab-pane>
+            </a-tabs>
+          </a-card>
+        </a-col>
+      </a-row>
+    </a-form>
+
+    <div class="footer">
+      <a-button :style="{marginRight: '8px'}" @click="close">取消</a-button>
+      <a-button @click="onSubmit" type="primary" :loading="state.submitBtn" :disabled="state.submitBtn">确定</a-button>
+    </div>
+  </a-drawer>
+</template>
+
+<script>
+import form from '@/components/diboot/mixins/form'
+import { dibootApi } from '@/utils/request'
+import _ from 'lodash'
+
+const NEW_PERMISSION_ITEM = {
+  parentId: '',
+  displayType: 'PERMISSION',
+  displayName: '新按钮/权限',
+  frontendCode: '',
+  apiSetList: ['']
+}
+export default {
+  name: 'DictionaryDrawer',
+  data () {
+    return {
+      baseApi: '/dictionary',
+      form: this.$form.createForm(this),
+      currentPermissionActiveKey: 0,
+      apiSetList: [''],
+      permissionList: [],
+      innerFormItemLayout: {
+        labelCol: {
+          xs: { span: 24 },
+          sm: { span: 4 }
+        },
+        wrapperCol: {
+          xs: { span: 24 },
+          sm: { span: 20 }
+        }
+      },
+      innerFormItemLayoutWithOutLabel: {
+        wrapperCol: {
+          xs: { span: 24, offset: 0 },
+          sm: { span: 20, offset: 4 }
+        }
+      }
+    }
+  },
+  mixins: [ form ],
+  methods: {
+    async afterOpen (id) {
+      if (id === undefined) {
+        return
+      }
+      const res = await dibootApi.get(`${this.baseApi}/${id}`)
+      if (res.code === 0) {
+        this.initSubItem(res.data)
+      } else {
+        this.$notification.error({
+          message: '获取数据失败',
+          description: res.msg
+        })
+      }
+    },
+    /***
+     * 提交前的验证流程
+     * @returns {Promise<any>}
+     */
+    validate () {
+      return new Promise((resolve, reject) => {
+        this.form.validateFields((err, fieldsValue) => {
+          if (!err) {
+            const errMsgs = []
+            // 对按钮/权限列表进行验证
+            if (this.permissionList.length > 0) {
+              const notChangePerIdxList = []
+              const nullDisplayNameIdxList = []
+              const nullFrontendCodeIdxList = []
+              this.permissionList.forEach((permission, i) => {
+                // 校验按钮/权限名称是否为空以及是否更改
+                if (!permission.displayName) {
+                  nullDisplayNameIdxList.push(i + 1)
+                } else if (permission.displayName === NEW_PERMISSION_ITEM.displayName) {
+                  notChangePerIdxList.push(i + 1)
+                }
+                // 校验按钮/权限编码是否设置
+                if (!permission.frontendCode) {
+                  nullFrontendCodeIdxList.push(i + 1)
+                }
+              })
+              // 收集验证错误信息
+              if (notChangePerIdxList.length > 0) {
+                errMsgs.push(`第 ${notChangePerIdxList.join('、')} 个按钮/权限的名称没有更改`)
+              }
+              if (nullDisplayNameIdxList.length > 0) {
+                errMsgs.push(`第 ${nullDisplayNameIdxList.join('、')} 个按钮/权限的名称没有填写`)
+              }
+              if (nullFrontendCodeIdxList.length > 0) {
+                errMsgs.push(`第 ${nullFrontendCodeIdxList.join('、')} 个按钮/权限的编码没有填写`)
+              }
+            }
+            if (errMsgs.length > 0) {
+              const msg = errMsgs.join('；') + '。'
+              this.$message.error(msg)
+              reject(msg)
+            }
+
+            // 获取当前菜单的可用接口列表
+            const apiSetList = this.apiSetList.filter(api => {
+              return api !== undefined && api !== ''
+            })
+
+            // 整理当前的按钮/权限列表以及对应的接口列表
+            const permissionList = _.cloneDeep(this.permissionList)
+            // 整理所有按钮/权限列表的可用接口列表，并设置菜单的id为当前的parentId
+            permissionList.forEach(permission => {
+              permission.apiSetList = permission.apiSetList.filter(api => {
+                return api !== undefined && api !== ''
+              })
+              if (this.model && this.model.id) {
+                permission.parentId = this.model.id
+              }
+            })
+
+            // 合并参数
+            const values = {
+              ...fieldsValue,
+              apiSetList,
+              permissionList
+            }
+
+            resolve(values)
+          } else {
+            reject(err)
+          }
+          setTimeout(() => {
+            this.state.submitBtn = false
+          }, 600)
+        })
+      })
+    },
+    addNewPermission () {
+      const newPermission = _.cloneDeep(NEW_PERMISSION_ITEM)
+      this.permissionList.push(newPermission)
+      this.currentPermissionActiveKey = this.permissionList.length - 1
+    },
+    removePermission (index) {
+      this.permissionList.splice(index, 1)
+      this.currentPermissionActiveKey = this.currentPermissionActiveKey > 0 ? --this.currentPermissionActiveKey : 0
+    },
+    addMenuApiSet () {
+      this.apiSetList.push('')
+      this.$forceUpdate()
+    },
+    removeMenuApiSet (apiIdx) {
+      this.apiSetList.splice(apiIdx, 1)
+      this.$forceUpdate()
+    },
+    addApiSet (permission) {
+      let apiSetList = permission.apiSetList
+      if (apiSetList === undefined) {
+        apiSetList = []
+      }
+      apiSetList.push('')
+      permission.apiSetList = apiSetList
+      this.$forceUpdate()
+    },
+    removeApiSet (permission, apiIdx) {
+      permission.apiSetList.splice(apiIdx, 1)
+      this.$forceUpdate()
+    },
+    async checkTypeDuplicate (rule, value, callback) {
+      if (!value) {
+        callback()
+        return
+      }
+      const params = { id: this.model.id, type: value }
+      const res = await dibootApi.get(`${this.baseApi}/checkTypeDuplicate`, params)
+      if (res.code === 0) {
+        callback()
+      } else {
+        callback(res.msg.split(':')[1])
+      }
+    }
+  }
+}
+</script>
+
+<style scoped>
+  .footer{
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    border-top: 1px solid #e9e9e9;
+    padding: 10px 16px;
+    background: #fff;
+    text-align: right
+  }
+</style>
