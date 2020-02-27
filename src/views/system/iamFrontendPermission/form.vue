@@ -7,27 +7,33 @@
     :wrapStyle="{height: 'calc(100% - 108px)',overflow: 'auto',paddingBottom: '108px'}"
   >
     <a-form layout="vertical" :form="form">
-      <a-row :gutter="16">
-        <a-col :span="12">
-          <a-form-item label="权限类型">
-
-            <a-radio-group
-              v-decorator="[
-                'displayType',
-                {
-                  initialValue: model.displayType,
-                  rules: [{ required: true, message: '权限类型不能为空', whitespace: true }]
-                }
-              ]"
-            >
-              <a-radio value="MENU">顶级菜单</a-radio>
-              <a-radio value="SUBMENU">子级菜单</a-radio>
-            </a-radio-group>
-          </a-form-item>
-        </a-col>
-        <a-col :span="12">
-        </a-col>
-      </a-row>
+      <a-form-item label="父级菜单">
+        <a-select
+          v-if="more.iamFrontendPermissionList"
+          placeholder="请选择父级菜单"
+          v-decorator="[
+            'parentId',
+            {
+              initialValue: model.parentId ? model.parentId.toString() : '0',
+              rules: [{ required: true, message: '父级菜单不能为空', whitespace: true }]
+            }
+          ]"
+        >
+          <a-select-option
+            key="a_0"
+            :value="`0`"
+          >
+            顶级菜单
+          </a-select-option>
+          <a-select-option
+            v-for="(item, index) in more.iamFrontendPermissionList"
+            :key="index"
+            :value="`${item.id}`"
+          >
+            {{ item.displayName }}
+          </a-select-option>
+        </a-select>
+      </a-form-item>
       <a-row :gutter="16">
         <a-col :span="12">
           <a-form-item label="菜单名称">
@@ -53,7 +59,7 @@
                   initialValue: model.frontendCode,
                   rules: [
                     { required: true, message: '类型编码不能为空', whitespace: true },
-                    { validator: this.checkTypeDuplicate }
+                    { validator: this.checkCodeDuplicate }
                   ]
                 }
               ]"
@@ -123,16 +129,28 @@
                 v-for="(permission, index) in permissionList"
                 :tab="permission.displayName"
                 :key="index">
+                <a-form-item :required="true" label="按钮/权限编码">
+                  <a-select
+                    v-if="more.frontendPermissionCodeKvList"
+                    showSearch
+                    :filterOption="(input, option) => filterPermissionCodeOption(permission, input, option)"
+                    @change="value => changePermissionName(permission, value)"
+                    placeholder="请选择按钮/权限编码"
+                    v-model="permission.frontendCode"
+                  >
+                    <a-select-option
+                      v-for="(item, index) in more.frontendPermissionCodeKvList"
+                      :key="index"
+                      :value="item.v"
+                    >
+                      {{ item.k }}[{{ item.v }}]
+                    </a-select-option>
+                  </a-select>
+                </a-form-item>
                 <a-form-item :required="true" label="按钮/权限名称">
                   <a-input
                     placeholder="按钮/权限名称"
                     v-model="permission.displayName"
-                  />
-                </a-form-item>
-                <a-form-item :required="true" label="按钮/权限编码">
-                  <a-input
-                    placeholder="按钮/权限编码"
-                    v-model="permission.frontendCode"
                   />
                 </a-form-item>
                 <a-form-item
@@ -199,7 +217,9 @@ export default {
   name: 'DictionaryDrawer',
   data () {
     return {
-      baseApi: '/dictionary',
+      baseApi: '/iam/frontendPermission',
+      createApi: '/create',
+      updateApiPrefix: '/update',
       form: this.$form.createForm(this),
       currentPermissionActiveKey: 0,
       apiSetList: [''],
@@ -299,8 +319,10 @@ export default {
             })
 
             // 合并参数
+            const displayType = 'MENU'
             const values = {
               ...fieldsValue,
+              displayType,
               apiSetList,
               permissionList
             }
@@ -345,17 +367,45 @@ export default {
       permission.apiSetList.splice(apiIdx, 1)
       this.$forceUpdate()
     },
-    async checkTypeDuplicate (rule, value, callback) {
+    filterPermissionCodeOption (permission, input, option) {
+      const text = option.componentOptions.children[0].text.toLowerCase()
+      if (text.indexOf(input.toLowerCase()) >= 0) {
+        return true
+      }
+      const value = option.componentOptions.propsData.value.toLowerCase()
+      if (value.indexOf(input.toLowerCase()) >= 0) {
+        return true
+      }
+      permission.frontendCode = input
+      return false
+    },
+    changePermissionName (permission, value) {
+      const validKvList = this.more.frontendPermissionCodeKvList.filter(item => {
+        return item.v === value
+      })
+      if (validKvList.length > 0) {
+        permission.displayName = validKvList[0]['k']
+      }
+    },
+    async checkCodeDuplicate (rule, value, callback) {
       if (!value) {
         callback()
         return
       }
       const params = { id: this.model.id, type: value }
-      const res = await dibootApi.get(`${this.baseApi}/checkTypeDuplicate`, params)
+      const res = await dibootApi.get(`${this.baseApi}/checkCodeDuplicate`, params)
       if (res.code === 0) {
         callback()
       } else {
         callback(res.msg.split(':')[1])
+      }
+    }
+  },
+  props: {
+    more: {
+      type: Object,
+      default: () => {
+        return {}
       }
     }
   }

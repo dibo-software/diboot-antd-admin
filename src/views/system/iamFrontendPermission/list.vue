@@ -69,7 +69,7 @@
       </span>
     </a-table>
 
-    <diboot-form ref="form" @refreshList="getList"></diboot-form>
+    <diboot-form ref="form" @refreshList="getList" :more="more"></diboot-form>
     <diboot-detail ref="detail"></diboot-detail>
   </a-card>
 </template>
@@ -79,7 +79,7 @@ import list from '@/components/diboot/mixins/list'
 import dibootForm from './form'
 import dibootDetail from './detail'
 export default {
-  name: 'DictionaryList',
+  name: 'IamFrontendPermissionList',
   components: {
     dibootForm,
     dibootDetail
@@ -87,7 +87,8 @@ export default {
   mixins: [ list ],
   data () {
     return {
-      baseApi: '/iamFrontendPermission',
+      baseApi: '/iam/frontendPermission',
+      deleteApiPrefix: '/delete',
       customQueryParam: { parentId: 0, displayType: 'MENU' },
       getMore: true,
       columns: [
