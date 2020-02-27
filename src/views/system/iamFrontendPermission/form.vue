@@ -131,6 +131,7 @@
                   >
                     <a-select-option
                       v-for="(item, index) in more.frontendPermissionCodeKvList"
+                      v-if="!existPermissionCodes.includes(item.v) || permission.frontendCode === item.v"
                       :key="index"
                       :value="item.v"
                     >
@@ -217,7 +218,6 @@ export default {
       currentPermissionActiveKey: 0,
       apiSetList: [''],
       permissionList: [],
-      menuTreeData: [],
       innerFormItemLayout: {
         labelCol: {
           xs: { span: 24 },
@@ -251,11 +251,6 @@ export default {
             item.apiSetList = ['']
           }
         })
-      }
-      // 将more中的menuList树状数据格式化
-      if (this.more && this.more.menuList && this.more.menuList.length > 0) {
-        this.menuTreeData = treeListFormatter(this.more.menuList, 'id', 'displayName', true)
-        this.menuTreeData.splice(0, 0, { key: '0', value: '0', title: '顶级菜单' })
       }
     },
     /***
@@ -414,6 +409,24 @@ export default {
       this.apiSetList = ['']
       this.permissionList = []
       this.form.resetFields()
+    }
+  },
+  computed: {
+    menuTreeData: function () {
+      if (!this.more || !this.more.menuList) {
+        return []
+      }
+      const menuTreeData = treeListFormatter(this.more.menuList, 'id', 'displayName', true)
+      menuTreeData.splice(0, 0, { key: '0', value: '0', title: '顶级菜单' })
+      return menuTreeData
+    },
+    existPermissionCodes: function () {
+      if (!this.permissionList) {
+        return []
+      }
+      return this.permissionList.map(item => {
+        return item.frontendCode
+      })
     }
   },
   props: {
