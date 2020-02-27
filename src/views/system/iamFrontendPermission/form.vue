@@ -58,7 +58,7 @@
                 {
                   initialValue: model.frontendCode,
                   rules: [
-                    { required: true, message: '类型编码不能为空', whitespace: true },
+                      { required: true, message: '类型编码不能为空', whitespace: true },
                     { validator: this.checkCodeDuplicate }
                   ]
                 }
@@ -207,6 +207,7 @@ import { dibootApi } from '@/utils/request'
 import _ from 'lodash'
 
 const NEW_PERMISSION_ITEM = {
+  id: undefined,
   parentId: '',
   displayType: 'PERMISSION',
   displayName: '新按钮/权限',
@@ -245,17 +246,11 @@ export default {
   mixins: [ form ],
   methods: {
     async afterOpen (id) {
-      if (id === undefined) {
-        return
-      }
-      const res = await dibootApi.get(`${this.baseApi}/${id}`)
-      if (res.code === 0) {
-        this.initSubItem(res.data)
-      } else {
-        this.$notification.error({
-          message: '获取数据失败',
-          description: res.msg
-        })
+      if (id) {
+        // 设置当前菜单项的接口列表
+        this.apiSetList = this.model.apiSetList
+        // 设置当前菜单项的按钮/权限列表
+        this.permissionList = this.model.permissionList
       }
     },
     /***
@@ -392,13 +387,20 @@ export default {
         callback()
         return
       }
-      const params = { id: this.model.id, type: value }
+      const params = { id: this.model.id, code: value }
       const res = await dibootApi.get(`${this.baseApi}/checkCodeDuplicate`, params)
       if (res.code === 0) {
         callback()
       } else {
         callback(res.msg.split(':')[1])
       }
+    },
+    close () {
+      this.state.visible = false
+      this.model = {}
+      this.apiSetList = []
+      this.permissionList = []
+      this.form.resetFields()
     }
   },
   props: {
