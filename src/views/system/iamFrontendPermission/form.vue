@@ -39,6 +39,7 @@
               treeNodeFilterProp="title"
               showSearch
               treeDefaultExpandAll
+              v-model="currentMenu"
               @change="onMenuNameChange"
             >
             </a-tree-select>
@@ -199,6 +200,7 @@ export default {
       updateApiPrefix: '/update',
       form: this.$form.createForm(this),
       currentPermissionActiveKey: 0,
+      currentMenu: '',
       apiSetList: [],
       permissionList: [],
       apiTreeList: []
@@ -423,8 +425,9 @@ export default {
     close () {
       this.state.visible = false
       this.model = {}
-      this.apiSetList = ['']
+      this.apiSetList = []
       this.permissionList = []
+      this.currentMenu = ''
       this.form.resetFields()
     }
   },
