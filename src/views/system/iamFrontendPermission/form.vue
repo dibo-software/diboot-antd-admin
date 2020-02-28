@@ -21,7 +21,7 @@
               v-decorator="[
             'parentId',
             {
-              initialValue: model.parentId ? model.parentId.toString() : '0',
+              initialValue: model.parentId ? model.parentId.toString() : initParentId,
               rules: [{ required: true, message: '父级菜单不能为空', whitespace: true }]
             }
           ]"
@@ -477,6 +477,12 @@ export default {
       type: Object,
       default: () => {
         return {}
+      }
+    },
+    initParentId: {
+      type: String,
+      default: () => {
+        return '0'
       }
     }
   }

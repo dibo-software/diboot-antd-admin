@@ -30,7 +30,7 @@
               v-action:create
               type="primary"
               icon="plus"
-              @click="$refs.form.open(undefined)">新建</a-button>
+              @click="create">新建</a-button>
           </a-col>
         </a-row>
       </a-form>
@@ -63,6 +63,9 @@
           </a>
           <a-menu slot="overlay">
             <a-menu-item v-action:update>
+              <a @click="createSubMenu(record.id)">添加子菜单</a>
+            </a-menu-item>
+            <a-menu-item v-action:update>
               <a @click="$refs.form.open(record.id)">编辑</a>
             </a-menu-item>
             <a-menu-item v-action:delete>
@@ -76,7 +79,7 @@
       </span>
     </a-table>
 
-    <diboot-form ref="form" @refreshList="getList" :more="more"></diboot-form>
+    <diboot-form ref="form" @refreshList="getList" :initParentId="formParentId" :more="more"></diboot-form>
     <diboot-detail ref="detail"></diboot-detail>
   </a-card>
 </template>
@@ -100,6 +103,7 @@ export default {
       deleteApiPrefix: '/delete',
       customQueryParam: { displayType: 'MENU' },
       getMore: true,
+      formParentId: '0',
       columns: [
         {
           title: '菜单名称',
@@ -131,6 +135,14 @@ export default {
     afterLoadList (data) {
       this.data = clearNullChildren(data)
       this.attachMore()
+    },
+    create () {
+      this.formParentId = '0'
+      this.$refs.form.open(undefined)
+    },
+    createSubMenu (parentId) {
+      this.formParentId = `${parentId}`
+      this.$refs.form.open(undefined)
     }
   }
 }
