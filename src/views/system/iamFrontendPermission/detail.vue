@@ -7,19 +7,38 @@
     :wrapStyle="{height: 'calc(100% - 108px)',overflow: 'auto',paddingBottom: '108px'}"
   >
     <a-spin :spinning="spinning">
-      <detail-list :col="2">
-        <detail-list-item term="类型名称">{{ model.itemName }}</detail-list-item>
-        <detail-list-item term="类型编码">{{ model.type }}</detail-list-item>
+      <detail-list :col="1">
+        <detail-list-item term="上级菜单">{{ model.parentDisplayName ? model.parentDisplayName : '无' }}</detail-list-item>
       </detail-list>
       <detail-list :col="1">
-        <detail-list-item term="包含子项">
-          <template v-for="(item,i) in children">
-            <a-tag color="blue" :key="i">{{ item.itemName }}({{ item.itemValue }})</a-tag>
+        <detail-list-item term="菜单名称">{{ model.displayName }}</detail-list-item>
+      </detail-list>
+      <detail-list :col="1">
+        <detail-list-item term="菜单编码">{{ model.frontendCode }}</detail-list-item>
+      </detail-list>
+      <detail-list :col="1">
+        <detail-list-item term="页面按钮/权限">
+          <template v-if="model.permissionList && model.permissionList.length > 0">
+            <a-tag color="cyan" :key="i" v-for="(permission,i) in model.permissionList">
+              {{ `${permission.displayName}[${permission.frontendCode}]` }}
+            </a-tag>
+          </template>
+          <template v-else>
+            无
           </template>
         </detail-list-item>
       </detail-list>
       <detail-list :col="1">
-        <detail-list-item term="备注">{{ model.description || '-' }}</detail-list-item>
+        <detail-list-item term="接口列表">
+          <template v-if="model.apiSetList && model.apiSetList.length > 0">
+            <a-tag color="green" :key="i" v-for="(api,i) in model.apiSetList">
+              {{ api }}
+            </a-tag>
+          </template>
+          <template v-else>
+            无
+          </template>
+        </detail-list-item>
       </detail-list>
     </a-spin>
 
@@ -34,10 +53,10 @@ import detail from '@/components/diboot/mixins/detail'
 import DetailList from '@/components/tools/DetailList'
 const DetailListItem = DetailList.Item
 export default {
-  name: 'DictionaryDetail',
+  name: 'IamFrontendPermissionDetail',
   data () {
     return {
-      baseApi: '/dictionary',
+      baseApi: '/iam/frontendPermission',
       children: []
     }
   },

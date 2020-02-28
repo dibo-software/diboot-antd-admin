@@ -6,13 +6,13 @@
     @close="close"
     :wrapStyle="{height: 'calc(100% - 108px)',overflow: 'auto',paddingBottom: '108px'}"
   >
-    <a-form layout="vertical" :form="form">
+    <a-form layout="vertical" :form="form" class="iamFrontendPermissionForm">
       <a-row :gutter="16">
         <a-col :span="12">
-          <a-form-item label="父级菜单">
+          <a-form-item label="上级菜单">
             <a-tree-select
               v-if="menuTreeData.length > 0"
-              placeholder="请选择父级菜单"
+              placeholder="请选择上级菜单"
               :dropdownStyle="{ maxHeight: '400px', overflow: 'auto' }"
               :treeData="menuTreeData"
               treeNodeFilterProp="title"
@@ -22,7 +22,7 @@
             'parentId',
             {
               initialValue: model.parentId ? model.parentId.toString() : initParentId,
-              rules: [{ required: true, message: '父级菜单不能为空', whitespace: true }]
+              rules: [{ required: true, message: '上级菜单不能为空', whitespace: true }]
             }
           ]"
             >
@@ -229,7 +229,7 @@ const NEW_PERMISSION_ITEM = {
   apiSetList: ['']
 }
 export default {
-  name: 'DictionaryDrawer',
+  name: 'IamFrontendPermissionDrawer',
   data () {
     return {
       baseApi: '/iam/frontendPermission',
@@ -499,5 +499,8 @@ export default {
     padding: 10px 16px;
     background: #fff;
     text-align: right
+  }
+  .iamFrontendPermissionForm .ant-form-item {
+    margin-bottom: 10px;
   }
 </style>
