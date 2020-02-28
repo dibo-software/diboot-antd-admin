@@ -196,8 +196,6 @@ export default {
   data () {
     return {
       baseApi: '/iam/frontendPermission',
-      createApi: '/create',
-      updateApiPrefix: '/update',
       form: this.$form.createForm(this),
       currentPermissionActiveKey: 0,
       currentMenu: '',

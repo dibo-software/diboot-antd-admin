@@ -100,7 +100,6 @@ export default {
   data () {
     return {
       baseApi: '/iam/frontendPermission',
-      deleteApiPrefix: '/delete',
       customQueryParam: { displayType: 'MENU' },
       getMore: true,
       formParentId: '0',

@@ -123,8 +123,6 @@ export default {
   data () {
     return {
       baseApi: '/iam/role',
-      createApi: '/create',
-      updateApiPrefix: '/update',
       form: this.$form.createForm(this),
       isAdmin: false,
       permissionList: [],
