@@ -78,39 +78,20 @@
           </a-form-item>
         </a-col>
       </a-row>
-      <a-form-item
-        v-for="(api, apiIdx) in apiSetList"
-        :key="`a_${apiIdx}`"
-        v-bind="
-          apiIdx === 0
-            ? innerFormItemLayout
-            : innerFormItemLayoutWithOutLabel
-        "
-        :label="apiIdx === 0 ? '页面内接口列表' : ''"
-        :required="false"
-      >
-        <a-input
-          @change="$forceUpdate()"
-          v-model="apiSetList[apiIdx]"
-          placeholder="请输入页面需要请求的接口"
-          style="width: 80%; margin-right: 8px"
-        />
-        <a-icon
-          v-if="apiSetList.length > 1"
-          class="dynamic-delete-button"
-          type="minus-circle-o"
-          style="cursor: pointer;"
-          @click="() => removeMenuApiSet(apiIdx)"
-        />
-      </a-form-item>
-      <a-form-item v-bind="innerFormItemLayoutWithOutLabel">
-        <a-button
-          type="dashed"
-          style="width: 80%"
-          @click="addMenuApiSet()"
+      <a-form-item label="当前菜单页面接口列表">
+        <a-tree-select
+          v-if="routerTreeList.length > 0"
+          placeholder="请选取当前菜单页面接口列表"
+          :dropdownStyle="{ maxHeight: '400px', overflow: 'auto' }"
+          :treeData="apiTreeList"
+          treeNodeFilterProp="title"
+          showSearch
+          treeDefaultExpandAll
+          multiple
+          allowClear
+          v-model="apiSetList"
         >
-          <a-icon type="plus" /> 添加接口API
-        </a-button>
+        </a-tree-select>
       </a-form-item>
       <a-row :gutter="16">
         <a-col :span="24">
@@ -165,39 +146,20 @@
                     v-model="permission.displayName"
                   />
                 </a-form-item>
-                <a-form-item
-                  v-for="(api, apiIdx) in permission.apiSetList"
-                  :key="`a_${apiIdx}`"
-                  v-bind="
-                    apiIdx === 0
-                      ? innerFormItemLayout
-                      : innerFormItemLayoutWithOutLabel
-                  "
-                  :label="apiIdx === 0 ? '所需接口列表' : ''"
-                  :required="false"
-                >
-                  <a-input
-                    @change="$forceUpdate()"
-                    v-model="permission['apiSetList'][apiIdx]"
-                    placeholder="请输入按钮/权限所需接口"
-                    style="width: 80%; margin-right: 8px"
-                  />
-                  <a-icon
-                    v-if="permission['apiSetList'].length > 1"
-                    class="dynamic-delete-button"
-                    type="minus-circle-o"
-                    style="cursor: pointer;"
-                    @click="() => removeApiSet(permission, apiIdx)"
-                  />
-                </a-form-item>
-                <a-form-item v-bind="innerFormItemLayoutWithOutLabel">
-                  <a-button
-                    type="dashed"
-                    style="width: 80%"
-                    @click="addApiSet(permission)"
+                <a-form-item label="当前按钮/权限所需接口列表">
+                  <a-tree-select
+                    v-if="routerTreeList.length > 0"
+                    placeholder="当前按钮/权限所需接口列表"
+                    :dropdownStyle="{ maxHeight: '400px', overflow: 'auto' }"
+                    :treeData="apiTreeList"
+                    treeNodeFilterProp="title"
+                    showSearch
+                    treeDefaultExpandAll
+                    multiple
+                    allowClear
+                    v-model="permission.apiSetList"
                   >
-                    <a-icon type="plus" /> 添加接口API
-                  </a-button>
+                  </a-tree-select>
                 </a-form-item>
               </a-tab-pane>
             </a-tabs>
@@ -216,7 +178,7 @@
 <script>
 import form from '@/components/diboot/mixins/form'
 import { dibootApi } from '@/utils/request'
-import { treeListFormatter, routersFormatter, treeList2list } from '@/utils/treeDataUtil'
+import { treeListFormatter, routersFormatter, treeList2list, apiListFormatter } from '@/utils/treeDataUtil'
 import { mapState } from 'vuex'
 import _ from 'lodash'
 
@@ -226,7 +188,7 @@ const NEW_PERMISSION_ITEM = {
   displayType: 'PERMISSION',
   displayName: '新按钮/权限',
   frontendCode: '',
-  apiSetList: ['']
+  apiSetList: []
 }
 export default {
   name: 'IamFrontendPermissionDrawer',
@@ -237,24 +199,9 @@ export default {
       updateApiPrefix: '/update',
       form: this.$form.createForm(this),
       currentPermissionActiveKey: 0,
-      apiSetList: [''],
+      apiSetList: [],
       permissionList: [],
-      innerFormItemLayout: {
-        labelCol: {
-          xs: { span: 24 },
-          sm: { span: 4 }
-        },
-        wrapperCol: {
-          xs: { span: 24 },
-          sm: { span: 20 }
-        }
-      },
-      innerFormItemLayoutWithOutLabel: {
-        wrapperCol: {
-          xs: { span: 24, offset: 0 },
-          sm: { span: 20, offset: 4 }
-        }
-      }
+      apiTreeList: []
     }
   },
   mixins: [ form ],
@@ -269,22 +216,44 @@ export default {
         this.permissionList = this.model.permissionList
         this.permissionList.forEach(item => {
           if (!item.apiSetList || item.apiSetList.length === 0) {
-            item.apiSetList = ['']
+            item.apiSetList = []
           }
         })
       }
+
+      dibootApi.get(`${this.baseApi}/apiList`).then(res => {
+        if (res.code === 0) {
+          this.apiTreeList = apiListFormatter(res.data)
+        } else {
+          this.$message.error(res.msg)
+        }
+      })
     },
     onMenuNameChange (value) {
       if (this.routerList || this.routerList.length > 0) {
-        const resultList = this.routerList.filter(item => {
+        const currentMenu = this.routerList.find(item => {
           return item.value === value
         })
-        if (resultList.length > 0) {
-          this.form.setFieldsValue({
-            frontendCode: resultList[0]['value'],
-            displayName: resultList[0]['title']
-          })
+        if (currentMenu === undefined) {
+          return false
         }
+        // 自动设置菜单名称与菜单编码
+        this.form.setFieldsValue({
+          frontendCode: currentMenu.value,
+          displayName: currentMenu.title
+        })
+        // 自动设置菜单页面所需接口
+        this.apiSetList = []
+        if (!currentMenu.value) {
+          return false
+        }
+        const currentApi =  this.apiList.find(item => {
+          return item.value && item.value.toLowerCase().includes(currentMenu.value.toLowerCase())
+        })
+        if (currentApi === undefined || !currentApi.value) {
+          return false
+        }
+        this.apiSetList.push(currentApi.value)
       }
     },
     /***
@@ -366,43 +335,22 @@ export default {
         })
       })
     },
-    onPermissionListTabsEdit (targetKey, action) {
-      console.log('targetKey==>', targetKey)
-      if (action === 'add') {
-        this.addNewPermission()
-      } else if (action === 'remove') {
-        this.removePermission(targetKey)
-      }
-    },
     addNewPermission () {
       const newPermission = _.cloneDeep(NEW_PERMISSION_ITEM)
       this.permissionList.push(newPermission)
       this.currentPermissionActiveKey = this.permissionList.length - 1
+      // 自动补全编码选项
+      if (this.more && this.more.frontendPermissionCodeKvList) {
+        const validKv = this.more.frontendPermissionCodeKvList.find(kv => {
+          return !this.existPermissionCodes.includes(kv.v)
+        })
+        newPermission.frontendCode = validKv.v
+        this.changePermissionName(newPermission, validKv.v)
+      }
     },
     removePermission (index) {
       this.permissionList.splice(index, 1)
       this.currentPermissionActiveKey = this.currentPermissionActiveKey > 0 ? --this.currentPermissionActiveKey : 0
-    },
-    addMenuApiSet () {
-      this.apiSetList.push('')
-      this.$forceUpdate()
-    },
-    removeMenuApiSet (apiIdx) {
-      this.apiSetList.splice(apiIdx, 1)
-      this.$forceUpdate()
-    },
-    addApiSet (permission) {
-      let apiSetList = permission.apiSetList
-      if (apiSetList === undefined) {
-        apiSetList = []
-      }
-      apiSetList.push('')
-      permission.apiSetList = apiSetList
-      this.$forceUpdate()
-    },
-    removeApiSet (permission, apiIdx) {
-      permission.apiSetList.splice(apiIdx, 1)
-      this.$forceUpdate()
     },
     filterPermissionCodeOption (permission, input, option) {
       const text = option.componentOptions.children[0].text.toLowerCase()
@@ -417,12 +365,47 @@ export default {
       return false
     },
     changePermissionName (permission, value) {
-      const validKvList = this.more.frontendPermissionCodeKvList.filter(item => {
+      const validKv = this.more.frontendPermissionCodeKvList.find(item => {
         return item.v === value
       })
-      if (validKvList.length > 0) {
-        permission.displayName = validKvList[0]['k']
+      // 自动补全按钮/权限名称
+      if (validKv !== undefined) {
+        permission.displayName = validKv['k']
       }
+      // 自动补全接口列表
+      permission.apiSetList = []
+      if (this.apiSetList.length === 0 || !value) {
+        return false
+      }
+      const matchStrList = this.apiSetList[0].match(/\/(\S*)\//)
+      if (!matchStrList || matchStrList.length < 2) {
+        return false
+      }
+      const matchStr = matchStrList[0]
+      let uri
+      if (value === 'detail') {
+        uri = `GET:${matchStr}{`
+      } else if (value === 'create') {
+        uri = `POST:${matchStr}`
+      } else if (value === 'update') {
+        uri = `PUT:${matchStr}{`
+      } else if (value === 'delete') {
+        uri = `DELETE:${matchStr}{`
+      } else if (value === 'export') {
+        uri = `POST:${matchStr}export`
+      } else if (value === 'import') {
+        uri = `POST:${matchStr}import`
+      }
+      if (!uri) {
+        return false
+      }
+      const matchApi = this.apiList.find(api => {
+        return api.value && api.value.includes(uri)
+      })
+      if (matchApi === undefined) {
+        return false
+      }
+      permission.apiSetList.push(matchApi.value)
     },
     async checkCodeDuplicate (rule, value, callback) {
       if (!value) {
@@ -454,6 +437,9 @@ export default {
     },
     routerList: function () {
       return treeList2list(_.cloneDeep(this.routerTreeList))
+    },
+    apiList: function() {
+      return treeList2list(_.cloneDeep(this.apiTreeList))
     },
     menuTreeData: function () {
       if (!this.more || !this.more.menuList) {

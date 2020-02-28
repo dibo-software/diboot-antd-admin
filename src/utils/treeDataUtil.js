@@ -89,7 +89,6 @@ const routersFormatter = function (routers) {
         value: code,
         title: `${item.meta.title}`
       }
-      console.log(formatterItem)
       if (item.children !== undefined && item.children.length > 0) {
         formatterItem.children = routersFormatter(item.children)
       }
@@ -99,9 +98,40 @@ const routersFormatter = function (routers) {
   return formatterList
 }
 
+const apiListFormatter = function (apiList) {
+  if (apiList === undefined || apiList.length === 0) {
+    return undefined
+  }
+
+  console.log('apiListFormatter', apiList)
+
+  const formatterList = []
+  apiList.forEach(item => {
+    let children
+    if (item.children) {
+      children = item.children.map(child => {
+        return {
+          key: child.value,
+          value: child.value,
+          title: `[${item.classTitle}-${child.apiName}][${child.apiMethod}](${child.apiUri})`
+        }
+      })
+    }
+    formatterList.push({
+      key: item.classTitle,
+      value: '',
+      title: item.classTitle,
+      children,
+      disabled: true
+    })
+  })
+  return formatterList
+}
+
 export {
   treeListFormatter,
   clearNullChildren,
   treeList2list,
-  routersFormatter
+  routersFormatter,
+  apiListFormatter
 }

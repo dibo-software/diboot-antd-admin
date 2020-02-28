@@ -63,10 +63,10 @@
           </a>
           <a-menu slot="overlay">
             <a-menu-item v-action:update>
-              <a @click="createSubMenu(record.id)">添加子菜单</a>
+              <a @click="$refs.form.open(record.id)">编辑</a>
             </a-menu-item>
             <a-menu-item v-action:update>
-              <a @click="$refs.form.open(record.id)">编辑</a>
+              <a @click="createSubMenu(record.id)">添加子菜单</a>
             </a-menu-item>
             <a-menu-item v-action:delete>
               <a href="javascript:;" @click="remove(record.id)">删除</a>
