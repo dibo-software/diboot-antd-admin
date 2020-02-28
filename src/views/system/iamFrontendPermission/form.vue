@@ -7,25 +7,44 @@
     :wrapStyle="{height: 'calc(100% - 108px)',overflow: 'auto',paddingBottom: '108px'}"
   >
     <a-form layout="vertical" :form="form">
-      <a-form-item label="父级菜单">
-        <a-tree-select
-          v-if="menuTreeData.length > 0"
-          placeholder="请选择父级菜单"
-          :dropdownStyle="{ maxHeight: '400px', overflow: 'auto' }"
-          :treeData="menuTreeData"
-          treeNodeFilterProp="title"
-          showSearch
-          treeDefaultExpandAll
-          v-decorator="[
+      <a-row :gutter="16">
+        <a-col :span="12">
+          <a-form-item label="父级菜单">
+            <a-tree-select
+              v-if="menuTreeData.length > 0"
+              placeholder="请选择父级菜单"
+              :dropdownStyle="{ maxHeight: '400px', overflow: 'auto' }"
+              :treeData="menuTreeData"
+              treeNodeFilterProp="title"
+              showSearch
+              treeDefaultExpandAll
+              v-decorator="[
             'parentId',
             {
               initialValue: model.parentId ? model.parentId.toString() : '0',
               rules: [{ required: true, message: '父级菜单不能为空', whitespace: true }]
             }
           ]"
-        >
-        </a-tree-select>
-      </a-form-item>
+            >
+            </a-tree-select>
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item label="当前菜单选取">
+            <a-tree-select
+              v-if="routerTreeList.length > 0"
+              placeholder="请选取当前菜单"
+              :dropdownStyle="{ maxHeight: '400px', overflow: 'auto' }"
+              :treeData="routerTreeList"
+              treeNodeFilterProp="title"
+              showSearch
+              treeDefaultExpandAll
+              @change="onMenuNameChange"
+            >
+            </a-tree-select>
+          </a-form-item>
+        </a-col>
+      </a-row>
       <a-row :gutter="16">
         <a-col :span="12">
           <a-form-item label="菜单名称">
@@ -197,7 +216,8 @@
 <script>
 import form from '@/components/diboot/mixins/form'
 import { dibootApi } from '@/utils/request'
-import { treeListFormatter } from '@/utils/treeDataUtil'
+import { treeListFormatter, routersFormatter, treeList2list } from '@/utils/treeDataUtil'
+import { mapState } from 'vuex'
 import _ from 'lodash'
 
 const NEW_PERMISSION_ITEM = {
@@ -242,7 +262,7 @@ export default {
     async afterOpen (id) {
       if (id) {
         // 设置当前菜单项的接口列表
-        if (this.model.apiSetList && this.model.apiSetList.length > 0){
+        if (this.model.apiSetList && this.model.apiSetList.length > 0) {
           this.apiSetList = this.model.apiSetList
         }
         // 设置当前菜单项的按钮/权限列表
@@ -252,6 +272,19 @@ export default {
             item.apiSetList = ['']
           }
         })
+      }
+    },
+    onMenuNameChange (value) {
+      if (this.routerList || this.routerList.length > 0) {
+        const resultList = this.routerList.filter(item => {
+          return item.value === value
+        })
+        if (resultList.length > 0) {
+          this.form.setFieldsValue({
+            frontendCode: resultList[0]['value'],
+            displayName: resultList[0]['title']
+          })
+        }
       }
     },
     /***
@@ -413,6 +446,15 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      addRouters: state => state.permission.addRouters
+    }),
+    routerTreeList: function () {
+      return routersFormatter(this.addRouters)
+    },
+    routerList: function () {
+      return treeList2list(_.cloneDeep(this.routerTreeList))
+    },
     menuTreeData: function () {
       if (!this.more || !this.more.menuList) {
         return []

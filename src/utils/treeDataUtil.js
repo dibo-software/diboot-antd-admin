@@ -50,7 +50,58 @@ const clearNullChildren = function (treeList) {
   return treeList
 }
 
+/***
+ * 树型列表转普通列表
+ * @param treeList
+ * @returns {[]|*[]}
+ */
+const treeList2list = function (treeList) {
+  if (treeList === undefined || treeList.length === 0) {
+    return []
+  }
+  const allList = []
+  treeList.forEach(item => {
+    if (item.children !== undefined && item.children.length > 0) {
+      allList.push(...treeList2list(item.children))
+      delete item.children
+    }
+  })
+  allList.push(...treeList)
+  return allList
+}
+
+/***
+ * 路由配置格式化
+ * @param routers
+ * @returns {[]|undefined}
+ */
+const routersFormatter = function (routers) {
+  if (routers === undefined || routers.length === 0) {
+    return undefined
+  }
+
+  const formatterList = []
+  routers.forEach(item => {
+    if (item.meta) {
+      const code = item.meta.permission && item.meta.permission.length > 0 ? item.meta.permission[0] : item.name
+      const formatterItem = {
+        key: code,
+        value: code,
+        title: `${item.meta.title}`
+      }
+      console.log(formatterItem)
+      if (item.children !== undefined && item.children.length > 0) {
+        formatterItem.children = routersFormatter(item.children)
+      }
+      formatterList.push(formatterItem)
+    }
+  })
+  return formatterList
+}
+
 export {
   treeListFormatter,
-  clearNullChildren
+  clearNullChildren,
+  treeList2list,
+  routersFormatter
 }

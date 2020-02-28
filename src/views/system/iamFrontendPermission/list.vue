@@ -46,6 +46,13 @@
       @change="handleTableChange"
       rowKey="id"
     >
+      <span slot="permissionList" slot-scope="text, record">
+        <template v-if="record.permissionList && record.permissionList.length > 0">
+          <a-tag color="cyan" v-for="(permission, index) in record.permissionList" :key="index">
+            {{ `${permission.displayName}[${permission.frontendCode}]` }}
+          </a-tag>
+        </template>
+      </span>
       <span slot="action" slot-scope="text, record">
         <a v-action:detail href="javascript:;" @click="$refs.detail.open(record.id)">详情</a>
         <a-divider v-action:detail v-permission="['update', 'delete']" type="vertical" />
@@ -104,7 +111,8 @@ export default {
         },
         {
           title: '页面按钮/权限',
-          dataIndex: 'permission'
+          dataIndex: 'permissionList',
+          scopedSlots: { customRender: 'permissionList' }
         },
         {
           title: '创建时间',
@@ -122,6 +130,7 @@ export default {
   methods: {
     afterLoadList (data) {
       this.data = clearNullChildren(data)
+      this.attachMore()
     }
   }
 }
