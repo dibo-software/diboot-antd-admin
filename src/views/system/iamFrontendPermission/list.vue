@@ -78,6 +78,8 @@
 import list from '@/components/diboot/mixins/list'
 import dibootForm from './form'
 import dibootDetail from './detail'
+import { clearNullChildren } from '@/utils/treeDataUtil'
+
 export default {
   name: 'IamFrontendPermissionList',
   components: {
@@ -89,7 +91,7 @@ export default {
     return {
       baseApi: '/iam/frontendPermission',
       deleteApiPrefix: '/delete',
-      customQueryParam: { parentId: 0, displayType: 'MENU' },
+      customQueryParam: { displayType: 'MENU' },
       getMore: true,
       columns: [
         {
@@ -115,6 +117,11 @@ export default {
           scopedSlots: { customRender: 'action' }
         }
       ]
+    }
+  },
+  methods: {
+    afterLoadList (data) {
+      this.data = clearNullChildren(data)
     }
   }
 }

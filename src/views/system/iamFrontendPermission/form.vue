@@ -13,6 +13,7 @@
           placeholder="请选择父级菜单"
           :dropdownStyle="{ maxHeight: '400px', overflow: 'auto' }"
           :treeData="menuTreeData"
+          treeNodeFilterProp="title"
           showSearch
           treeDefaultExpandAll
           v-decorator="[
