@@ -131,7 +131,6 @@ const apiListFormatter = function (apiList) {
  * @param treeList
  * @param valueField
  * @param titleField
- * @param toString
  * @returns {[]|undefined}
  */
 const permissionTreeListFormatter = function (treeList, valueField, titleField) {
@@ -146,6 +145,7 @@ const permissionTreeListFormatter = function (treeList, valueField, titleField) 
     }
     const formatterItem = {
       slots,
+      type: item.displayType,
       parentId: item.parentId,
       key: item[valueField],
       value: item[valueField],

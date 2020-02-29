@@ -70,6 +70,7 @@
                     showIcon
                     checkable
                     checkStrictly
+                    @check="onNodeCheck"
                     :defaultExpandAll="true"
                     v-model="checkedKeys"
                     :treeData="permissionTreeList"
@@ -99,7 +100,7 @@ import { permissionTreeListFormatter, treeList2list } from '@/utils/treeDataUtil
 import _ from 'lodash'
 
 export default {
-  name: 'RoleForm',
+  name: 'IamRoleForm',
   props: {
     more: {
       type: Object,
@@ -144,6 +145,78 @@ export default {
         this.$message.error(res.msg)
       }
     },
+    /***
+     * 节点选中时的处理事件
+     * 当选中的是父节点时，全选所有子节点
+     * 当取消选中的是父节点时，取消所有子节点选择
+     * @param checkedKeys
+     * @param e
+     */
+    onNodeCheck (checkedKeys, e) {
+      const { value } = e.node
+      const checked = e.checked
+      if (checked === true) {
+        // 如果具有上级节点，则自动选择所有的父级节点（上级菜单必选，否则设置无效）
+        this.deepCheckParentNode(value)
+        // 如果具有下级权限节点，则自动选择所有权限列表（默认操作，可去除）
+        const children = this.childrenMap[value]
+        if (this.withoutMenuChildren(children)) {
+          children.forEach(item => {
+            this.autoCheckNode(item.value)
+          })
+        }
+      } else {
+        // 如果具有下级权限节点，则自动取消选择所有的父级节点（下级菜单必须取消，否则设置无效）
+        this.deepUnCheckChildrenNode(value)
+      }
+    },
+    /***
+     * 逐级选中所有父节点
+     * @param value
+     */
+    deepCheckParentNode (value) {
+      const currentPermission = this.permissionList.find(item => {
+        return item.value === value
+      })
+      if (currentPermission !== undefined && currentPermission.parentId && currentPermission.parentId !== 0) {
+        this.autoCheckNode(currentPermission.parentId)
+        this.deepCheckParentNode(currentPermission.parentId)
+      }
+    },
+    /***
+     * 逐级取消选中所有子节点
+     * @param value
+     */
+    deepUnCheckChildrenNode (value) {
+      const children = this.childrenMap[value]
+      if (children !== undefined && children.length > 0) {
+        children.forEach(item => {
+          this.autoUnCheckNode(item.value)
+          this.deepUnCheckChildrenNode(item.value)
+        })
+      }
+    },
+    autoCheckNode (value) {
+      const checkedIdList = this.checkedKeys.checked
+      if (!checkedIdList.includes(value)) {
+        checkedIdList.push(value)
+      }
+    },
+    autoUnCheckNode (value) {
+      const checkedIdList = this.checkedKeys.checked
+      if (checkedIdList.includes(value)) {
+        _.pull(checkedIdList, value)
+      }
+    },
+    withoutMenuChildren (children) {
+      if (children === undefined || children.length === 0) {
+        return false
+      }
+      const permission = children.find(item => {
+        return item.type === 'MENU'
+      })
+      return permission === undefined
+    },
     close () {
       this.state.visible = false
       this.model = {}
@@ -181,6 +254,21 @@ export default {
         return []
       }
       return treeList2list(_.cloneDeep(this.permissionTreeList))
+    },
+    childrenMap: function () {
+      const childrenMap = {}
+      if (this.permissionList.length === 0){
+        return childrenMap
+      }
+      this.permissionList.forEach(item => {
+        let children = childrenMap[item.parentId]
+        if (children === undefined) {
+          children = []
+          childrenMap[item.parentId] = children
+        }
+        children.push(item)
+      })
+      return childrenMap
     }
   }
 }

@@ -43,7 +43,7 @@ import { permissionTreeListFormatter } from '@/utils/treeDataUtil'
 
 const DetailListItem = DetailList.Item
 export default {
-  name: 'IamUserDetail',
+  name: 'IamRoleDetail',
   data () {
     return {
       baseApi: '/iam/role',
