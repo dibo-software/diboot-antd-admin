@@ -54,42 +54,29 @@
           </a-form-item>
         </a-col>
       </a-row>
-      <a-divider />
       <a-row :gutter="16">
         <a-col :span="24">
-          <a-form-item label="拥有权限">
-            <a-row :gutter="16" v-for="(permission, idx) in permissionList" :key="idx">
+          <a-form-item label="角色授权">
+            <a-row>
               <template v-if="isAdmin">
-                <a-col :span="4">
-                  {{ permission.name }}：
-                </a-col>
                 <a-col :span="20">
-                  <a-tag>所有权限</a-tag>
+                  <a-tag>拥有所有权限</a-tag>
                 </a-col>
               </template>
               <template v-else>
-                <a-col :span="4">
-                  <a-checkbox
-                    :indeterminate="permission.indeterminate"
-                    @change="onCheckAllChange($event, permission)"
-                    :checked="permission.checked"
-                  >
-                    {{ permission.name }}：
-                  </a-checkbox>
-                </a-col>
                 <a-col :span="20">
-                  <a-checkbox-group
-                    @change="changePermission($event, permission)"
-                    v-model="permissionIdsMap[permission.id]"
+                  <a-tree
+                    v-if="permissionTreeList.length > 0"
+                    showIcon
+                    checkable
+                    checkStrictly
+                    :defaultExpandAll="true"
+                    v-model="checkedKeys"
+                    :treeData="permissionTreeList"
                   >
-                    <a-checkbox
-                      v-for="(item, index) in permission.children"
-                      :key="index"
-                      :value="item.id"
-                    >
-                      {{ item.operationName }}
-                    </a-checkbox>
-                  </a-checkbox-group>
+                    <a-icon slot="menu" type="bars" />
+                    <a-icon slot="permission" type="thunderbolt" />
+                  </a-tree>
                 </a-col>
               </template>
             </a-row>
@@ -108,7 +95,9 @@
 <script>
 import { dibootApi } from '@/utils/request'
 import form from '@/components/diboot/mixins/form'
-import forEach from 'lodash.foreach'
+import { permissionTreeListFormatter, treeList2list } from '@/utils/treeDataUtil'
+import _ from 'lodash'
+
 export default {
   name: 'RoleForm',
   props: {
@@ -125,8 +114,8 @@ export default {
       baseApi: '/iam/role',
       form: this.$form.createForm(this),
       isAdmin: false,
-      permissionList: [],
-      permissionIdsMap: {}
+      permissionTreeList: [],
+      checkedKeys: []
     }
   },
   methods: {
@@ -136,64 +125,30 @@ export default {
         this.isAdmin = true
       }
 
-      // 获取系统中所有的permissionList
-      const res = await dibootApi.get(`/iam/permission/list`, { parentId: 0 })
-      if (res.code === 0) {
-        this.permissionList = res.data
-      }
-      // 获取所有已设置的权限
-      let allSelectedIds = []
-      if (this.model && this.model.permissionList && this.model.permissionList.length > 0) {
-        allSelectedIds = this.model.permissionList.map(per => {
-          return per.id
+      // 设置checkedKeys初值
+      if (this.model && this.model.permissionList) {
+        this.checkedKeys = this.model.permissionList.map(item => {
+          return item.id
         })
       }
-      this.permissionList.forEach(per => {
-        const selectIds = []
-        if (per.children && per.children.length > 0) {
-          per.children.forEach(item => {
-            if (allSelectedIds.includes(item.id)) {
-              selectIds.push(item.id)
-            }
-          })
+
+      // 获取系统中所有的permissionList
+      const res = await dibootApi.get(`/iam/frontendPermission/allList`)
+      if (res.code === 0) {
+        if (!res.data || res.data.length === 0){
+          this.$message.error('请先添加菜单及权限')
         } else {
-          per.children = []
-        }
-        this.permissionIdsMap[per.id] = selectIds
-        // 对全选按钮的选中状态进行处理
-        per.indeterminate = !!selectIds.length && selectIds.length < per.children.length
-        per.checked = selectIds.length === per.children.length
-      })
-    },
-    onCheckAllChange (e, permission) {
-      const checked = e.target.checked
-      if (checked) {
-        if (permission.children && permission.children.length > 0) {
-          this.permissionIdsMap[permission.id] = permission.children.map(per => {
-            return per.id
-          })
+          this.permissionTreeList = permissionTreeListFormatter(res.data, 'id', 'displayName')
         }
       } else {
-        this.permissionIdsMap[permission.id] = []
+        this.$message.error(res.msg)
       }
-      // 改变全选按钮状态
-      Object.assign(permission, {
-        indeterminate: false,
-        checked: e.target.checked
-      })
-      this.$forceUpdate()
-    },
-    changePermission (e, permission) {
-      this.permissionIdsMap[permission.id] = e
-      permission.indeterminate = !!this.permissionIdsMap[permission.id].length && this.permissionIdsMap[permission.id].length < permission.children.length
-      permission.checked = this.permissionIdsMap[permission.id].length === permission.children.length
-      this.$forceUpdate()
     },
     close () {
       this.state.visible = false
       this.model = {}
-      this.permissionIdsMap = {}
-      this.permissionList = []
+      this.permissionTreeList = []
+      this.checkedKeys = []
       this.form.resetFields()
       this.isAdmin = false
     },
@@ -207,14 +162,25 @@ export default {
       }
     },
     enhance (values) {
-      const permissionIds = []
-      forEach(this.permissionIdsMap, (value, key) => {
-        if (value && value.length > 0) {
-          permissionIds.push(parseInt(key))
-          permissionIds.push(...value)
+      const checkedIdList = this.checkedKeys.checked
+      // 自动选择没有选到的父级
+      checkedIdList.forEach(id => {
+        const permission = this.permissionList.find(item => {
+          return item.value === id
+        })
+        if (permission !== undefined && permission.parentId !== undefined && !checkedIdList.includes(permission.parentId)) {
+          checkedIdList.push(permission.parentId)
         }
       })
-      values.permissionIdList = permissionIds
+      values.permissionIdList = this.checkedKeys.checked
+    }
+  },
+  computed: {
+    permissionList: function () {
+      if (!this.permissionTreeList || this.permissionTreeList.length === 0) {
+        return []
+      }
+      return treeList2list(_.cloneDeep(this.permissionTreeList))
     }
   }
 }

@@ -8,6 +8,9 @@ const permissionMissing = Vue.directive('permissionMissing', {
   inserted: function (el, binding, vnode) {
     const { value } = binding
     const roles = store.getters && store.getters.roles
+    if (roles.superAdmin === true) {
+      el.parentNode && el.parentNode.removeChild(el) || (el.style.display = 'none')
+    }
 
     const elVal = vnode.context.$route.meta.permission
     const permissionId = elVal instanceof String && [elVal] || elVal

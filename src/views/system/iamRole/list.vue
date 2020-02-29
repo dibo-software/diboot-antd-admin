@@ -45,42 +45,6 @@
       @change="handleTableChange"
       rowKey="id"
     >
-      <div
-        slot="expandedRowRender"
-        slot-scope="record"
-        style="margin: 0">
-        <a-row
-          :gutter="16"
-          :style="{ marginBottom: '12px' }">
-          <a-col v-if="record.superAdmin === true">
-            <a-tag color="blue">拥有所有权限</a-tag>
-          </a-col>
-          <template v-else>
-            <template v-if="record.permissionList && record.permissionList.length > 0">
-              <a-col :span="24" v-for="(per, index) in record.permissions" :key="index" class="roleItem">
-                <a-col :span="3">
-                  <span>{{ per.name }}：</span>
-                </a-col>
-                <a-col :span="18" v-if="per.children && per.children.length > 0">
-                  <a-tag color="cyan" v-for="(p, k) in per.children" :key="k">
-                    {{ p.operationName }}
-                  </a-tag>
-                </a-col>
-                <a-col :span="18" v-else>-</a-col>
-              </a-col>
-            </template>
-            <template v-else>
-              <a-col :span="12">
-                <a-tag color="red">暂无相关权限</a-tag>
-              </a-col>
-            </template>
-          </template>
-        </a-row>
-      </div>
-
-      <span slot="status" slot-scope="text">
-        {{ text | statusFilter }}
-      </span>
 
       <span slot="action" slot-scope="text, record">
         <div v-if="record.superAdmin === true">
@@ -152,33 +116,6 @@ export default {
           scopedSlots: { customRender: 'action' }
         }
       ]
-    }
-  },
-  methods: {
-    afterLoadList (list) {
-      list.forEach(role => {
-        if (role.permissionList && role.permissionList.length > 0) {
-          const childrenListMap = {}
-          role.permissionList.forEach(per => {
-            if (per.parentId !== 0) {
-              if (childrenListMap[per.parentId] === undefined) {
-                childrenListMap[per.parentId] = []
-              }
-              childrenListMap[per.parentId].push(per)
-            }
-          })
-          // 合并childrenListMap为permissions
-          const permissions = []
-          forEach(childrenListMap, (values, key) => {
-            if (values && values.length > 0) {
-              const per = { name: values[0]['name'] }
-              per.children = values
-              permissions.push(per)
-            }
-          })
-          role.permissions = permissions
-        }
-      })
     }
   }
 }

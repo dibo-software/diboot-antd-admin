@@ -103,8 +103,6 @@ const apiListFormatter = function (apiList) {
     return undefined
   }
 
-  console.log('apiListFormatter', apiList)
-
   const formatterList = []
   apiList.forEach(item => {
     let children
@@ -128,10 +126,45 @@ const apiListFormatter = function (apiList) {
   return formatterList
 }
 
+/***
+ * 权限树状结构转化（用于角色权限配置中）
+ * @param treeList
+ * @param valueField
+ * @param titleField
+ * @param toString
+ * @returns {[]|undefined}
+ */
+const permissionTreeListFormatter = function (treeList, valueField, titleField) {
+  if (treeList === undefined || treeList.length === 0) {
+    return undefined
+  }
+
+  const formatterList = []
+  treeList.forEach(item => {
+    const slots = {
+      icon: item.displayType === 'MENU' ? 'menu' : 'permission'
+    }
+    const formatterItem = {
+      slots,
+      parentId: item.parentId,
+      key: item[valueField],
+      value: item[valueField],
+      title: item[titleField]
+    }
+    if (item.children !== undefined && item.children.length > 0) {
+      formatterItem.children = permissionTreeListFormatter(item.children, valueField, titleField, toString)
+    }
+    formatterList.push(formatterItem)
+  })
+
+  return formatterList
+}
+
 export {
   treeListFormatter,
   clearNullChildren,
   treeList2list,
   routersFormatter,
-  apiListFormatter
+  apiListFormatter,
+  permissionTreeListFormatter
 }

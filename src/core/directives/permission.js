@@ -8,6 +8,9 @@ const permission = Vue.directive('permission', {
   inserted: function (el, binding, vnode) {
     const { value } = binding
     const roles = store.getters && store.getters.roles
+    if (roles.superAdmin === true) {
+      return
+    }
 
     const elVal = vnode.context.$route.meta.permission
     const permissionId = elVal instanceof String && [elVal] || elVal
