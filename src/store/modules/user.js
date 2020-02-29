@@ -62,7 +62,7 @@ const user = {
             const role = result.role
             // 更改permission的默认的列表字段
             role.permissions = permissionListToPermissions(result.role.permissionList)
-            role.permissionList = role.permissions.map(permission => { return permission.code })
+            role.permissionList = role.permissions.map(permission => { return permission.permissionId })
             commit('SET_ROLES', result.role)
             commit('SET_INFO', result)
           } else {

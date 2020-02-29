@@ -7,12 +7,14 @@
     :wrapStyle="{height: 'calc(100% - 108px)',overflow: 'auto',paddingBottom: '108px'}"
   >
     <a-spin :spinning="spinning">
-      <detail-list :col="2">
+      <detail-list :col="1">
         <detail-list-item term="角色名称">{{ model.name }}</detail-list-item>
+      </detail-list>
+      <detail-list :col="1">
         <detail-list-item term="角色编码">{{ model.code }}</detail-list-item>
       </detail-list>
       <detail-list :col="1">
-        <detail-list-item term="描述">{{ model.description || '-' }}</detail-list-item>
+        <detail-list-item term="角色描述">{{ model.description || '-' }}</detail-list-item>
       </detail-list>
       <detail-list :col="1">
         <detail-list-item term="已授权权限">
