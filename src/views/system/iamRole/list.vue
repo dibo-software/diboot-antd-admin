@@ -51,20 +51,22 @@
           -
         </div>
         <div v-else>
-          <a v-action:update @click="$refs.form.open(record.id)">编辑</a>
-          <a-divider v-action:detail v-permission="['delete']" type="vertical" />
-          <a-dropdown
-            v-permission="['delete']">
+          <a v-action:detail href="javascript:;" @click="$refs.detail.open(record.id)">详情</a>
+          <a-divider v-action:detail v-permission="['update', 'delete']" type="vertical" />
+          <a-dropdown v-permission="['update', 'delete']">
             <a class="ant-dropdown-link">
-              更多 <a-icon type="down" />
+              更多 <a-icon type="down"/>
             </a>
             <a-menu slot="overlay">
-              <a-menu-item>
-                <a v-action:delete href="javascript:;" @click="remove(record.id)">删除</a>
+              <a-menu-item v-action:update>
+                <a @click="$refs.form.open(record.id)">编辑</a>
+              </a-menu-item>
+              <a-menu-item v-action:delete>
+                <a href="javascript:;" @click="remove(record.id)">删除</a>
               </a-menu-item>
             </a-menu>
           </a-dropdown>
-          <span v-permission-missing="['update', 'delete']">
+          <span v-permission-missing="['detail', 'update', 'delete']">
             -
           </span>
         </div>
@@ -72,19 +74,20 @@
     </a-table>
 
     <diboot-form ref="form" :more="more" @refreshList="getList"></diboot-form>
-
+    <diboot-detail ref="detail"></diboot-detail>
   </a-card>
 </template>
 
 <script>
-import dibootForm from './form'
 import list from '@/components/diboot/mixins/list'
-import forEach from 'lodash.foreach'
+import dibootForm from './form'
+import dibootDetail from './detail'
 
 export default {
   name: 'TableList',
   components: {
-    dibootForm
+    dibootForm,
+    dibootDetail
   },
   mixins: [list],
   data () {

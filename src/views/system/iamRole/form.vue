@@ -9,20 +9,6 @@
     <a-form :form="form">
       <a-row :gutter="16">
         <a-col :span="12">
-          <a-form-item label="编码">
-            <a-input
-              placeholder="编码"
-              v-decorator="[
-                'code',
-                {
-                  initialValue: model.code,
-                  rules: [{ required: true, message: '编码不能为空', whitespace: true }, { validator: checkCodeDuplicate }]
-                }
-              ]"
-            />
-          </a-form-item>
-        </a-col>
-        <a-col :span="12">
           <a-form-item label="角色名称">
             <a-input
               placeholder="角色名称"
@@ -31,6 +17,20 @@
                 {
                   initialValue: model.name,
                   rules: [{ required: true, message: '角色名称不能为空', whitespace: true }]
+                }
+              ]"
+            />
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item label="角色编码">
+            <a-input
+              placeholder="角色编码"
+              v-decorator="[
+                'code',
+                {
+                  initialValue: model.code,
+                  rules: [{ required: true, message: '角色编码不能为空', whitespace: true }, { validator: checkCodeDuplicate }]
                 }
               ]"
             />
