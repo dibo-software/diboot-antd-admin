@@ -59,9 +59,11 @@ export default {
             if (res.code === 0) {
               this.data = res.data
               this.afterLoadList(this.data)
-              this.pagination.pageSize = res.page.pageSize
-              this.pagination.current = res.page.pageIndex
-              this.pagination.total = res.page.totalCount
+              if (res.page) {
+                this.pagination.pageSize = res.page.pageSize
+                this.pagination.current = res.page.pageIndex
+                this.pagination.total = res.page.totalCount
+              }
               // eslint-disable-next-line no-undef
               resolve(this.data)
             } else {
@@ -100,9 +102,11 @@ export default {
           if (res.code === 0) {
             this.data = res.data
             this.afterLoadList(this.data)
-            this.pagination.pageSize = res.page.pageSize
-            this.pagination.current = res.page.pageIndex
-            this.pagination.total = res.page.totalCount
+            if (res.page) {
+              this.pagination.pageSize = res.page.pageSize
+              this.pagination.current = res.page.pageIndex
+              this.pagination.total = res.page.totalCount
+            }
             resolve(this.data)
           } else {
             this.$notification.error({

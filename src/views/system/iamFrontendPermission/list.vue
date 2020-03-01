@@ -37,13 +37,15 @@
     </div>
 
     <a-table
+      v-if="data.length > 0"
       ref="table"
       size="default"
       :columns="columns"
       :dataSource="data"
-      :pagination="pagination"
+      :pagination="false"
       :loading="loadingData"
       @change="handleTableChange"
+      :defaultExpandAllRows="true"
       rowKey="id"
     >
       <span slot="permissionList" slot-scope="text, record">
@@ -78,6 +80,7 @@
         </span>
       </span>
     </a-table>
+    <a-alert v-else message="请点击右上角新建开始配置系统菜单与权限！" banner />
 
     <diboot-form ref="form" @refreshList="getList" :initParentId="formParentId" :more="more"></diboot-form>
     <diboot-detail ref="detail"></diboot-detail>
