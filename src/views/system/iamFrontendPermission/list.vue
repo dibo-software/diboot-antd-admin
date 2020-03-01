@@ -35,9 +35,8 @@
         </a-row>
       </a-form>
     </div>
-
+    <a-alert v-if="!loadingData && (!data || data.length === 0)" message="请点击右上角新建开始配置系统菜单与权限！" banner style="margin-bottom: 20px;" />
     <a-table
-      v-if="data.length > 0"
       ref="table"
       size="default"
       :columns="columns"
@@ -45,7 +44,7 @@
       :pagination="false"
       :loading="loadingData"
       @change="handleTableChange"
-      :defaultExpandAllRows="true"
+      :expandedRowKeys="dataIdList"
       rowKey="id"
     >
       <span slot="permissionList" slot-scope="text, record">
@@ -80,7 +79,6 @@
         </span>
       </span>
     </a-table>
-    <a-alert v-else message="请点击右上角新建开始配置系统菜单与权限！" banner />
 
     <diboot-form ref="form" @refreshList="getList" :initParentId="formParentId" :more="more"></diboot-form>
     <diboot-detail ref="detail"></diboot-detail>
@@ -91,7 +89,8 @@
 import list from '@/components/diboot/mixins/list'
 import dibootForm from './form'
 import dibootDetail from './detail'
-import { clearNullChildren } from '@/utils/treeDataUtil'
+import { clearNullChildren, treeList2list } from '@/utils/treeDataUtil'
+import _ from 'lodash'
 
 export default {
   name: 'IamFrontendPermissionList',
@@ -145,6 +144,22 @@ export default {
     createSubMenu (parentId) {
       this.formParentId = `${parentId}`
       this.$refs.form.open(undefined)
+    }
+  },
+  computed: {
+    dataList: function () {
+      if (!this.data || this.data.length === 0) {
+        return []
+      }
+      return treeList2list(_.cloneDeep(this.data))
+    },
+    dataIdList: function () {
+      if (this.dataList.length === 0) {
+        return []
+      }
+      return this.dataList.map(item => {
+        return item.id
+      })
     }
   }
 }
