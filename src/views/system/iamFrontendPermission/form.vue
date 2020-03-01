@@ -96,7 +96,7 @@
       </a-form-item>
       <a-row :gutter="16">
         <a-col :span="24">
-          <a-card size="small" title="按钮/权限管理">
+          <a-card size="small" title="按钮/权限列表">
             <a-button-group slot="extra">
               <a-button
                 @click="addNewPermission"
@@ -164,6 +164,9 @@
                 </a-form-item>
               </a-tab-pane>
             </a-tabs>
+            <template v-else>
+              无
+            </template>
           </a-card>
         </a-col>
       </a-row>
