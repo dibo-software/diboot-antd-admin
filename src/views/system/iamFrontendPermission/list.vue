@@ -54,7 +54,7 @@
     >
       <span slot="permissionList" slot-scope="text, record">
         <template v-if="record.permissionList && record.permissionList.length > 0">
-          <a-tag color="cyan" v-for="(permission, index) in record.permissionList" :key="index">
+          <a-tag v-for="(permission, index) in record.permissionList" :key="index">
             {{ `${permission.displayName}[${permission.frontendCode}]` }}
           </a-tag>
         </template>

@@ -55,7 +55,7 @@
     >
       <span slot="roleList" slot-scope="text, record">
         <template v-if="record.roleList">
-          <a-tag color="cyan" v-for="(role, index) in record.roleList" :key="index">{{ role.name }}</a-tag>
+          <a-tag v-for="(role, index) in record.roleList" :key="index">{{ role.name }}</a-tag>
         </template>
         <template v-else>
           <span>-</span>
