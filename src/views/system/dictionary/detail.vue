@@ -61,9 +61,7 @@ export default {
         this.children = []
       }
     },
-    close () {
-      this.visible = false
-      this.model = {}
+    afterClose () {
       this.children = []
     }
   }

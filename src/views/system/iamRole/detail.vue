@@ -57,6 +57,9 @@ export default {
       if (this.model && this.model.permissionVOList) {
         this.permissionTreeList = permissionTreeListFormatter(this.model.permissionVOList, 'id', 'displayName')
       }
+    },
+    afterClose () {
+      this.permissionTreeList = []
     }
   },
   components: {

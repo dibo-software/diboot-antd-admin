@@ -242,6 +242,9 @@ export default {
     },
     enhance (values) {
       values.orgId = 0
+    },
+    afterClose () {
+      this.setPassword = false
     }
   },
   props: {

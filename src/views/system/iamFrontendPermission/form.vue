@@ -423,13 +423,10 @@ export default {
         callback(res.msg.split(':')[1])
       }
     },
-    close () {
-      this.state.visible = false
-      this.model = {}
+    afterClose () {
       this.apiSetList = []
       this.permissionList = []
       this.currentMenu = ''
-      this.form.resetFields()
     }
   },
   computed: {

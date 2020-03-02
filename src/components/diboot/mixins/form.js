@@ -60,6 +60,7 @@ export default {
       this.state.visible = false
       this.model = {}
       this.form.resetFields()
+      this.afterClose()
     },
     /***
      * 提交前的验证流程
@@ -184,6 +185,9 @@ export default {
      * @param id
      */
     afterOpen (id) {
+
+    },
+    afterClose () {
 
     },
     attachMore () {

@@ -130,9 +130,7 @@ export default {
         this.$message.error(res.msg)
       }
     },
-    close () {
-      this.visible = false
-      this.model = {}
+    afterClose () {
       this.permissionTreeList = []
       this.$emit('refreshList')
     }

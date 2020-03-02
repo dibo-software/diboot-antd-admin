@@ -31,12 +31,16 @@ export default {
     close () {
       this.visible = false
       this.model = {}
+      this.afterClose()
     },
     /****
      * 打开表单之后的操作
      * @param id
      */
     afterOpen (id) {
+
+    },
+    afterClose () {
 
     }
   }

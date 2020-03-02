@@ -211,11 +211,8 @@ export default {
       this.childItem = _.cloneDeep(CHILDREN_ITEM_DEFAULT)
       this.childrenBtnConfig = _.cloneDeep(CHILDREN_BTN_CONFIG_DEFAULT)
     },
-    close () {
-      this.state.visible = false
-      this.model = {}
+    afterClose () {
       this.children = []
-      this.form.resetFields()
     },
     enhance (values) {
       values.children = this.children

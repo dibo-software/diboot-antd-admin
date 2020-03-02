@@ -217,12 +217,9 @@ export default {
       })
       return permission === undefined
     },
-    close () {
-      this.state.visible = false
-      this.model = {}
+    afterClose () {
       this.permissionTreeList = []
       this.checkedKeys = []
-      this.form.resetFields()
       this.isAdmin = false
     },
     async checkCodeDuplicate (rule, value, callback) {

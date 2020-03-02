@@ -58,6 +58,9 @@ export default {
       if (res.code === 0) {
         this.username = res.data
       }
+    },
+    afterClose () {
+      this.username = ''
     }
   },
   components: {
