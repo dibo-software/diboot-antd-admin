@@ -45,9 +45,9 @@
               type="text"
               placeholder="验证码"
               v-decorator="[
-                  'captcha',
-                  {rules: [{ required: true, message: '请输入验证码' }], validateTrigger: 'blur'}
-                ]"
+                'captcha',
+                {rules: [{ required: true, message: '请输入验证码' }], validateTrigger: 'blur'}
+              ]"
             >
               <a-icon slot="prefix" type="key" :style="{ color: 'rgba(0,0,0,.25)' }"/>
             </a-input>

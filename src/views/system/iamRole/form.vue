@@ -136,7 +136,7 @@ export default {
       // 获取系统中所有的permissionList
       const res = await dibootApi.get(`/iam/frontendPermission/list`)
       if (res.code === 0) {
-        if (!res.data || res.data.length === 0){
+        if (!res.data || res.data.length === 0) {
           this.$message.error('请先添加菜单及权限')
         } else {
           this.permissionTreeList = permissionTreeListFormatter(res.data, 'id', 'displayName')

@@ -19,12 +19,12 @@
               showSearch
               treeDefaultExpandAll
               v-decorator="[
-            'parentId',
-            {
-              initialValue: model.parentId ? model.parentId.toString() : initParentId,
-              rules: [{ required: true, message: '上级菜单不能为空', whitespace: true }]
-            }
-          ]"
+                'parentId',
+                {
+                  initialValue: model.parentId ? model.parentId.toString() : initParentId,
+                  rules: [{ required: true, message: '上级菜单不能为空', whitespace: true }]
+                }
+              ]"
             >
             </a-tree-select>
           </a-form-item>
@@ -132,9 +132,9 @@
                     v-model="permission.frontendCode"
                   >
                     <a-select-option
-                      v-for="(item, index) in more.frontendPermissionCodeKvList"
+                      v-for="(item, i) in more.frontendPermissionCodeKvList"
                       v-if="!existPermissionCodes.includes(item.v) || permission.frontendCode === item.v"
-                      :key="index"
+                      :key="i"
                       :value="item.v"
                     >
                       {{ item.k }}[{{ item.v }}]
@@ -250,7 +250,7 @@ export default {
         if (!currentMenu.value) {
           return false
         }
-        const currentApi =  this.apiList.find(item => {
+        const currentApi = this.apiList.find(item => {
           return item.value && item.value.toLowerCase().includes(currentMenu.value.toLowerCase())
         })
         if (currentApi === undefined || !currentApi.value) {
@@ -439,7 +439,7 @@ export default {
     routerList: function () {
       return treeList2list(_.cloneDeep(this.routerTreeList))
     },
-    apiList: function() {
+    apiList: function () {
       return treeList2list(_.cloneDeep(this.apiTreeList))
     },
     menuTreeData: function () {
