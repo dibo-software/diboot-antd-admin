@@ -96,7 +96,7 @@
 <script>
 import { dibootApi } from '@/utils/request'
 import form from '@/components/diboot/mixins/form'
-import { permissionTreeListFormatter, treeList2list } from '@/utils/treeDataUtil'
+import { permissionTreeListFormatter, treeList2list, list2childrenMap } from '@/utils/treeDataUtil'
 import _ from 'lodash'
 
 export default {
@@ -256,19 +256,7 @@ export default {
       return treeList2list(_.cloneDeep(this.permissionTreeList))
     },
     childrenMap: function () {
-      const childrenMap = {}
-      if (this.permissionList.length === 0){
-        return childrenMap
-      }
-      this.permissionList.forEach(item => {
-        let children = childrenMap[item.parentId]
-        if (children === undefined) {
-          children = []
-          childrenMap[item.parentId] = children
-        }
-        children.push(item)
-      })
-      return childrenMap
+      return list2childrenMap(this.permissionList)
     }
   }
 }

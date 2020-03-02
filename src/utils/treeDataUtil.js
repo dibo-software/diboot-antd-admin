@@ -71,6 +71,27 @@ const treeList2list = function (treeList) {
 }
 
 /***
+ * 树形列表转子列表map
+ * @param list
+ * @returns {{}}
+ */
+const list2childrenMap = function (list) {
+  const childrenMap = {}
+  if (list === undefined || list.length === 0) {
+    return childrenMap
+  }
+  list.forEach(item => {
+    let children = childrenMap[item.parentId]
+    if (children === undefined) {
+      children = []
+      childrenMap[item.parentId] = children
+    }
+    children.push(item)
+  })
+  return childrenMap
+}
+
+/***
  * 路由配置格式化
  * @param routers
  * @returns {[]|undefined}
@@ -147,6 +168,8 @@ const permissionTreeListFormatter = function (treeList, valueField, titleField) 
       slots,
       type: item.displayType,
       parentId: item.parentId,
+      id: item.id,
+      sortId: item.sortId,
       key: item[valueField],
       value: item[valueField],
       title: item[titleField]
@@ -164,6 +187,7 @@ export {
   treeListFormatter,
   clearNullChildren,
   treeList2list,
+  list2childrenMap,
   routersFormatter,
   apiListFormatter,
   permissionTreeListFormatter

@@ -3,12 +3,12 @@
     <div class="table-page-search-wrapper">
       <a-form layout="inline" @submit.native="getList">
         <a-row :gutter="48">
-          <a-col :md="8" :sm="24">
+          <a-col :md="7" :sm="24">
             <a-form-item label="菜单名称">
               <a-input placeholder="名称" v-model="queryParam.displayName" />
             </a-form-item>
           </a-col>
-          <a-col :md="8" :sm="24">
+          <a-col :md="7" :sm="24">
             <a-form-item label="菜单编码">
               <a-input placeholder="菜单编码" v-model="queryParam.frontendCode" />
             </a-form-item>
@@ -25,7 +25,12 @@
                 @click="reset">重置</a-button>
             </span>
           </a-col>
-          <a-col :lg="3" :sm="24" style="text-align: right;">
+          <a-col :lg="5" :sm="24" style="text-align: right;">
+            <a-button
+              @click="$refs.sort.open()"
+              icon="drag"
+              style="margin-right: 8px;"
+              type="default">排序</a-button>
             <a-button
               v-action:create
               type="primary"
@@ -82,6 +87,7 @@
 
     <diboot-form ref="form" @refreshList="getList" :initParentId="formParentId" :more="more"></diboot-form>
     <diboot-detail ref="detail"></diboot-detail>
+    <diboot-sort ref="sort" @refreshList="getList"></diboot-sort>
   </a-card>
 </template>
 
@@ -89,6 +95,7 @@
 import list from '@/components/diboot/mixins/list'
 import dibootForm from './form'
 import dibootDetail from './detail'
+import dibootSort from './sort'
 import { clearNullChildren, treeList2list } from '@/utils/treeDataUtil'
 import _ from 'lodash'
 
@@ -96,7 +103,8 @@ export default {
   name: 'IamFrontendPermissionList',
   components: {
     dibootForm,
-    dibootDetail
+    dibootDetail,
+    dibootSort
   },
   mixins: [ list ],
   data () {

@@ -55,7 +55,7 @@ export const asyncRouterMap = [
             path: '/system/iamFrontendPermission/list',
             name: 'IamFrontendPermission',
             component: () => import('@/views/system/iamFrontendPermission/list'),
-            meta: { title: '系统权限管理', keepAlive: true, permission: ['IamFrontendPermission'] }
+            meta: { title: '菜单权限管理', keepAlive: true, permission: ['IamFrontendPermission'] }
           },
           {
             path: '/system/iamLoginTrace/list',
