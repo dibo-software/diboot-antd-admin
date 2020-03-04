@@ -87,7 +87,7 @@
 
     <diboot-form ref="form" @refreshList="getList" :initParentId="formParentId" :more="more"></diboot-form>
     <diboot-detail ref="detail"></diboot-detail>
-    <diboot-sort ref="sort" @refreshList="getList"></diboot-sort>
+    <permission-tree-sort ref="sort" @complete="getList"></permission-tree-sort>
   </a-card>
 </template>
 
@@ -95,7 +95,7 @@
 import list from '@/components/diboot/mixins/list'
 import dibootForm from './form'
 import dibootDetail from './detail'
-import dibootSort from './sort'
+import permissionTreeSort from './treeSort'
 import { clearNullChildren, treeList2list } from '@/utils/treeDataUtil'
 import _ from 'lodash'
 
@@ -104,7 +104,7 @@ export default {
   components: {
     dibootForm,
     dibootDetail,
-    dibootSort
+    permissionTreeSort
   },
   mixins: [ list ],
   data () {
