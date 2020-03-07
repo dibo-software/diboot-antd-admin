@@ -151,7 +151,7 @@ export default {
       })
       this.close()
       this.form.resetFields()
-      this.$emit('refreshList')
+      this.$emit('complete')
       this.$emit('changeKey', result.data)
     },
     /***

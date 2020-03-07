@@ -9,10 +9,14 @@ export default {
       listApi: '',
       // 删除接口
       deleteApiPrefix: '',
+      // 导出接口
+      exportApi: '',
       // 自定义参数（不被查询表单重置和改变的参数）
       customQueryParam: {},
       // 与查询条件绑定的参数（会被查询表单重置和改变的参数）
       queryParam: {},
+      // 高级搜索 展开/关闭
+      advanced: false,
       // 列表数据
       data: [],
       // 关联相关的更多数据
@@ -39,6 +43,9 @@ export default {
       this.queryParam.pageIndex = pagination.current
       this.queryParam.pageSize = pagination.pageSize
       this.getList()
+    },
+    toggleAdvanced () {
+      this.advanced = !this.advanced
     },
     postList () {
       return new Promise((resolve, reject) => {
@@ -175,8 +182,25 @@ export default {
         })
       })
     },
+    exportData () {
+      const tempQueryParam = {}
+      // 合并自定义查询参数
+      merge(tempQueryParam, this.customQueryParam)
+      // 合并搜索参数
+      merge(tempQueryParam, this.queryParam)
+      const exportApi = this.exportApi ? this.exportApi : '/export'
+      dibootApi.download(`${this.baseApi}${exportApi}`, tempQueryParam).then(res => {
+        if (res.filename) {
+          this.downloadFile(res)
+        } else {
+          var decoder = new TextDecoder('utf-8')
+          var result = JSON.parse(decoder.decode(new Uint8Array(res)))
+          this.$message.error(result.msg)
+        }
+      })
+    },
     /**
-     * 导出数据
+     * 下载文件
      * @param res
      */
     downloadFile (res) {

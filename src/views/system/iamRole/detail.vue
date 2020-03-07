@@ -28,6 +28,9 @@
             <a-icon slot="menu" type="bars" />
             <a-icon slot="permission" type="thunderbolt" />
           </a-tree>
+          <template v-else>
+            无
+          </template>
         </detail-list-item>
       </detail-list>
     </a-spin>
