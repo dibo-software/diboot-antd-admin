@@ -85,7 +85,7 @@
       </span>
     </a-table>
 
-    <diboot-form ref="form" @refreshList="getList" :initParentId="formParentId" :more="more"></diboot-form>
+    <diboot-form ref="form" @complete="getList" :initParentId="formParentId" :more="more"></diboot-form>
     <diboot-detail ref="detail"></diboot-detail>
     <permission-tree-sort ref="sort" @complete="getList"></permission-tree-sort>
   </a-card>

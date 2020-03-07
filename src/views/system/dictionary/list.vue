@@ -69,7 +69,7 @@
       </span>
     </a-table>
 
-    <diboot-form ref="form" @refreshList="getList"></diboot-form>
+    <diboot-form ref="form" @complete="getList"></diboot-form>
     <diboot-detail ref="detail"></diboot-detail>
   </a-card>
 </template>

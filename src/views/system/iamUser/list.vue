@@ -88,7 +88,7 @@
     <diboot-form
       ref="form"
       :more="more"
-      @refreshList="getList"
+      @complete="getList"
     ></diboot-form>
     <!--详情页抽屉-->
     <diboot-detail ref="detail">
