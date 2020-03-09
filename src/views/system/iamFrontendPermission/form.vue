@@ -172,7 +172,7 @@
       </a-row>
     </a-form>
 
-    <div class="footer">
+    <div class="drawer-footer">
       <a-button :style="{marginRight: '8px'}" @click="close">取消</a-button>
       <a-button @click="onSubmit" type="primary" :loading="state.submitBtn" :disabled="state.submitBtn">确定</a-button>
     </div>
@@ -477,16 +477,6 @@ export default {
 </script>
 
 <style scoped>
-  .footer{
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    border-top: 1px solid #e9e9e9;
-    padding: 10px 16px;
-    background: #fff;
-    text-align: right
-  }
   .iamFrontendPermissionForm .ant-form-item {
     margin-bottom: 10px;
   }

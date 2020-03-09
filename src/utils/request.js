@@ -74,6 +74,13 @@ service.interceptors.response.use((response) => {
   if (response.status === 200) {
     resetPingTimer()
   }
+  // 如果当前请求是下载请求
+  if (response.headers.filename) {
+    return {
+      data: response.data,
+      filename: decodeURI(response.headers.filename)
+    }
+  }
   return response.data
 }, err)
 
