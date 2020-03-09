@@ -43,5 +43,13 @@ export default {
     afterClose () {
 
     }
+  },
+  props: {
+    width: {
+      type: Number,
+      default: () => {
+        return 720
+      }
+    }
   }
 }

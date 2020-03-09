@@ -212,6 +212,14 @@ export default {
       )
     }
   },
+  props: {
+    width: {
+      type: Number,
+      default: () => {
+        return 720
+      }
+    }
+  },
   async mounted () {
     if (this.getMore === true) {
       await this.attachMore()

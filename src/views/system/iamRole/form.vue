@@ -1,7 +1,7 @@
 <template>
   <a-drawer
-    :title="title"
-    :width="800"
+    :title="`${title}角色`"
+    :width="width"
     :visible="state.visible"
     @close="close"
     :wrapStyle="{height: 'calc(100% - 108px)',overflow: 'auto',paddingBottom: '108px'}"
