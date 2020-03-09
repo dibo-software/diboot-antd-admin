@@ -142,13 +142,27 @@ const dibootApi = {
       data: formData
     })
   },
+  download (url, params) {
+    return service({
+      url,
+      method: 'GET',
+      responseType: 'arraybuffer',
+      observe: 'response',
+      params,
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'Content-Type': 'application/json;charset=UTF-8'
+      },
+      withCredentials: true
+    })
+  },
   /**
    * 导出
    * @param url
    * @param data
    * @returns {AxiosPromise}
    */
-  download (url, data) {
+  postDownload (url, data) {
     return service({
       url,
       method: 'POST',
