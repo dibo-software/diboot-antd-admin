@@ -56,34 +56,14 @@ export default {
   name: 'IamFrontendPermissionDetail',
   data () {
     return {
-      baseApi: '/iam/frontendPermission',
-      children: []
+      baseApi: '/iam/frontendPermission'
     }
   },
   components: {
     DetailList,
     DetailListItem
   },
-  mixins: [ detail ],
-  methods: {
-    async afterOpen (id) {
-      this.initSubItem(this.model)
-    },
-    initSubItem: function (data) {
-      if (data.children && data.children.length > 0) {
-        var children = []
-        data.children.forEach(child => {
-          children.push({ id: child.id, itemName: child.itemName, itemValue: child.itemValue })
-        })
-        this.children = children
-      } else {
-        this.children = []
-      }
-    },
-    afterClose () {
-      this.children = []
-    }
-  }
+  mixins: [ detail ]
 }
 </script>
 
