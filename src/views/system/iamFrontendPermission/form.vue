@@ -180,300 +180,300 @@
 </template>
 
 <script>
-  import form from '@/components/diboot/mixins/form'
-  import { dibootApi } from '@/utils/request'
-  import { treeListFormatter, routersFormatter, treeList2list, apiListFormatter } from '@/utils/treeDataUtil'
-  import { mapState } from 'vuex'
-  import _ from 'lodash'
+import form from '@/components/diboot/mixins/form'
+import { dibootApi } from '@/utils/request'
+import { treeListFormatter, routersFormatter, treeList2list, apiListFormatter } from '@/utils/treeDataUtil'
+import { mapState } from 'vuex'
+import _ from 'lodash'
 
-  const NEW_PERMISSION_ITEM = {
-    id: undefined,
-    parentId: '',
-    displayType: 'PERMISSION',
-    displayName: '新按钮/权限',
-    frontendCode: '',
-    apiSetList: []
-  }
-  export default {
-    name: 'IamFrontendPermissionDrawer',
-    data () {
-      return {
-        baseApi: '/iam/frontendPermission',
-        form: this.$form.createForm(this),
-        currentPermissionActiveKey: 0,
-        currentMenu: '',
-        apiSetList: [],
-        permissionList: [],
-        apiTreeList: []
-      }
-    },
-    mixins: [ form ],
-    methods: {
-      async afterOpen (id) {
-        if (id) {
-          // 设置当前菜单项的接口列表
-          if (this.model.apiSetList && this.model.apiSetList.length > 0) {
-            this.apiSetList = this.model.apiSetList
-          }
-          // 设置当前菜单项的按钮/权限列表
-          this.permissionList = this.model.permissionList
-          this.permissionList.forEach(item => {
-            if (!item.apiSetList || item.apiSetList.length === 0) {
-              item.apiSetList = []
-            }
-          })
+const NEW_PERMISSION_ITEM = {
+  id: undefined,
+  parentId: '',
+  displayType: 'PERMISSION',
+  displayName: '新按钮/权限',
+  frontendCode: '',
+  apiSetList: []
+}
+export default {
+  name: 'IamFrontendPermissionDrawer',
+  data () {
+    return {
+      baseApi: '/iam/frontendPermission',
+      form: this.$form.createForm(this),
+      currentPermissionActiveKey: 0,
+      currentMenu: '',
+      apiSetList: [],
+      permissionList: [],
+      apiTreeList: []
+    }
+  },
+  mixins: [ form ],
+  methods: {
+    async afterOpen (id) {
+      if (id) {
+        // 设置当前菜单项的接口列表
+        if (this.model.apiSetList && this.model.apiSetList.length > 0) {
+          this.apiSetList = this.model.apiSetList
         }
-
-        dibootApi.get(`${this.baseApi}/apiList`).then(res => {
-          if (res.code === 0) {
-            this.apiTreeList = apiListFormatter(res.data)
-          } else {
-            this.$message.error(res.msg)
+        // 设置当前菜单项的按钮/权限列表
+        this.permissionList = this.model.permissionList
+        this.permissionList.forEach(item => {
+          if (!item.apiSetList || item.apiSetList.length === 0) {
+            item.apiSetList = []
           }
         })
-      },
-      onMenuNameChange (value) {
-        if (this.routerList || this.routerList.length > 0) {
-          const currentMenu = this.routerList.find(item => {
-            return item.value === value
-          })
-          if (currentMenu === undefined) {
-            return false
-          }
-          // 自动设置菜单名称与菜单编码
-          this.form.setFieldsValue({
-            frontendCode: currentMenu.value,
-            displayName: currentMenu.title
-          })
-          // 自动设置菜单页面所需接口
-          this.apiSetList = []
-          if (!currentMenu.value) {
-            return false
-          }
-          const currentApi = this.apiList.find(item => {
-            return item.value && item.value.toLowerCase().includes(currentMenu.value.toLowerCase())
-          })
-          if (currentApi === undefined || !currentApi.value) {
-            return false
-          }
-          this.apiSetList.push(currentApi.value)
+      }
+
+      dibootApi.get(`${this.baseApi}/apiList`).then(res => {
+        if (res.code === 0) {
+          this.apiTreeList = apiListFormatter(res.data)
+        } else {
+          this.$message.error(res.msg)
         }
-      },
-      /***
+      })
+    },
+    onMenuNameChange (value) {
+      if (this.routerList || this.routerList.length > 0) {
+        const currentMenu = this.routerList.find(item => {
+          return item.value === value
+        })
+        if (currentMenu === undefined) {
+          return false
+        }
+        // 自动设置菜单名称与菜单编码
+        this.form.setFieldsValue({
+          frontendCode: currentMenu.value,
+          displayName: currentMenu.title
+        })
+        // 自动设置菜单页面所需接口
+        this.apiSetList = []
+        if (!currentMenu.value) {
+          return false
+        }
+        const currentApi = this.apiList.find(item => {
+          return item.value && item.value.toLowerCase().includes(currentMenu.value.toLowerCase())
+        })
+        if (currentApi === undefined || !currentApi.value) {
+          return false
+        }
+        this.apiSetList.push(currentApi.value)
+      }
+    },
+    /***
        * 提交前的验证流程
        * @returns {Promise<any>}
        */
-      validate () {
-        return new Promise((resolve, reject) => {
-          this.form.validateFields((err, fieldsValue) => {
-            if (!err) {
-              const errMsgs = []
-              // 对按钮/权限列表进行验证
-              if (this.permissionList.length > 0) {
-                const notChangePerIdxList = []
-                const nullDisplayNameIdxList = []
-                const nullFrontendCodeIdxList = []
-                this.permissionList.forEach((permission, i) => {
-                  // 校验按钮/权限名称是否为空以及是否更改
-                  if (!permission.displayName) {
-                    nullDisplayNameIdxList.push(i + 1)
-                  } else if (permission.displayName === NEW_PERMISSION_ITEM.displayName) {
-                    notChangePerIdxList.push(i + 1)
-                  }
-                  // 校验按钮/权限编码是否设置
-                  if (!permission.frontendCode) {
-                    nullFrontendCodeIdxList.push(i + 1)
-                  }
-                })
-                // 收集验证错误信息
-                if (notChangePerIdxList.length > 0) {
-                  errMsgs.push(`第 ${notChangePerIdxList.join('、')} 个按钮/权限的名称没有更改`)
+    validate () {
+      return new Promise((resolve, reject) => {
+        this.form.validateFields((err, fieldsValue) => {
+          if (!err) {
+            const errMsgs = []
+            // 对按钮/权限列表进行验证
+            if (this.permissionList.length > 0) {
+              const notChangePerIdxList = []
+              const nullDisplayNameIdxList = []
+              const nullFrontendCodeIdxList = []
+              this.permissionList.forEach((permission, i) => {
+                // 校验按钮/权限名称是否为空以及是否更改
+                if (!permission.displayName) {
+                  nullDisplayNameIdxList.push(i + 1)
+                } else if (permission.displayName === NEW_PERMISSION_ITEM.displayName) {
+                  notChangePerIdxList.push(i + 1)
                 }
-                if (nullDisplayNameIdxList.length > 0) {
-                  errMsgs.push(`第 ${nullDisplayNameIdxList.join('、')} 个按钮/权限的名称没有填写`)
+                // 校验按钮/权限编码是否设置
+                if (!permission.frontendCode) {
+                  nullFrontendCodeIdxList.push(i + 1)
                 }
-                if (nullFrontendCodeIdxList.length > 0) {
-                  errMsgs.push(`第 ${nullFrontendCodeIdxList.join('、')} 个按钮/权限的编码没有填写`)
-                }
+              })
+              // 收集验证错误信息
+              if (notChangePerIdxList.length > 0) {
+                errMsgs.push(`第 ${notChangePerIdxList.join('、')} 个按钮/权限的名称没有更改`)
               }
-              if (errMsgs.length > 0) {
-                const msg = errMsgs.join('；') + '。'
-                this.$message.error(msg)
-                reject(msg)
+              if (nullDisplayNameIdxList.length > 0) {
+                errMsgs.push(`第 ${nullDisplayNameIdxList.join('、')} 个按钮/权限的名称没有填写`)
               }
+              if (nullFrontendCodeIdxList.length > 0) {
+                errMsgs.push(`第 ${nullFrontendCodeIdxList.join('、')} 个按钮/权限的编码没有填写`)
+              }
+            }
+            if (errMsgs.length > 0) {
+              const msg = errMsgs.join('；') + '。'
+              this.$message.error(msg)
+              reject(msg)
+            }
 
-              // 获取当前菜单的可用接口列表
-              const apiSetList = this.apiSetList.filter(api => {
+            // 获取当前菜单的可用接口列表
+            const apiSetList = this.apiSetList.filter(api => {
+              return api !== undefined && api !== ''
+            })
+
+            // 整理当前的按钮/权限列表以及对应的接口列表
+            const permissionList = _.cloneDeep(this.permissionList)
+            // 整理所有按钮/权限列表的可用接口列表，并设置菜单的id为当前的parentId
+            permissionList.forEach(permission => {
+              permission.apiSetList = permission.apiSetList.filter(api => {
                 return api !== undefined && api !== ''
               })
-
-              // 整理当前的按钮/权限列表以及对应的接口列表
-              const permissionList = _.cloneDeep(this.permissionList)
-              // 整理所有按钮/权限列表的可用接口列表，并设置菜单的id为当前的parentId
-              permissionList.forEach(permission => {
-                permission.apiSetList = permission.apiSetList.filter(api => {
-                  return api !== undefined && api !== ''
-                })
-                if (this.model && this.model.id) {
-                  permission.parentId = this.model.id
-                }
-              })
-
-              // 合并参数
-              const displayType = 'MENU'
-              const values = {
-                ...fieldsValue,
-                displayType,
-                apiSetList,
-                permissionList
+              if (this.model && this.model.id) {
+                permission.parentId = this.model.id
               }
+            })
 
-              resolve(values)
-            } else {
-              reject(err)
+            // 合并参数
+            const displayType = 'MENU'
+            const values = {
+              ...fieldsValue,
+              displayType,
+              apiSetList,
+              permissionList
             }
-            setTimeout(() => {
-              this.state.submitBtn = false
-            }, 600)
-          })
+
+            resolve(values)
+          } else {
+            reject(err)
+          }
+          setTimeout(() => {
+            this.state.submitBtn = false
+          }, 600)
         })
-      },
-      addNewPermission () {
-        const newPermission = _.cloneDeep(NEW_PERMISSION_ITEM)
-        this.permissionList.push(newPermission)
-        this.currentPermissionActiveKey = this.permissionList.length - 1
-        // 自动补全编码选项
-        if (this.more && this.more.frontendPermissionCodeKvList) {
-          const validKv = this.more.frontendPermissionCodeKvList.find(kv => {
-            return !this.existPermissionCodes.includes(kv.v)
-          })
-          newPermission.frontendCode = validKv.v
-          this.changePermissionName(newPermission, validKv.v)
-        }
-      },
-      removePermission (index) {
-        this.permissionList.splice(index, 1)
-        this.currentPermissionActiveKey = this.currentPermissionActiveKey > 0 ? --this.currentPermissionActiveKey : 0
-      },
-      filterPermissionCodeOption (permission, input, option) {
-        const text = option.componentOptions.children[0].text.toLowerCase()
-        if (text.indexOf(input.toLowerCase()) >= 0) {
-          return true
-        }
-        const value = option.componentOptions.propsData.value.toLowerCase()
-        if (value.indexOf(input.toLowerCase()) >= 0) {
-          return true
-        }
-        permission.frontendCode = input
+      })
+    },
+    addNewPermission () {
+      const newPermission = _.cloneDeep(NEW_PERMISSION_ITEM)
+      this.permissionList.push(newPermission)
+      this.currentPermissionActiveKey = this.permissionList.length - 1
+      // 自动补全编码选项
+      if (this.more && this.more.frontendPermissionCodeKvList) {
+        const validKv = this.more.frontendPermissionCodeKvList.find(kv => {
+          return !this.existPermissionCodes.includes(kv.v)
+        })
+        newPermission.frontendCode = validKv.v
+        this.changePermissionName(newPermission, validKv.v)
+      }
+    },
+    removePermission (index) {
+      this.permissionList.splice(index, 1)
+      this.currentPermissionActiveKey = this.currentPermissionActiveKey > 0 ? --this.currentPermissionActiveKey : 0
+    },
+    filterPermissionCodeOption (permission, input, option) {
+      const text = option.componentOptions.children[0].text.toLowerCase()
+      if (text.indexOf(input.toLowerCase()) >= 0) {
+        return true
+      }
+      const value = option.componentOptions.propsData.value.toLowerCase()
+      if (value.indexOf(input.toLowerCase()) >= 0) {
+        return true
+      }
+      permission.frontendCode = input
+      return false
+    },
+    changePermissionName (permission, value) {
+      const validKv = this.more.frontendPermissionCodeKvList.find(item => {
+        return item.v === value
+      })
+      // 自动补全按钮/权限名称
+      if (validKv !== undefined) {
+        permission.displayName = validKv['k']
+      }
+      // 自动补全接口列表
+      permission.apiSetList = []
+      if (this.apiSetList.length === 0 || !value) {
         return false
-      },
-      changePermissionName (permission, value) {
-        const validKv = this.more.frontendPermissionCodeKvList.find(item => {
-          return item.v === value
-        })
-        // 自动补全按钮/权限名称
-        if (validKv !== undefined) {
-          permission.displayName = validKv['k']
-        }
-        // 自动补全接口列表
-        permission.apiSetList = []
-        if (this.apiSetList.length === 0 || !value) {
-          return false
-        }
-        const matchStrList = this.apiSetList[0].match(/\/(\S*)\//)
-        if (!matchStrList || matchStrList.length < 2) {
-          return false
-        }
-        const matchStr = matchStrList[0]
-        let uri
-        if (value === 'detail') {
-          uri = `GET:${matchStr}{`
-        } else if (value === 'create') {
-          uri = `POST:${matchStr}`
-        } else if (value === 'update') {
-          uri = `PUT:${matchStr}{`
-        } else if (value === 'delete') {
-          uri = `DELETE:${matchStr}{`
-        } else if (value === 'export') {
-          uri = `POST:${matchStr}export`
-        } else if (value === 'import') {
-          uri = `POST:${matchStr}import`
-        }
-        if (!uri) {
-          return false
-        }
-        const matchApi = this.apiList.find(api => {
-          return api.value && api.value.includes(uri)
-        })
-        if (matchApi === undefined) {
-          return false
-        }
-        permission.apiSetList.push(matchApi.value)
-      },
-      async checkCodeDuplicate (rule, value, callback) {
-        if (!value) {
-          callback()
-          return
-        }
-        const params = { id: this.model.id, code: value }
-        const res = await dibootApi.get(`${this.baseApi}/checkCodeDuplicate`, params)
-        if (res.code === 0) {
-          callback()
-        } else {
-          callback(res.msg.split(':')[1])
-        }
-      },
-      afterClose () {
-        this.apiSetList = []
-        this.permissionList = []
-        this.currentMenu = ''
+      }
+      const matchStrList = this.apiSetList[0].match(/\/(\S*)\//)
+      if (!matchStrList || matchStrList.length < 2) {
+        return false
+      }
+      const matchStr = matchStrList[0]
+      let uri
+      if (value === 'detail') {
+        uri = `GET:${matchStr}{`
+      } else if (value === 'create') {
+        uri = `POST:${matchStr}`
+      } else if (value === 'update') {
+        uri = `PUT:${matchStr}{`
+      } else if (value === 'delete') {
+        uri = `DELETE:${matchStr}{`
+      } else if (value === 'export') {
+        uri = `POST:${matchStr}export`
+      } else if (value === 'import') {
+        uri = `POST:${matchStr}import`
+      }
+      if (!uri) {
+        return false
+      }
+      const matchApi = this.apiList.find(api => {
+        return api.value && api.value.includes(uri)
+      })
+      if (matchApi === undefined) {
+        return false
+      }
+      permission.apiSetList.push(matchApi.value)
+    },
+    async checkCodeDuplicate (rule, value, callback) {
+      if (!value) {
+        callback()
+        return
+      }
+      const params = { id: this.model.id, code: value }
+      const res = await dibootApi.get(`${this.baseApi}/checkCodeDuplicate`, params)
+      if (res.code === 0) {
+        callback()
+      } else {
+        callback(res.msg.split(':')[1])
       }
     },
-    computed: {
-      ...mapState({
-        addRouters: state => state.permission.addRouters
-      }),
-      routerTreeList: function () {
-        return routersFormatter(this.addRouters)
-      },
-      routerList: function () {
-        return treeList2list(_.cloneDeep(this.routerTreeList))
-      },
-      apiList: function () {
-        return treeList2list(_.cloneDeep(this.apiTreeList))
-      },
-      menuTreeData: function () {
-        if (!this.more || !this.more.menuList) {
-          return []
-        }
-        const menuTreeData = treeListFormatter(this.more.menuList, 'id', 'displayName', true)
-        menuTreeData.splice(0, 0, { key: '0', value: '0', title: '顶级菜单' })
-        return menuTreeData
-      },
-      existPermissionCodes: function () {
-        if (!this.permissionList) {
-          return []
-        }
-        return this.permissionList.map(item => {
-          return item.frontendCode
-        })
+    afterClose () {
+      this.apiSetList = []
+      this.permissionList = []
+      this.currentMenu = ''
+    }
+  },
+  computed: {
+    ...mapState({
+      addRouters: state => state.permission.addRouters
+    }),
+    routerTreeList: function () {
+      return routersFormatter(this.addRouters)
+    },
+    routerList: function () {
+      return treeList2list(_.cloneDeep(this.routerTreeList))
+    },
+    apiList: function () {
+      return treeList2list(_.cloneDeep(this.apiTreeList))
+    },
+    menuTreeData: function () {
+      if (!this.more || !this.more.menuList) {
+        return []
+      }
+      const menuTreeData = treeListFormatter(this.more.menuList, 'id', 'displayName', true)
+      menuTreeData.splice(0, 0, { key: '0', value: '0', title: '顶级菜单' })
+      return menuTreeData
+    },
+    existPermissionCodes: function () {
+      if (!this.permissionList) {
+        return []
+      }
+      return this.permissionList.map(item => {
+        return item.frontendCode
+      })
+    }
+  },
+  props: {
+    more: {
+      type: Object,
+      default: () => {
+        return {}
       }
     },
-    props: {
-      more: {
-        type: Object,
-        default: () => {
-          return {}
-        }
-      },
-      initParentId: {
-        type: String,
-        default: () => {
-          return '0'
-        }
+    initParentId: {
+      type: String,
+      default: () => {
+        return '0'
       }
     }
   }
+}
 </script>
 
 <style scoped>

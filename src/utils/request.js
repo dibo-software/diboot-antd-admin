@@ -74,6 +74,7 @@ service.interceptors.response.use((response) => {
   if (response.status === 200) {
     resetPingTimer()
   }
+
   // 如果当前请求是下载请求
   if (response.headers.filename) {
     return {
@@ -142,6 +143,12 @@ const dibootApi = {
       data: formData
     })
   },
+  /**
+   * GET下载文件
+   * @param url
+   * @param data
+   * @returns {AxiosPromise}
+   */
   download (url, params) {
     return service({
       url,
@@ -157,7 +164,7 @@ const dibootApi = {
     })
   },
   /**
-   * 导出
+   * POST下载文件（常用于提交json数据下载文件）
    * @param url
    * @param data
    * @returns {AxiosPromise}
