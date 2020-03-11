@@ -80,19 +80,31 @@
         </a-col>
       </a-row>
       <a-form-item label="当前菜单页面接口列表">
-        <a-tree-select
-          v-if="apiTreeList.length > 0"
+        <a-select
+          v-if="apiIndentList.length > 0"
           placeholder="请选取当前菜单页面接口列表"
-          :dropdownStyle="{ maxHeight: '400px', overflow: 'auto' }"
-          :treeData="apiTreeList"
-          treeNodeFilterProp="title"
-          showSearch
-          treeDefaultExpandAll
-          multiple
-          allowClear
           v-model="apiSetList"
         >
-        </a-tree-select>
+          <a-select-option
+            :key="index"
+            :value="api.value"
+            v-for="(api, index) in apiIndentList">
+            {{ api.title }}
+          </a-select-option>
+        </a-select>
+<!--        <a-tree-select-->
+<!--          v-if="apiTreeList.length > 0"-->
+<!--          placeholder="请选取当前菜单页面接口列表"-->
+<!--          :dropdownStyle="{ maxHeight: '400px', overflow: 'auto' }"-->
+<!--          :treeData="apiTreeList"-->
+<!--          treeNodeFilterProp="title"-->
+<!--          showSearch-->
+<!--          treeDefaultExpandAll-->
+<!--          multiple-->
+<!--          allowClear-->
+<!--          v-model="apiSetList"-->
+<!--        >-->
+<!--        </a-tree-select>-->
       </a-form-item>
       <a-row :gutter="16">
         <a-col :span="24">
@@ -182,7 +194,7 @@
 <script>
 import form from '@/components/diboot/mixins/form'
 import { dibootApi } from '@/utils/request'
-import { treeListFormatter, routersFormatter, treeList2list, apiListFormatter } from '@/utils/treeDataUtil'
+import { treeListFormatter, routersFormatter, treeList2list, treeList2IndentList, apiListFormatter } from '@/utils/treeDataUtil'
 import { mapState } from 'vuex'
 import _ from 'lodash'
 
@@ -441,6 +453,9 @@ export default {
     },
     apiList: function () {
       return treeList2list(_.cloneDeep(this.apiTreeList))
+    },
+    apiIndentList: function () {
+      return treeList2IndentList(_.cloneDeep(this.apiTreeList))
     },
     menuTreeData: function () {
       if (!this.more || !this.more.menuList) {

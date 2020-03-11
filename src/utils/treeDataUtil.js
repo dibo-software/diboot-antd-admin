@@ -70,6 +70,27 @@ const treeList2list = function (treeList) {
   return allList
 }
 
+const treeList2IndentList = function (treeList, level) {
+  if (treeList === undefined || treeList.length === 0) {
+    return []
+  }
+  level = level === undefined ? 0 : level
+  const allList = []
+  let prefix = ''
+  for (let i = 0; i < level; i++) {
+    prefix += '　'
+  }
+  treeList.forEach(item => {
+    item.title = prefix + item.title
+    allList.push(item)
+    if (item.children !== undefined && item.children.length > 0) {
+      allList.push(...treeList2IndentList(item.children, (level + 1)))
+      delete item.childre
+    }
+  })
+  return allList
+}
+
 /***
  * 树形列表转子列表map
  * @param list
@@ -187,6 +208,7 @@ export {
   treeListFormatter,
   clearNullChildren,
   treeList2list,
+  treeList2IndentList,
   list2childrenMap,
   routersFormatter,
   apiListFormatter,
