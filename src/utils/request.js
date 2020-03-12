@@ -8,6 +8,7 @@ import notification from 'ant-design-vue/es/notification'
 import {
   ACCESS_TOKEN
 } from '@/store/mutation-types'
+import router from '@/router/index'
 
 // baseURL
 const BASE_URL = '/api'
@@ -73,6 +74,15 @@ service.interceptors.response.use((response) => {
   // 如果请求成功，则重置心跳定时器
   if (response.status === 200) {
     resetPingTimer()
+  }
+
+  // 如果返回的自定义状态码为 4001， 则token过期，需要清理掉token并跳转至登录页面重新登录
+  if (response.data && response.data.code === 4001) {
+    Vue.ls.remove(ACCESS_TOKEN)
+    store.commit('SET_TOKEN', '')
+    store.commit('SET_ROLES', [])
+    router.push('/login')
+    throw new Error('登录过期，请重新登录')
   }
 
   // 如果当前请求是下载请求
