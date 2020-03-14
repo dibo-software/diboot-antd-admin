@@ -24,7 +24,7 @@ export default {
       reloadMore: {},
       state: {
         visible: false,
-        submitBtn: false
+        confirmSubmit: false
       }
     }
   },
@@ -75,7 +75,7 @@ export default {
             reject(err)
           }
           setTimeout(() => {
-            this.state.submitBtn = false
+            this.state.confirmSubmit = false
           }, 600)
         })
       })
@@ -119,7 +119,7 @@ export default {
      * @returns {Promise<void>}
      */
     async onSubmit () {
-      this.state.submitBtn = true
+      this.state.confirmSubmit = true
       const values = await this.validate()
       this.enhance(values)
       try {

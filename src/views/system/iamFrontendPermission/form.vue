@@ -82,14 +82,16 @@
       <a-form-item label="当前菜单页面接口列表">
         <a-select
           v-if="apiIndentList.length > 0"
+          mode="multiple"
+          :getPopupContainer="getPopupContainer"
           placeholder="请选取当前菜单页面接口列表"
           v-model="apiSetList"
         >
           <a-select-option
             :key="index"
-            :value="api.value"
-            v-for="(api, index) in apiIndentList">
-            {{ api.title }}
+            :value="item.value"
+            v-for="(item, index) in apiIndentList">
+            {{ item.title }}
           </a-select-option>
         </a-select>
 <!--        <a-tree-select-->
@@ -186,7 +188,7 @@
 
     <div class="drawer-footer">
       <a-button :style="{marginRight: '8px'}" @click="close">取消</a-button>
-      <a-button @click="onSubmit" type="primary" :loading="state.submitBtn" :disabled="state.submitBtn">确定</a-button>
+      <a-button @click="onSubmit" type="primary" :loading="state.confirmSubmit" :disabled="state.confirmSubmit">确定</a-button>
     </div>
   </a-drawer>
 </template>
@@ -345,7 +347,7 @@ export default {
             reject(err)
           }
           setTimeout(() => {
-            this.state.submitBtn = false
+            this.state.confirmSubmit = false
           }, 600)
         })
       })
@@ -455,6 +457,7 @@ export default {
       return treeList2list(_.cloneDeep(this.apiTreeList))
     },
     apiIndentList: function () {
+      console.log('start build indent list...')
       return treeList2IndentList(_.cloneDeep(this.apiTreeList))
     },
     menuTreeData: function () {
