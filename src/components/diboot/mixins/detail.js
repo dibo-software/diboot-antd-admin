@@ -17,7 +17,6 @@ export default {
       const res = await dibootApi.get(`${this.baseApi}/${id}`)
       if (res.code === 0) {
         this.model = res.data
-        console.log('详情--', this.model)
         this.title = '详情'
         this.visible = true
         this.afterOpen(id)
@@ -34,7 +33,7 @@ export default {
       this.afterClose()
     },
     /****
-     * 打开表单之后的操作
+     * 打开详情之后的操作
      * @param id
      */
     afterOpen (id) {
