@@ -6,7 +6,7 @@ diboot-antd-admin前端基础项目，是一个与diboot其他后端组件构成
 
 相关技术栈
 ------
- * 前端基础（自不必多言）
+ * Vue
  * Vue全家桶套餐：[Vue](https://cn.vuejs.org/index.html), [vue-router](https://router.vuejs.org/zh/), [axios](https://github.com/axios/axios), [vuex](https://vuex.vuejs.org/zh/) 
  * Ant Design 的 Vue 实现：[Ant Design Vue](https://www.antdv.com/docs/vue/introduce/)
  * 中后台解决方案：[ant-design-pro-vue](https://github.com/sendya/ant-design-pro-vue)
