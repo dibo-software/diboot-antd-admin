@@ -44,13 +44,13 @@
         <a-col :span="24">
           <a-form-item label="包含子项">
             <a-row :gutter="16" v-if="children.length > 0">
-              <a-col :span="24" style="margin-left: -15px">
+              <a-col :span="24" style="margin-left: -6px">
                 <template v-for="(item,i) in children">
                   <a-tag
                     closable
                     color="blue"
                     :key="i"
-                    :style="{ padding: '5px', margin: '5px 15px', height: '30px', lineHeight: '16px' }"
+                    :style="{ padding: '5px', margin: '5px 6px', height: '30px', lineHeight: '16px' }"
                     @click="onTagClicked(item, i)"
                     @close="onTagClosed($event, i)"
                     v-decorator="[
@@ -116,7 +116,6 @@ const CHILDREN_BTN_CONFIG_DEFAULT = {
   label: '添加子项',
   currentIndex: undefined
 }
-// eslint-disable-next-line standard/object-curly-even-spacing
 const CHILDREN_ITEM_DEFAULT = { id: '', itemName: '', itemValue: '' }
 export default {
   name: 'DictionaryDrawer',
