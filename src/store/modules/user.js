@@ -64,6 +64,9 @@ const user = {
             if (result.role.permissionList.length > 0) {
               role.permissions = permissionListToPermissions(result.role.permissionList)
               role.permissionList = role.permissions.map(permission => { return permission.permissionId })
+            } else {
+              role.permissions = []
+              role.permissionList = []
             }
             commit('SET_ROLES', result.role)
             commit('SET_INFO', result)
