@@ -443,10 +443,10 @@ export default {
       return treeList2list(_.cloneDeep(this.apiTreeList))
     },
     menuTreeData: function () {
-      if (!this.more || !this.more.menuList) {
-        return []
+      let menuTreeData = []
+      if (this.more && this.more.menuList) {
+        menuTreeData = treeListFormatter(this.more.menuList, 'id', 'displayName', true)
       }
-      const menuTreeData = treeListFormatter(this.more.menuList, 'id', 'displayName', true)
       menuTreeData.splice(0, 0, { key: '0', value: '0', title: '顶级菜单' })
       return menuTreeData
     },
