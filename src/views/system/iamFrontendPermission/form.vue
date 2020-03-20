@@ -21,7 +21,7 @@
               v-decorator="[
                 'parentId',
                 {
-                  initialValue: model.parentId ? model.parentId.toString() : initParentId,
+                  initialValue: model.parentId !== undefined ? model.parentId.toString() : initParentId,
                   rules: [{ required: true, message: '上级菜单不能为空', whitespace: true }]
                 }
               ]"
