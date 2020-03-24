@@ -158,6 +158,7 @@
                     treeDefaultExpandAll
                     multiple
                     allowClear
+                    @change="value => {permission.apiSetList = value; $forceUpdate()}"
                     v-model="permission.apiSetList"
                   >
                   </a-tree-select>
@@ -216,12 +217,12 @@ export default {
           this.apiSetList = this.model.apiSetList
         }
         // 设置当前菜单项的按钮/权限列表
-        this.permissionList = this.model.permissionList
-        this.permissionList.forEach(item => {
+        this.model.permissionList.forEach(item => {
           if (!item.apiSetList || item.apiSetList.length === 0) {
             item.apiSetList = []
           }
         })
+        this.permissionList = this.model.permissionList
       }
 
       dibootApi.get(`${this.baseApi}/apiList`).then(res => {
