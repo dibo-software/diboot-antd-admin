@@ -9,18 +9,18 @@
     <a-spin :spinning="spinning">
       <a-row>
         <a-col :span="24">
-        <a-tree
-          v-if="treeList.length > 0"
-          showIcon
-          checkStrictly
-          draggable
-          @drop="onDrop"
-          :defaultExpandAll="true"
-          :treeData="treeList"
-        >
-          <a-icon slot="menu" type="bars" />
-          <a-icon slot="permission" type="thunderbolt" />
-        </a-tree>
+          <a-tree
+            v-if="treeList.length > 0"
+            showIcon
+            checkStrictly
+            draggable
+            @drop="onDrop"
+            :defaultExpandAll="true"
+            :treeData="treeList"
+          >
+            <a-icon slot="menu" type="bars" />
+            <a-icon slot="permission" type="thunderbolt" />
+          </a-tree>
         </a-col>
       </a-row>
     </a-spin>
