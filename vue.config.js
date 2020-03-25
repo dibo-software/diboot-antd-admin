@@ -9,6 +9,9 @@ function resolve (dir) {
 
 // vue.config.js
 module.exports = {
+  publicPath: '/antd/',
+  outputDir: 'dist',
+  assetsDir: 'static',
   configureWebpack: {
     plugins: [
       // Ignore all locale files of moment.js
