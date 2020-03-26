@@ -50,7 +50,6 @@ export default {
     onSearch () {
       this.pagination.current = 1
       this.handleTableChange(this.pagination)
-      this.getList()
     },
     postList () {
       return new Promise((resolve, reject) => {
