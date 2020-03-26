@@ -56,7 +56,7 @@
       rowKey="id"
     >
       <span slot="successLabel" slot-scope="text, record">
-        <a-tag v-if="text === true" color="green">成功</a-tag>
+        <a-tag v-if="record.success === true" color="green">成功</a-tag>
         <a-tag v-else color="red">失败</a-tag>
       </span>
       <span slot="roleList" slot-scope="text, record">
