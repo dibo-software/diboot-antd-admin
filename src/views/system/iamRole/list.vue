@@ -1,7 +1,7 @@
 <template>
   <a-card :bordered="false">
     <div class="table-page-search-wrapper">
-      <a-form layout="inline" @submit.native="getList">
+      <a-form layout="inline" @submit.native="onSearch">
         <a-row :gutter="48">
           <a-col :md="8" :sm="24">
             <a-form-item label="角色名称">

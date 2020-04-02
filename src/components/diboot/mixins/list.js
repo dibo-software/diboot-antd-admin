@@ -47,6 +47,10 @@ export default {
     toggleAdvanced () {
       this.advanced = !this.advanced
     },
+    onSearch () {
+      this.pagination.current = 1
+      this.handleTableChange(this.pagination)
+    },
     postList () {
       return new Promise((resolve, reject) => {
         this.loadingData = true

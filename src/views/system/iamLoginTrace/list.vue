@@ -1,7 +1,7 @@
 <template>
   <a-card :bordered="false">
     <div class="table-page-search-wrapper">
-      <a-form layout="inline" @submit.native="getList">
+      <a-form layout="inline" @submit.native="onSearch">
         <a-row :gutter="48">
           <a-col :md="6" :sm="24">
             <a-form-item label="用户名">
@@ -14,14 +14,17 @@
             </a-form-item>
           </a-col>
           <a-col :md="6" :sm="24">
-            <a-form-item label="登录方式">
-              <a-select placeholder="请选择" default-value="" v-model="queryParam.authType">
+            <a-form-item label="登录状态">
+              <a-select placeholder="请选择" default-value="" v-model="queryParam.success">
                 <a-select-option
-                  v-for="(authType, index) in more.authTypeKvList"
-                  :key="index"
-                  :value="authType.v"
+                  :value="true"
                 >
-                  {{ authType.k }}
+                  成功
+                </a-select-option>
+                <a-select-option
+                  :value="false"
+                >
+                  失败
                 </a-select-option>
               </a-select>
             </a-form-item>
@@ -52,6 +55,10 @@
       @change="handleTableChange"
       rowKey="id"
     >
+      <span slot="successLabel" slot-scope="text, record">
+        <a-tag v-if="record.success === true" color="green">成功</a-tag>
+        <a-tag v-else color="red">失败</a-tag>
+      </span>
       <span slot="roleList" slot-scope="text, record">
         <template v-if="record.roleList">
           <a-tag color="cyan" v-for="(role, index) in record.roleList" :key="index">{{ role.name }}</a-tag>
@@ -97,6 +104,11 @@ export default {
         {
           title: '登录方式',
           dataIndex: 'authTypeLabel'
+        },
+        {
+          title: '登录状态',
+          dataIndex: 'success',
+          scopedSlots: { customRender: 'successLabel' }
         },
         {
           title: '登录时间',

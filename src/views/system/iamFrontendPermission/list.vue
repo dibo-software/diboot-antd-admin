@@ -1,7 +1,7 @@
 <template>
   <a-card :border="false">
     <div class="table-page-search-wrapper">
-      <a-form layout="inline" @submit.native="getList">
+      <a-form layout="inline" @submit.native="onSearch">
         <a-row :gutter="48">
           <a-col :md="7" :sm="24">
             <a-form-item label="菜单名称">
