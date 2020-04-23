@@ -105,7 +105,8 @@ export default {
         },
         {
           title: '创建时间',
-          dataIndex: 'createTime'
+          dataIndex: 'createTime',
+          sorter: true
         },
         {
           title: '操作',

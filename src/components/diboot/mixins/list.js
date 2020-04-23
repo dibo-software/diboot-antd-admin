@@ -39,11 +39,23 @@ export default {
     }
   },
   methods: {
-    handleTableChange (pagination) {
+    handleTableChange (pagination, filters, sorter) {
       this.queryParam.pageIndex = pagination.current
       this.queryParam.pageSize = pagination.pageSize
+      this.appendSorterParam(sorter)
       this.getList()
     },
+    appendSorterParam (sorter) {
+      const field = sorter.field
+      if (field !== undefined) {
+        const order = sorter.order === 'ascend' ? 'ASC' : 'DESC'
+        const orderBy = `${field}:${order}`
+        this.queryParam.orderBy = orderBy
+      } else {
+        this.queryParam.orderBy = undefined
+      }
+    },
+
     toggleAdvanced () {
       this.advanced = !this.advanced
     },
