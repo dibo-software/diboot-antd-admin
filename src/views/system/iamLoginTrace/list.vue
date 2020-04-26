@@ -112,7 +112,8 @@ export default {
         },
         {
           title: '登录时间',
-          dataIndex: 'createTime'
+          dataIndex: 'createTime',
+          sorter: true
         },
         {
           title: '操作',
