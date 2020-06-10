@@ -13,7 +13,7 @@
     "postinstall": "opencollective-postinstall"
   },
   "dependencies": {
-    "ant-design-vue": "~1.3.9",
+    "ant-design-vue": "~1.6.2",
     "axios": "^0.19.0",
     "core-js": "2",
     "enquire.js": "^2.1.6",
@@ -26,6 +26,7 @@
     "mockjs2": "^1.0.5",
     "moment": "^2.24.0",
     "nprogress": "^0.2.0",
+    "quill": "^2.0.0-dev.4",
     "viser-vue": "^2.3.3",
     "vue": "^2.5.22",
     "vue-clipboard2": "^0.2.1",
