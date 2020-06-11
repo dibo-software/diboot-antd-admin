@@ -213,7 +213,7 @@ export default {
       merge(tempQueryParam, this.queryParam)
       // 改造查询条件（用于列表页扩展）
       tempQueryParam = this.rebuildQuery(tempQueryParam)
-      const exportApi = this.exportApi ? this.exportApi : '/export'
+      const exportApi = this.exportApi ? this.exportApi : '/excel/export'
       dibootApi.download(`${this.baseApi}${exportApi}`, tempQueryParam).then(res => {
         if (res.filename) {
           this.downloadFile(res)

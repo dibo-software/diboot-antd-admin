@@ -1,7 +1,5 @@
 <template>
   <a-card :bordered="false" title="数据上传" class="diboot-import content">
-    <form id="downloadExample" :action="exampleUrl" method="get">
-    </form>
     <a slot="extra" @click="handleDownloadExample">
       <a-icon type="download"/>
       下载示例文件
@@ -88,8 +86,26 @@ export default {
        * 下载样例文件
        */
     handleDownloadExample () {
-      const exportForm = document.querySelector('#downloadExample')
-      exportForm.submit()
+      dibootApi.download(this.exampleUrl)
+        .then(res => {
+          const blob = new Blob([res.data])
+          if ('download' in document.createElement('a')) {
+            // 非IE下载
+            const elink = document.createElement('a')
+            elink.download = res.filename
+            elink.style.display = 'none'
+            elink.href = URL.createObjectURL(blob)
+            document.body.appendChild(elink)
+            elink.click()
+            URL.revokeObjectURL(elink.href) // 释放URL 对象
+            document.body.removeChild(elink)
+          } else {
+            // IE10+下载
+            navigator.msSaveBlob(blob, res.filename)
+          }
+        }).catch(err => {
+          console.log(err)
+        })
     },
     handleRemove (file) {
       const index = this.fileList.indexOf(file)
