@@ -25,7 +25,24 @@ export default {
       state: {
         visible: false,
         confirmSubmit: false
-      }
+      },
+      // 当前form是否包含上传
+      isUpload: false,
+      /**
+       * 所有文件的集合都放置与fileWrapper对象中，提交的时候会自动遍历
+       * 格式如下：
+       * fileWrapper: {
+       *  singleImageList: [],
+       *  multiImageList: [],
+       *  singleFileList: [],
+       *  multiFileList: []
+       * }
+       */
+      fileWrapper: {},
+      /**
+       * uuid集合
+       */
+      fileUuidList: []
     }
   },
   computed: {
@@ -59,6 +76,7 @@ export default {
     close () {
       this.state.visible = false
       this.model = {}
+      this.__defaultFileWrapperKeys__()
       this.form.resetFields()
       this.afterClose()
     },
@@ -210,6 +228,40 @@ export default {
       return (
         option.componentOptions.children[0].text.toLowerCase().indexOf(input.toLowerCase()) >= 0
       )
+    },
+    /**
+     * 设置文件uuid
+     * @private
+     */
+    __setFileUuidList__ (values) {
+      // 如果包含上传功能，那么设置uuid
+      if (this.isUpload) {
+        const fileWrapperKeys = Object.keys(this.fileWrapper)
+        if (fileWrapperKeys.length > 0) {
+          for (const fileWrapperKey of fileWrapperKeys) {
+            const tempFileList = this.fileWrapper[fileWrapperKey]
+            if (tempFileList && tempFileList.length && tempFileList.length > 0) {
+              this.fileUuidList.push(...tempFileList.map(item => item.uid))
+            }
+          }
+          values['fileUuidList'] = this.fileUuidList
+        }
+      }
+    },
+    /**
+     * 初始化fileWrapper
+     * @private
+     */
+    __defaultFileWrapperKeys__ () {
+      const fileWrapperKeys = Object.keys(this.fileWrapper)
+      if (fileWrapperKeys.length > 0) {
+        for (const fileWrapperKey of fileWrapperKeys) {
+          this.fileWrapper[fileWrapperKey] = []
+        }
+      } else {
+        this.fileWrapper = {}
+      }
+      this.fileUuidList = []
     }
   },
   props: {
