@@ -157,7 +157,7 @@ export default {
     },
     attachMore () {
       return new Promise((resolve, reject) => {
-        dibootApi.post('/attachMore', this.attachMoreList).then(res => {
+        dibootApi.post('/common/attachMore', this.attachMoreList).then(res => {
           if (res.code === 0) {
             this.more = res.data
             resolve(res.data)
