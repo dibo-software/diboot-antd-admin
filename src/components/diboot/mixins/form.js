@@ -127,7 +127,7 @@ export default {
      */
     async update (values) {
       const updateApiPrefix = this.updateApiPrefix ? this.updateApiPrefix : ''
-      const res = await dibootApi.put(`${this.baseApi}${updateApiPrefix}/${this.model.id}`, values)
+      const res = await dibootApi.put(`${this.baseApi}${updateApiPrefix}/${this.model[this.primaryKey]}`, values)
       if (res.code === 0) {
         return { data: res.data, msg: '更新记录成功' }
       } else {
