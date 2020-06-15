@@ -10,6 +10,8 @@ export default {
       createApi: '',
       // 更新接口
       updateApiPrefix: '',
+      // 主键字段名
+      primaryKey: 'id',
       labelCol: {
         xs: { span: 24 },
         sm: { span: 5 }
@@ -20,8 +22,8 @@ export default {
       },
       model: {},
       title: '',
-      getMore: false,
-      reloadMore: {},
+      attachMoreList: [],
+      more: {},
       state: {
         visible: false,
         confirmSubmit: false
@@ -142,12 +144,12 @@ export default {
       this.enhance(values)
       try {
         let result = {}
-        if (this.model.id === undefined) {
+        if (this.model[this.primaryKey] === undefined) {
           // 新增该记录
           result = await this.add(values)
         } else {
           // 更新该记录
-          values['id'] = this.model.id
+          values[this.primaryKey] = this.model[this.primaryKey]
           result = await this.update(values)
         }
 
@@ -210,9 +212,11 @@ export default {
     },
     attachMore () {
       return new Promise((resolve, reject) => {
-        dibootApi.get(`${this.baseApi}/attachMore`).then((res) => {
-          this.reloadMore = res.data
-          resolve(res.data)
+        dibootApi.post('/attachMore', this.attachMoreList).then(res => {
+          if (res.code === 0) {
+            this.more = res.data
+            resolve(res.data)
+          }
         }).catch(err => {
           reject(err)
         })
@@ -273,7 +277,7 @@ export default {
     }
   },
   async mounted () {
-    if (this.getMore === true) {
+    if (this.attachMoreList.length > 0) {
       await this.attachMore()
     }
   }

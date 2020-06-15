@@ -21,10 +21,9 @@ export default {
       data: [],
       // 关联相关的更多数据
       more: {},
+      attachMoreList: [],
       // 是否从mixin中自动获取初始的列表数据
       getListFromMixin: true,
-      // 是否从mixin中自动获取关联数据
-      getMore: false,
       // 标记加载状态
       loadingData: false,
       // 分页数据
@@ -156,9 +155,17 @@ export default {
     rebuildQuery (query) {
       return query
     },
-    async attachMore () {
-      const res = await dibootApi.get(`${this.baseApi}/attachMore`)
-      this.more = res.data
+    attachMore () {
+      return new Promise((resolve, reject) => {
+        dibootApi.post('/attachMore', this.attachMoreList).then(res => {
+          if (res.code === 0) {
+            this.more = res.data
+            resolve(res.data)
+          }
+        }).catch(err => {
+          reject(err)
+        })
+      })
     },
     reset () {
       this.queryParam = {}
@@ -213,7 +220,7 @@ export default {
       merge(tempQueryParam, this.queryParam)
       // 改造查询条件（用于列表页扩展）
       tempQueryParam = this.rebuildQuery(tempQueryParam)
-      const exportApi = this.exportApi ? this.exportApi : '/export'
+      const exportApi = this.exportApi ? this.exportApi : '/excel/export'
       dibootApi.download(`${this.baseApi}${exportApi}`, tempQueryParam).then(res => {
         if (res.filename) {
           this.downloadFile(res)
@@ -251,7 +258,7 @@ export default {
     if (this.getListFromMixin === true) {
       await this.getList()
     }
-    if (this.getMore === true) {
+    if (this.attachMoreList.length > 0) {
       await this.attachMore()
     }
   }

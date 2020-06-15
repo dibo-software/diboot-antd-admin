@@ -10354,6 +10354,11 @@ throat@^4.0.0:
   resolved "https://registry.npm.taobao.org/throat/download/throat-4.1.0.tgz#89037cbc92c56ab18926e6ba4cbb200e15672a6a"
   integrity sha1-iQN8vJLFarGJJua6TLsgDhVnKmo=
 
+throttle-debounce@^2.0.1:
+  version "2.2.1"
+  resolved "https://registry.npm.taobao.org/throttle-debounce/download/throttle-debounce-2.2.1.tgz?cache=0&sync_timestamp=1591627280081&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fthrottle-debounce%2Fdownload%2Fthrottle-debounce-2.2.1.tgz#fbd933ae6793448816f7d5b3cae259d464c98137"
+  integrity sha1-+9kzrmeTRIgW99WzyuJZ1GTJgTc=
+
 through2@^2.0.0:
   version "2.0.5"
   resolved "https://registry.npm.taobao.org/through2/download/through2-2.0.5.tgz#01c1e39eb31d07cb7d03a96a70823260b23132cd"
@@ -10751,6 +10756,14 @@ uuid@^3.0.1, uuid@^3.3.2:
   resolved "https://registry.npm.taobao.org/uuid/download/uuid-3.3.3.tgz#4568f0216e78760ee1dbf3a4d2cf53e224112866"
   integrity sha1-RWjwIW54dg7h2/Ok0s9T4iQRKGY=
 
+v-viewer@^1.5.1:
+  version "1.5.1"
+  resolved "https://registry.npm.taobao.org/v-viewer/download/v-viewer-1.5.1.tgz#94804d83814cca566e691339fe1e64793486f200"
+  integrity sha1-lIBNg4FMylZuaRM5/h5keTSG8gA=
+  dependencies:
+    throttle-debounce "^2.0.1"
+    viewerjs "^1.5.0"
+
 validate-npm-package-license@^3.0.1:
   version "3.0.4"
   resolved "https://registry.npm.taobao.org/validate-npm-package-license/download/validate-npm-package-license-3.0.4.tgz#fc91f6b9c7ba15c857f4cb2c5defeec39d4f410a"
@@ -10786,6 +10799,11 @@ verror@1.10.0:
     assert-plus "^1.0.0"
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
+
+viewerjs@^1.5.0:
+  version "1.6.0"
+  resolved "https://registry.npm.taobao.org/viewerjs/download/viewerjs-1.6.0.tgz#3465b2274e7dca3cbae2ca12ec608bf0d9d9b39a"
+  integrity sha1-NGWyJ059yjy64soS7GCL8NnZs5o=
 
 viser-vue@^2.3.3:
   version "2.4.7"

@@ -27,6 +27,9 @@ export default {
         })
       }
     },
+    downloadFile (path) {
+      window.location.href = path
+    },
     close () {
       this.visible = false
       this.model = {}
