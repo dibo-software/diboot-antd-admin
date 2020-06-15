@@ -4,7 +4,7 @@
     :width="width"
     :visible="state.visible"
     @close="close"
-    :wrapStyle="{height: 'calc(100% - 108px)',overflow: 'auto',paddingBottom: '108px'}"
+    :body-style="{ paddingBottom: '80px' }"
   >
     <a-form :form="form">
       <a-row :gutter="16">
