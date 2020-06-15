@@ -22,8 +22,12 @@ export default {
       },
       model: {},
       title: '',
-      attachMoreList: [],
+      // 关联相关的更多数据
       more: {},
+      // 获取关联数据列表的配置列表
+      attachMoreList: [],
+      // 是否使mixin在当前业务的attachMore接口中自动获取关联数据
+      getMore: false,
       state: {
         visible: false,
         confirmSubmit: false
@@ -210,17 +214,17 @@ export default {
     afterClose () {
 
     },
-    attachMore () {
-      return new Promise((resolve, reject) => {
-        dibootApi.post('/common/attachMore', this.attachMoreList).then(res => {
-          if (res.code === 0) {
-            this.more = res.data
-            resolve(res.data)
-          }
-        }).catch(err => {
-          reject(err)
-        })
-      })
+    async attachMore () {
+      let res = {}
+      if (this.getMore === true) {
+        res = await dibootApi.get(`${this.baseApi}/attachMore`)
+      } else if (this.attachMoreList.length > 0) {
+        res = await dibootApi.post('/common/attachMore', this.attachMoreList)
+      }
+      if (res.code === 0) {
+        this.more = res.data
+        return res.data
+      }
     },
     /***
      * select选择框启用search功能后的过滤器
@@ -276,9 +280,7 @@ export default {
       }
     }
   },
-  async mounted () {
-    if (this.attachMoreList.length > 0) {
-      await this.attachMore()
-    }
+  mounted () {
+    this.attachMore()
   }
 }
