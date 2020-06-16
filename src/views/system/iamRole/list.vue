@@ -93,7 +93,6 @@ export default {
   data () {
     return {
       baseApi: '/iam/role',
-      getMore: false,
       // 表头
       columns: [
         {

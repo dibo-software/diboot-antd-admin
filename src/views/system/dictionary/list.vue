@@ -89,7 +89,6 @@ export default {
     return {
       baseApi: '/dictionary',
       customQueryParam: { parentId: 0 },
-      getMore: false,
       columns: [
         {
           title: '类型名称',

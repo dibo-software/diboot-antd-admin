@@ -4,7 +4,7 @@
     :width="720"
     @close="close"
     :visible="state.visible"
-    :wrapStyle="{height: 'calc(100% - 108px)',overflow: 'auto',paddingBottom: '108px'}"
+    :body-style="{ paddingBottom: '80px' }"
   >
     <a-form layout="vertical" :form="form">
       <a-row :gutter="16">
@@ -55,22 +55,22 @@
         <a-col :span="12">
           <a-form-item label="角色">
             <a-select
-              v-if="more.roleKvList"
+              v-if="more.iamRoleKvList"
               :getPopupContainer="getPopupContainer"
               mode="multiple"
               placeholder="请选择角色"
               v-decorator="[
                 'roleIdList',
                 {
-                  initialValue: model.roleList && model.roleList.map(role => {return role.id}),
+                  initialValue: model.roleList && model.roleList.map(role => {return `${role.id}`}),
                   rules: [{ required: true, message: '角色不能为空' }]
                 }
               ]"
             >
               <a-select-option
-                v-for="(role, index) in more.roleKvList"
+                v-for="(role, index) in more.iamRoleKvList"
                 :key="index"
-                :value="role.v"
+                :value="`${role.v}`"
               >
                 {{ role.k }}
               </a-select-option>
@@ -196,7 +196,23 @@ export default {
     return {
       baseApi: '/iam/user',
       setPassword: false,
-      form: this.$form.createForm(this)
+      form: this.$form.createForm(this),
+      attachMoreList: [
+        {
+          type: 'D',
+          target: 'GENDER'
+        },
+        {
+          type: 'D',
+          target: 'USER_STATUS'
+        },
+        {
+          type: 'T',
+          target: 'iamRole',
+          key: 'name',
+          value: 'id'
+        }
+      ]
     }
   },
   methods: {
@@ -245,14 +261,6 @@ export default {
     },
     afterClose () {
       this.setPassword = false
-    }
-  },
-  props: {
-    more: {
-      type: Object,
-      default: () => {
-        return {}
-      }
     }
   },
   mixins: [form]

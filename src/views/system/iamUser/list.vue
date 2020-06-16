@@ -106,7 +106,22 @@ export default {
   data () {
     return {
       baseApi: '/iam/user',
-      getMore: true,
+      attachMoreList: [
+        {
+          type: 'D',
+          target: 'GENDER'
+        },
+        {
+          type: 'D',
+          target: 'USER_STATUS'
+        },
+        {
+          type: 'T',
+          target: 'iamRole',
+          key: 'name',
+          value: 'id'
+        }
+      ],
       columns: [
         {
           title: '姓名',

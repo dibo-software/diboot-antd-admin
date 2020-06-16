@@ -83,7 +83,6 @@ export default {
   data () {
     return {
       baseApi: '/iam/loginTrace',
-      getMore: true,
       columns: [
         {
           title: '用户类型',
