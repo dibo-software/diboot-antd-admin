@@ -78,6 +78,7 @@ export default {
           })
         }
       }
+      await this.attachMore()
     },
     close () {
       this.state.visible = false
@@ -279,8 +280,5 @@ export default {
         return 720
       }
     }
-  },
-  mounted () {
-    this.attachMore()
   }
 }
