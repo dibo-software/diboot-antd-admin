@@ -255,6 +255,9 @@ export default {
     },
     afterLoadList (list) {
 
+    },
+    getPopupContainer (trigger) {
+      return trigger.parentElement
     }
   },
   async mounted () {
