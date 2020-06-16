@@ -12,7 +12,7 @@
         <a-input
           size="large"
           type="text"
-          placeholder="请输入用户名"
+          placeholder="请输入用户名：admin"
           v-decorator="[
             'username',
             {rules: [{ required: true, message: '请输入用户名' }, { validator: handleUsernameOrEmail }], validateTrigger: 'change'}
@@ -27,7 +27,7 @@
           size="large"
           type="password"
           autocomplete="false"
-          placeholder="请输入密码"
+          placeholder="请输入密码：123456"
           v-decorator="[
             'password',
             {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
@@ -229,7 +229,7 @@ export default {
       })
     },
     loginSuccess (res) {
-      this.$router.push({ name: 'dashboard' })
+      this.$router.push('/dashboard')
       // 延迟 1 秒显示欢迎信息
       setTimeout(() => {
         this.$notification.success({
