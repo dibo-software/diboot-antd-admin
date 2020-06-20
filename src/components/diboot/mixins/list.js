@@ -1,5 +1,6 @@
 import merge from 'lodash.merge'
 import { dibootApi } from '@/utils/request'
+import moment from 'moment'
 export default {
   data () {
     return {
@@ -68,6 +69,8 @@ export default {
     postList () {
       return new Promise((resolve, reject) => {
         this.loadingData = true
+        // 转化包含moment的时间类型
+        this.contentTransform(this.queryParam)
         // 过滤掉不存在值的属性
         let tempQueryParam = {}
         // 合并自定义查询参数
@@ -115,6 +118,8 @@ export default {
     getList () {
       return new Promise((resolve, reject) => {
         this.loadingData = true
+        // 转化包含moment的时间类型
+        this.contentTransform(this.queryParam)
         // 过滤掉不存在值的属性
         let tempQueryParam = {}
         // 合并自定义查询参数
@@ -216,6 +221,8 @@ export default {
       })
     },
     exportData () {
+      // 转化包含moment的时间类型
+      this.contentTransform(this.queryParam)
       let tempQueryParam = {}
       // 合并自定义查询参数
       merge(tempQueryParam, this.customQueryParam)
@@ -258,6 +265,34 @@ export default {
     },
     getPopupContainer (trigger) {
       return trigger.parentElement
+    },
+    /**
+     * 处理查询参数中的moment数据 默认转化为YYYY-MM-DD
+     * 如果需要单独处理属性，那么请传入transform对象，指定属性的转化类型
+     * 示例：{createTime: 'YYYY-MM-DD'}
+     * @param content 待转化内容
+     * @param transform 需要转化的格式
+     */
+    contentTransform (content, transform = {}) {
+      if (content) {
+        for (const key in content) {
+          const value = content[key]
+          const format = transform[key] || 'YYYY-MM-DD'
+          if (value instanceof Array) {
+            // 如果类型是moment，那么进行转化
+            if (value && value[0] instanceof moment) {
+              const transformTime = []
+              for (let i = 0; i < value.length; i++) {
+                transformTime[i] = value[i].format(format)
+              }
+              content[key] = transformTime
+            }
+          } else if (value instanceof moment) {
+            content[key] = value.format(format)
+          }
+        }
+      }
+      return content
     }
   },
   async mounted () {

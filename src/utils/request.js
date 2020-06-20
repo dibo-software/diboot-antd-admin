@@ -9,6 +9,7 @@ import {
   ACCESS_TOKEN
 } from '@/store/mutation-types'
 import router from '@/router/index'
+import qs from 'qs'
 
 // baseURL
 const BASE_URL = '/api'
@@ -58,6 +59,12 @@ service.interceptors.request.use(config => {
   const token = Vue.ls.get(ACCESS_TOKEN)
   if (token) {
     config.headers[JWT_HEADER_KEY] = token // 让每个请求携带自定义 token 请根据实际情况自行修改
+  }
+  // 只针对get方式进行序列化
+  if (config.method === 'get') {
+    config.paramsSerializer = function (params) {
+      return qs.stringify(params, { arrayFormat: 'repeat' })
+    }
   }
   return config
 }, err)
