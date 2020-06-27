@@ -1,6 +1,7 @@
 import merge from 'lodash.merge'
 import { dibootApi } from '@/utils/request'
 import moment from 'moment'
+import _ from 'lodash'
 export default {
   data () {
     return {
@@ -28,6 +29,8 @@ export default {
       getListFromMixin: true,
       // 是否使mixin在当前业务的attachMore接口中自动获取关联数据
       getMore: false,
+      // 日期区间选择配置
+      dateRangeQuery: {},
       // 标记加载状态
       loadingData: false,
       // 分页数据
@@ -49,8 +52,8 @@ export default {
       this.getList()
     },
     appendSorterParam (sorter) {
-      const field = sorter.field
-      if (field !== undefined) {
+      if (sorter !== undefined && sorter.field !== undefined) {
+        const field = sorter.field
         const order = sorter.order === 'ascend' ? 'ASC' : 'DESC'
         const orderBy = `${field}:${order}`
         this.queryParam.orderBy = orderBy
@@ -67,6 +70,7 @@ export default {
       this.handleTableChange(this.pagination)
     },
     postList () {
+      this.dateRange2queryParam()
       return new Promise((resolve, reject) => {
         this.loadingData = true
         // 转化包含moment的时间类型
@@ -116,6 +120,7 @@ export default {
       })
     },
     getList () {
+      this.dateRange2queryParam()
       return new Promise((resolve, reject) => {
         this.loadingData = true
         // 转化包含moment的时间类型
@@ -177,6 +182,7 @@ export default {
     },
     reset () {
       this.queryParam = {}
+      this.dateRangeQuery = {}
       this.getList()
     },
     remove (id) {
@@ -293,6 +299,14 @@ export default {
         }
       }
       return content
+    },
+    dateRange2queryParam () {
+      _.forEach(this.dateRangeQuery, (v, k) => {
+        if (k && v && v.length === 2) {
+          this.queryParam[`${k}Begin`] = v[0].format('YYYY-MM-DD')
+          this.queryParam[`${k}End`] = v[1].format('YYYY-MM-DD')
+        }
+      })
     }
   },
   async mounted () {
