@@ -60,7 +60,7 @@ export default {
     }
   },
   created () {
-    if (this.limitCount === 1 && this.isImage) {
+    if (this.limitCount === 1 && this.isImage && this.value) {
       this.imageUrl = `${this.prefix}${this.value}`
     }
   },
