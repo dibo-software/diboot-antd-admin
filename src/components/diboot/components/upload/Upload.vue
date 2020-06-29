@@ -61,7 +61,7 @@ export default {
   },
   created () {
     if (this.limitCount === 1 && this.isImage && this.value) {
-      this.imageUrl = `${this.prefix}${this.value}`
+      this.imageUrl = `${this.prefix}${this.value}/image`
     }
   },
   methods: {
@@ -166,12 +166,12 @@ export default {
       }
       if (this.isImage) {
         Object.assign(file, {
-          url: `${this.prefix}${data.accessUrl}`,
-          thumbUrl: `${this.prefix}${data.accessUrl}`
+          url: `${this.prefix}${data.accessUrl}/image`,
+          thumbUrl: `${this.prefix}${data.accessUrl}/image`
         })
         // 如果是但图片设置URL
         if (this.limitCount === 1) {
-          this.imageUrl = `${this.prefix}${data.accessUrl}`
+          this.imageUrl = `${this.prefix}${data.accessUrl}/image`
         }
       }
       return file
