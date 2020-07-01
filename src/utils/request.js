@@ -12,7 +12,7 @@ import router from '@/router/index'
 import qs from 'qs'
 
 // baseURL
-const BASE_URL = '/api'
+const BASE_URL = '/example'
 // token在Header中的key
 const JWT_HEADER_KEY = 'authtoken'
 // tokan自动刷新（发送心跳）的时间间隔（分钟）
@@ -96,7 +96,9 @@ service.interceptors.response.use((response) => {
   if (response.headers.filename) {
     return {
       data: response.data,
-      filename: decodeURI(response.headers.filename)
+      filename: decodeURI(response.headers.filename),
+      code: parseInt(response.headers['err-code'] || '0'),
+      msg: decodeURI(response.headers['err-msg'] || '')
     }
   }
   return response.data

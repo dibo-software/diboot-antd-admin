@@ -88,6 +88,10 @@ export default {
     handleDownloadExample () {
       dibootApi.download(this.exampleUrl)
         .then(res => {
+          if (res.code && res.code === 4006) {
+            this.$message.error(res.msg)
+            return
+          }
           const blob = new Blob([res.data])
           if ('download' in document.createElement('a')) {
             // 非IE下载
