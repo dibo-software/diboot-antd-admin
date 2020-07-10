@@ -45,12 +45,23 @@ export default {
     }
   },
   methods: {
+
+    /**
+     * 分页、排序、筛选变化时触发
+     * @param pagination 分页
+     * @param filters 排序
+     * @param sorter 筛选
+     */
     handleTableChange (pagination, filters, sorter) {
       this.queryParam.pageIndex = pagination.current
       this.queryParam.pageSize = pagination.pageSize
       this.appendSorterParam(sorter)
       this.getList()
     },
+    /**
+     * 构建排序
+     * @param sorter
+     */
     appendSorterParam (sorter) {
       if (sorter !== undefined && sorter.field !== undefined) {
         const field = sorter.field
@@ -61,14 +72,24 @@ export default {
         this.queryParam.orderBy = undefined
       }
     },
-
+    /**
+     * 切换展示更多搜索框
+     */
     toggleAdvanced () {
       this.advanced = !this.advanced
     },
+    /**
+     * 搜索，查询第一页（默认查询按钮触发）
+     */
     onSearch () {
       this.pagination.current = 1
       this.handleTableChange(this.pagination)
     },
+
+    /**
+     * post请求的获取列表（可以传递更长、更复杂参数）
+     * @returns {Promise<any>}
+     */
     postList () {
       this.dateRange2queryParam()
       return new Promise((resolve, reject) => {
@@ -119,6 +140,11 @@ export default {
           })
       })
     },
+
+    /**
+     * get请求获取列表
+     * @returns {Promise<any>}
+     */
     getList () {
       this.dateRange2queryParam()
       return new Promise((resolve, reject) => {
@@ -165,9 +191,19 @@ export default {
         })
       })
     },
+    /**
+     * 重新构建查询条件 (接收已经定义的customQueryParam与queryParam的合并值)
+     * @param query
+     * @returns {*}
+     */
     rebuildQuery (query) {
       return query
     },
+
+    /**
+     * 加载当前页面关联的对象或者字典
+     * @returns {Promise<*>}
+     */
     async attachMore () {
       let res = {}
       if (this.getMore === true) {
@@ -180,11 +216,19 @@ export default {
         return res.data
       }
     },
+    /**
+     * 重置
+     */
     reset () {
       this.queryParam = {}
       this.dateRangeQuery = {}
       this.getList()
     },
+    /**
+     * 删除
+     * @param id
+     * @returns {Promise<any>}
+     */
     remove (id) {
       return new Promise((resolve, reject) => {
         var _this = this
@@ -226,6 +270,10 @@ export default {
         })
       })
     },
+
+    /**
+     * 导出数据至excel
+     */
     exportData () {
       // 转化包含moment的时间类型
       this.contentTransform(this.queryParam)
@@ -266,9 +314,19 @@ export default {
         navigator.msSaveBlob(blob, res.filename)
       }
     },
+    /**
+     * 加载数据之后操作
+     * @param list
+     */
     afterLoadList (list) {
 
     },
+
+    /**
+     * 解决带有下拉框组件在滚动时下拉框不随之滚动的问题
+     * @param trigger
+     * @returns {HTMLElement}
+     */
     getPopupContainer (trigger) {
       return trigger.parentElement
     },
@@ -300,6 +358,9 @@ export default {
       }
       return content
     },
+    /**
+     * 构建区间查询参数
+     */
     dateRange2queryParam () {
       _.forEach(this.dateRangeQuery, (v, k) => {
         if (k && v && v.length === 2) {

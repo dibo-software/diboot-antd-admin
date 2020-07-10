@@ -4,15 +4,25 @@ import moment from 'moment'
 export default {
   data () {
     return {
+      // 请求接口基础路径
       baseApi: '/',
+      // 当前组件显示状态
       visible: false,
+      // 当前详情框详情数据
       model: {},
+      // 标题
       title: '',
+      // loading状态
       spinning: false
     }
   },
   methods: {
     moment,
+    /**
+     * 打开详细页
+     * @param id
+     * @returns {Promise<void>}
+     */
     async open (id) {
       const res = await dibootApi.get(`${this.baseApi}/${id}`)
       if (res.code === 0) {
@@ -27,6 +37,10 @@ export default {
         })
       }
     },
+    /**
+     * 下载文件
+     * @param path
+     */
     downloadFile (path) {
       dibootApi.download(path)
         .then(res => {
@@ -49,6 +63,9 @@ export default {
           console.log(err)
         })
     },
+    /**
+     * 关闭详情
+     */
     close () {
       this.visible = false
       this.model = {}

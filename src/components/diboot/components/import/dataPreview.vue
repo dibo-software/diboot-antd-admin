@@ -30,6 +30,12 @@ export default {
     }
   },
   methods: {
+
+    /**
+     * 预览
+     * @param headers  头部列表字段
+     * @param dataList  数据
+     */
     preview (headers, dataList) {
       this.visible = true
       this.headers = headers
@@ -42,6 +48,9 @@ export default {
       }
       this.columns = columns
     },
+    /**
+     * 关闭预览
+     */
     close () {
       this.visible = false
     }
