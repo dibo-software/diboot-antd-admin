@@ -23,6 +23,10 @@ const action = Vue.directive('action', {
     }
     const elVal = vnode.context.$route.meta.permission
     const permissionId = elVal instanceof String && [elVal] || elVal
+    // 如果没有配置菜单权限，则都视作有权限处理
+    if (!permissionId) {
+      return
+    }
     roles.permissions.forEach(p => {
       if (!permissionId.includes(p.permissionId)) {
         return
