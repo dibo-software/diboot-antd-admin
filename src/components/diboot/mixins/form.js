@@ -5,22 +5,27 @@ import moment from 'moment'
 export default {
   data () {
     return {
+      // 主键字段名
+      primaryKey: 'id',
+      // 请求接口基础路径
       baseApi: '/',
       // 新建接口
       createApi: '',
       // 更新接口
       updateApiPrefix: '',
-      // 主键字段名
-      primaryKey: 'id',
+      // label 默认布局样式
       labelCol: {
         xs: { span: 24 },
         sm: { span: 5 }
       },
+      // form控件默认布局样式
       wrapperCol: {
         xs: { span: 24 },
         sm: { span: 16 }
       },
+      // 存放数据
       model: {},
+      // 标题
       title: '',
       // 关联相关的更多数据
       more: {},
@@ -28,6 +33,7 @@ export default {
       attachMoreList: [],
       // 是否使mixin在当前业务的attachMore接口中自动获取关联数据
       getMore: false,
+      // 当前组件状态对象
       state: {
         visible: false,
         confirmSubmit: false
@@ -80,6 +86,9 @@ export default {
       }
       await this.attachMore()
     },
+    /**
+     * 关闭表单
+     */
     close () {
       this.state.visible = false
       this.model = {}

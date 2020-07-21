@@ -14,6 +14,11 @@ const permissionMissing = Vue.directive('permissionMissing', {
 
     const elVal = vnode.context.$route.meta.permission
     const permissionId = elVal instanceof String && [elVal] || elVal
+    // 如果没有配置菜单权限，则都视作有权限处理
+    if (!permissionId) {
+      el.parentNode && el.parentNode.removeChild(el) || (el.style.display = 'none')
+      return
+    }
 
     // 此处的权限列表判断为或关系，也就是v-permission的参数中的权限有一个满足，就不显示该元素
     if (value && value instanceof Array && value.length > 0) {

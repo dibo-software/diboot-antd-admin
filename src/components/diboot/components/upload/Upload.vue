@@ -14,7 +14,7 @@
         <div v-else>
           <a-icon :type="loading ? 'loading' : 'plus'" />
           <div class="ant-upload-text">
-            {{uploadText}}
+            {{ uploadText }}
           </div>
         </div>
       </template>
@@ -23,19 +23,19 @@
           <div v-if="fileList.length < limitCount">
             <a-icon :type="loading ? 'loading' : 'plus'" />
             <div class="ant-upload-text">
-              {{uploadText}}
+              {{ uploadText }}
             </div>
           </div>
         </template>
         <template v-else>
           <a-button class="upload-btn">
-            <a-icon :type="loading ? 'loading' : 'upload'" />{{uploadText}}
+            <a-icon :type="loading ? 'loading' : 'upload'" />{{ uploadText }}
           </a-button>
         </template>
       </template>
     </a-upload>
     <span class="upload-comment" v-if="fileList.length === 0" style="color: #ddd">
-      请上传{{limitSize}}M以内的{{isImage ? 'jpg/png格式图片': '文件'}}
+      请上传{{ limitSize }}M以内的{{ isImage ? 'jpg/png格式图片': '文件' }}
     </span>
     <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel" class="custom-upload-preview-modal">
       <img alt="example" style="width: 100%" :src="imageUrl" />
@@ -60,8 +60,8 @@ export default {
     }
   },
   created () {
-    if (this.limitCount === 1 && this.isImage) {
-      this.imageUrl = `${this.prefix}${this.value}`
+    if (this.limitCount === 1 && this.isImage && this.value) {
+      this.imageUrl = `${this.prefix}${this.value}/image`
     }
   },
   methods: {
@@ -166,12 +166,12 @@ export default {
       }
       if (this.isImage) {
         Object.assign(file, {
-          url: `${this.prefix}${data.accessUrl}`,
-          thumbUrl: `${this.prefix}${data.accessUrl}`
+          url: `${this.prefix}${data.accessUrl}/image`,
+          thumbUrl: `${this.prefix}${data.accessUrl}/image`
         })
         // 如果是但图片设置URL
         if (this.limitCount === 1) {
-          this.imageUrl = `${this.prefix}${data.accessUrl}`
+          this.imageUrl = `${this.prefix}${data.accessUrl}/image`
         }
       }
       return file
