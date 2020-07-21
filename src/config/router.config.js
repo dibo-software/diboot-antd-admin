@@ -31,7 +31,7 @@ export const asyncRouterMap = [
         path: '/system',
         redirect: '/system/dictionary/list',
         component: PageView,
-        meta: { title: '系统管理', icon: 'dashboard' },
+        meta: { title: '系统管理', icon: 'dashboard', permission: ['Dictionary', 'IamUser', 'IamRole', 'IamFrontendPermission', 'IamLoginTrace'] },
         children: [
           {
             path: '/system/dictionary/list',

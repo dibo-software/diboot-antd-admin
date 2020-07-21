@@ -11,6 +11,19 @@ Vue.filter('NumberFormat', function (value) {
   return intPartFormat
 })
 
+Vue.filter('BooleanFormat', function (value) {
+  if (value === undefined) {
+    return ''
+  }
+  if (value === true || value === 'true') {
+    return '是'
+  }
+  if (value === false || value === 'false') {
+    return '否'
+  }
+  return ''
+})
+
 Vue.filter('dayjs', function (dataStr, pattern = 'YYYY-MM-DD HH:mm:ss') {
   return moment(dataStr).format(pattern)
 })

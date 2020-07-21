@@ -69,15 +69,33 @@ export default {
   },
   data () {
     return {
+      /**
+       * 上传的文件
+       */
       fileList: [],
+      /**
+       * 文件备注
+       */
       comment: '',
+      /**
+       * 是否禁用预览
+       */
       previewDisabled: true,
+      /**
+       * 是否禁用上传
+       */
       uploadDisabled: true,
+      /**
+       * 预览时候使用
+       */
       importFileNameObj: {},
       fileNameFields: {
         originFileName: 'originFileName',
         previewFileName: 'previewFileName'
       },
+      /**
+       * 错误信息提示
+       */
       errMsg: ''
     }
   },
@@ -88,6 +106,10 @@ export default {
     handleDownloadExample () {
       dibootApi.download(this.exampleUrl)
         .then(res => {
+          if (res.code && res.code === 4006) {
+            this.$message.error(res.msg)
+            return
+          }
           const blob = new Blob([res.data])
           if ('download' in document.createElement('a')) {
             // 非IE下载
@@ -107,6 +129,9 @@ export default {
           console.log(err)
         })
     },
+    /**
+     * 删除文件
+     */
     handleRemove (file) {
       const index = this.fileList.indexOf(file)
       const newFileList = this.fileList.slice()
@@ -117,6 +142,10 @@ export default {
       this.importFileNameObj = {}
       this.$refs.dataPreview.close()
     },
+
+    /**
+     * 上传之前操作
+     */
     beforeUpload (file) {
       this.fileList = [...this.fileList, file].splice(-1)
       this.previewDisabled = this.fileList.length === 0
@@ -139,8 +168,10 @@ export default {
             this.importFileNameObj[this.fileNameFields.previewFileName] = res.data[this.fileNameFields.previewFileName]
             this.$refs.dataPreview.preview(res.data.header, res.data.dataList)
             this.errMsg = ''
+            this.uploadDisabled = false
           } else {
             this.errMsg = res.msg
+            this.uploadDisabled = true
           }
         })
     },
