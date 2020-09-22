@@ -212,6 +212,8 @@ export default {
     },
     afterClose () {
       this.children = []
+      this.childrenBtnConfig = _.cloneDeep(CHILDREN_BTN_CONFIG_DEFAULT)
+      this.childItem = _.cloneDeep(CHILDREN_ITEM_DEFAULT)
     },
     enhance (values) {
       values.children = this.children
