@@ -31,7 +31,7 @@ export const asyncRouterMap = [
         path: '/system',
         redirect: '/system/dictionary/list',
         component: PageView,
-        meta: { title: '系统管理', icon: 'dashboard', permission: ['Dictionary', 'IamUser', 'IamRole', 'IamFrontendPermission', 'IamLoginTrace'] },
+        meta: { title: '系统管理', icon: 'dashboard', permission: ['Dictionary', 'IamUser', 'IamRole', 'IamFrontendPermission', 'IamLoginTrace', 'IamOperationLog'] },
         children: [
           {
             path: '/system/dictionary/list',
@@ -56,6 +56,12 @@ export const asyncRouterMap = [
             name: 'IamFrontendPermission',
             component: () => import('@/views/system/iamFrontendPermission/list'),
             meta: { title: '菜单权限管理', keepAlive: true, permission: ['IamFrontendPermission'] }
+          },
+          {
+            path: '/system/iamOperationLog/list',
+            name: 'IamOperationLogList',
+            component: () => import('@/views/system/iamOperationLog/list'),
+            meta: { title: '操作日志查看', keepAlive: true, permission: ['IamOperationLog'] }
           },
           {
             path: '/system/iamLoginTrace/list',
