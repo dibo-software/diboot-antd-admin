@@ -12,7 +12,7 @@ import router from '@/router/index'
 import qs from 'qs'
 
 // baseURL
-const BASE_URL = '/example'
+const BASE_URL = '/api'
 // token在Header中的key
 const JWT_HEADER_KEY = 'authtoken'
 // tokan自动刷新（发送心跳）的时间间隔（分钟）
