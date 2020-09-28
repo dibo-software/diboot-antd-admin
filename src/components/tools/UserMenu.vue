@@ -64,7 +64,7 @@ export default {
         content: '确定要注销登录吗 ?',
         onOk () {
           return that.Logout({}).then(() => {
-            that.$router.push('/')
+            that.$router.push('/user/login')
           }).catch(err => {
             that.$message.error({
               title: '错误',
