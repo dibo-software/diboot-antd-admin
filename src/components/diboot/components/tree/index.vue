@@ -166,22 +166,22 @@
         if (!originTreeList || originTreeList.length === 0) {
           return undefined
         }
-        const formatterOrgList = []
+        const formatterItemList = []
         originTreeList.forEach(item => {
-          const formatterOrg = {}
-          formatterOrg.key = item[this.nodeKey]
-          formatterOrg.value = item[this.nodeKey]
-          formatterOrg.title = item[this.nodeName]
-          formatterOrg.scopedSlots = { title: 'title' }
+          const formatterItem = {}
+          formatterItem.key = item[this.nodeKey]
+          formatterItem.value = item[this.nodeKey]
+          formatterItem.title = item[this.nodeName]
+          formatterItem.scopedSlots = { title: 'title' }
           const children = this.treeListFormatter(item.children)
           if (children !== undefined) {
-            formatterOrg.children = children
+            formatterItem.children = children
           }
-          formatterOrgList.push(formatterOrg)
+          formatterItemList.push(formatterItem)
         })
         // 如果需要默认展开所有，则初始化展开数据
-        this.expandedKeys = this.getInitSmartExpandedKeys(formatterOrgList, 5)
-        return formatterOrgList
+        this.expandedKeys = this.getInitSmartExpandedKeys(formatterItemList, 5)
+        return formatterItemList
       }
     },
     computed: {
