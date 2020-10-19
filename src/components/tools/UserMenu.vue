@@ -65,6 +65,7 @@ export default {
         onOk () {
           return that.Logout({}).then(() => {
             that.$router.push('/user/login')
+            that.$router.go(0)
           }).catch(err => {
             that.$message.error({
               title: '错误',
