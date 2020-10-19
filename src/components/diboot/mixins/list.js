@@ -270,7 +270,31 @@ export default {
         })
       })
     },
-
+    /***
+     * 批量删除
+     * @returns {boolean}
+     */
+    batchRemove () {
+      if (this.selectedRowKeys === undefined || this.selectedRowKeys.length === 0) {
+        this.$message.error('请选择需要操作的行')
+        return false
+      }
+      const _this = this
+      this.$confirm({
+        title: '您是否确认批量删除所选项？',
+        onOk () {
+          // 开始删除选中的行
+          dibootApi.post(`${_this.baseApi}/batchDelete`, _this.selectedRowKeys).then(res => {
+            if (res.code === 0) {
+              _this.$message.success(res.msg)
+              _this.getList()
+            } else {
+              _this.$message.error(res.msg)
+            }
+          })
+        }
+      })
+    },
     /**
      * 导出数据至excel
      */
