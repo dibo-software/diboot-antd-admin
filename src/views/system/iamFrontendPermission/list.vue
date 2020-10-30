@@ -72,7 +72,7 @@
             <a-menu-item v-action:update>
               <a @click="$refs.form.open(record.id)">编辑</a>
             </a-menu-item>
-            <a-menu-item v-action:update>
+            <a-menu-item v-action:create>
               <a @click="createSubMenu(record.id)">添加子菜单</a>
             </a-menu-item>
             <a-menu-item v-action:delete>
@@ -117,11 +117,13 @@ export default {
       columns: [
         {
           title: '菜单名称',
-          dataIndex: 'displayName'
+          dataIndex: 'displayName',
+          width: 200
         },
         {
           title: '菜单编码',
-          dataIndex: 'frontendCode'
+          dataIndex: 'frontendCode',
+          width: 160
         },
         {
           title: '页面按钮/权限',
