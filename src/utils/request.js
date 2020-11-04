@@ -13,9 +13,9 @@ import qs from 'qs'
 
 // baseURL
 const BASE_URL = '/api'
-// token在Header中的key
+// token在Header中的key，需要与后端对diboot.iam.jwt-signkey配置相同
 const JWT_HEADER_KEY = 'authtoken'
-// tokan自动刷新（发送心跳）的时间间隔（分钟）
+// token自动刷新（发送心跳）的时间间隔（分钟），建议为后端配置的token过期时间的1/8
 const TOKEN_REFRESH_EXPIRE = 10
 // 心跳计时器
 let pingTimer = {}
