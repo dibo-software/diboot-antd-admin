@@ -46,26 +46,42 @@
       @change="handleTableChange"
       rowKey="id"
     >
-      <span slot="action" slot-scope="text, record">
-        <a v-action:detail href="javascript:;" @click="$refs.detail.open(record.id)">详情</a>
-        <a-divider v-action:detail v-permission="['update', 'delete']" type="vertical" />
-        <a-dropdown
-          v-permission="['update', 'delete']">
-          <a class="ant-dropdown-link">
-            更多 <a-icon type="down" />
-          </a>
-          <a-menu slot="overlay">
-            <a-menu-item v-action:update>
-              <a @click="$refs.form.open(record.id)">编辑</a>
-            </a-menu-item>
-            <a-menu-item v-action:delete>
-              <a href="javascript:;" @click="remove(record.id)">删除</a>
-            </a-menu-item>
-          </a-menu>
-        </a-dropdown>
-        <span v-permission-missing="['detail', 'update', 'delete']">
+      <span slot="type" slot-scope="text, record">
+        <template
+          v-if="record.parentId && record.parentId != 0">
+          {{ record.itemValue }}
+        </template>
+        <template v-else>
+          {{ record.type }}
+        </template>
+      </span>
+      <span
+        slot="action"
+        slot-scope="text, record">
+        <template v-if="record.parentId && record.parentId != 0">
           -
-        </span>
+        </template>
+        <template v-else>
+          <a v-action:detail href="javascript:;" @click="$refs.detail.open(record.id)">详情</a>
+          <a-divider v-action:detail v-permission="['update', 'delete']" type="vertical" />
+          <a-dropdown
+            v-permission="['update', 'delete']">
+            <a class="ant-dropdown-link">
+              更多 <a-icon type="down" />
+            </a>
+            <a-menu slot="overlay">
+              <a-menu-item v-action:update>
+                <a @click="$refs.form.open(record.id)">编辑</a>
+              </a-menu-item>
+              <a-menu-item v-action:delete>
+                <a href="javascript:;" @click="remove(record.id)">删除</a>
+              </a-menu-item>
+            </a-menu>
+          </a-dropdown>
+          <span v-permission-missing="['detail', 'update', 'delete']">
+            -
+          </span>
+        </template>
       </span>
     </a-table>
 
@@ -95,8 +111,9 @@ export default {
           dataIndex: 'itemName'
         },
         {
-          title: '类型编码',
-          dataIndex: 'type'
+          title: '类型/编码',
+          dataIndex: 'type',
+          scopedSlots: { customRender: 'type' }
         },
         {
           title: '备注',
