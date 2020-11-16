@@ -28,7 +28,7 @@ export default {
         this.spinning = false
         if (res.code === 0) {
           this.afterOpen()
-          this.treeList = this.treeListFormatter(res.data, this.formatter.value, this.formatter.title)
+          this.treeList = this.treeListFormatter(this.treeListFilter(res.data), this.formatter.value, this.formatter.title)
         } else {
           this.$message.error(res.msg)
         }
@@ -36,6 +36,10 @@ export default {
         this.spinning = false
         console.log('获取树结构异常', e)
       }
+    },
+    // 对排序列表进行过滤处理
+    treeListFilter (list) {
+      return list
     },
     submitSortList (list) {
       const sortApi = this.sortApi ? this.sortApi : `${this.baseApi}/sortList`
@@ -71,7 +75,7 @@ export default {
         ((info.node.children || []).length > 0 && // Has children
           info.node.expanded && // Is expanded
           dropPosition === 1)) {
-        this.$message.warning('如果需要更改层级关系，请使用更新功能进行更改！')
+        this.levelChangeWarning()
         return false
       } else {
         // 检查拖拽的地方是否是同一层级
@@ -82,10 +86,10 @@ export default {
           return item.value === dropKey
         })
         if (dragItem === undefined || dropItem === undefined) {
-          this.$message.warning('如果需要更改层级关系，请使用更新功能进行更改！')
+          this.levelChangeWarning()
           return false
         } else if (dragItem.parentId !== dropItem.parentId) {
-          this.$message.warning('如果需要更改层级关系，请使用更新功能进行更改！')
+          this.levelChangeWarning()
           return false
         }
 
@@ -130,6 +134,9 @@ export default {
       })
 
       return formatterList
+    },
+    levelChangeWarning () {
+      this.$message.warning('如果需要更改层级关系，请使用更新功能进行更改！')
     },
     close () {
       this.visible = false
