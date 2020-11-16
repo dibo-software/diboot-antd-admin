@@ -201,6 +201,7 @@ export default {
     return {
       baseApi: '/iam/resourcePermission',
       form: this.$form.createForm(this),
+      getMore: true,
       currentPermissionActiveKey: 0,
       currentMenu: '',
       apiSetList: [],
@@ -461,12 +462,6 @@ export default {
     }
   },
   props: {
-    more: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
     initParentId: {
       type: String,
       default: () => {
