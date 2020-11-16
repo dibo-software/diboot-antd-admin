@@ -71,10 +71,12 @@
             </a>
             <a-menu slot="overlay">
               <a-menu-item v-action:update>
-                <a @click="$refs.form.open(record.id)">编辑</a>
+                <a v-if="record.editable" @click="$refs.form.open(record.id)">编辑</a>
+                <a v-else @click="$message.warning('当前数据字典不可编辑')">编辑</a>
               </a-menu-item>
               <a-menu-item v-action:delete>
-                <a href="javascript:;" @click="remove(record.id)">删除</a>
+                <a v-if="record.deletable" href="javascript:;" @click="remove(record.id)">删除</a>
+                <a v-else href="javascript:;" @click="$message.warning('当前数据字典不可删除')">删除</a>
               </a-menu-item>
             </a-menu>
           </a-dropdown>
