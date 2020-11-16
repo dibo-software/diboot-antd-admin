@@ -36,10 +36,10 @@ import treeSort from '@/components/diboot/mixins/treeSort'
 import { permissionTreeListFormatter } from '@/utils/treeDataUtil'
 
 export default {
-  name: 'IamFrontendPermissionSort',
+  name: 'IamResourcePermissionSort',
   data () {
     return {
-      baseApi: '/iam/frontendPermission'
+      baseApi: '/iam/resourcePermission'
     }
   },
   methods: {

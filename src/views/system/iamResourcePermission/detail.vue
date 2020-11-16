@@ -14,13 +14,13 @@
         <detail-list-item term="菜单名称">{{ model.displayName }}</detail-list-item>
       </detail-list>
       <detail-list :col="1">
-        <detail-list-item term="菜单编码">{{ model.frontendCode }}</detail-list-item>
+        <detail-list-item term="菜单编码">{{ model.resourceCode }}</detail-list-item>
       </detail-list>
       <detail-list :col="1">
         <detail-list-item term="页面按钮/权限">
           <template v-if="model.permissionList && model.permissionList.length > 0">
             <a-tag color="cyan" :key="i" v-for="(permission,i) in model.permissionList">
-              {{ `${permission.displayName}[${permission.frontendCode}]` }}
+              {{ `${permission.displayName}[${permission.resourceCode}]` }}
             </a-tag>
           </template>
           <template v-else>
@@ -53,10 +53,10 @@ import detail from '@/components/diboot/mixins/detail'
 import DetailList from '@/components/tools/DetailList'
 const DetailListItem = DetailList.Item
 export default {
-  name: 'IamFrontendPermissionDetail',
+  name: 'IamResourcePermissionDetail',
   data () {
     return {
-      baseApi: '/iam/frontendPermission'
+      baseApi: '/iam/resourcePermission'
     }
   },
   components: {

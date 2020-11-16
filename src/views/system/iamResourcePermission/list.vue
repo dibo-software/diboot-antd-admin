@@ -10,7 +10,7 @@
           </a-col>
           <a-col :md="7" :sm="24">
             <a-form-item label="菜单编码">
-              <a-input placeholder="菜单编码" v-model="queryParam.frontendCode" />
+              <a-input placeholder="菜单编码" v-model="queryParam.resourceCode" />
             </a-form-item>
           </a-col>
           <a-col :md="5" :sm="24">
@@ -56,7 +56,7 @@
       <span slot="permissionList" slot-scope="text, record">
         <template v-if="record.permissionList && record.permissionList.length > 0">
           <a-tag v-for="(permission, index) in record.permissionList" :key="index">
-            {{ `${permission.displayName}[${permission.frontendCode}]` }}
+            {{ `${permission.displayName}[${permission.resourceCode}]` }}
           </a-tag>
         </template>
       </span>
@@ -101,7 +101,7 @@ import { clearNullChildren, treeList2list } from '@/utils/treeDataUtil'
 import _ from 'lodash'
 
 export default {
-  name: 'IamFrontendPermissionList',
+  name: 'IamResourcePermissionList',
   components: {
     dibootForm,
     dibootDetail,
@@ -110,7 +110,7 @@ export default {
   mixins: [ list ],
   data () {
     return {
-      baseApi: '/iam/frontendPermission',
+      baseApi: '/iam/resourcePermission',
       customQueryParam: { displayType: 'MENU' },
       getMore: true,
       formParentId: '0',
@@ -122,7 +122,7 @@ export default {
         },
         {
           title: '菜单编码',
-          dataIndex: 'frontendCode',
+          dataIndex: 'resourceCode',
           width: 160
         },
         {

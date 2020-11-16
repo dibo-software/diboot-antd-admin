@@ -6,7 +6,7 @@
     @close="close"
     :body-style="{ paddingBottom: '80px' }"
   >
-    <a-form layout="vertical" :form="form" class="iamFrontendPermissionForm">
+    <a-form layout="vertical" :form="form" class="iamResourcePermissionForm">
       <a-row :gutter="16">
         <a-col :span="12">
           <a-form-item label="上级菜单">
@@ -66,9 +66,9 @@
             <a-input
               placeholder="菜单编码"
               v-decorator="[
-                'frontendCode',
+                'resourceCode',
                 {
-                  initialValue: model.frontendCode,
+                  initialValue: model.resourceCode,
                   rules: [
                     { required: true, message: '菜单编码不能为空', whitespace: true },
                     { validator: this.checkCodeDuplicate }
@@ -124,16 +124,16 @@
                 :key="index">
                 <a-form-item :required="true" label="按钮/权限编码">
                   <a-select
-                    v-if="more.frontendPermissionCodeKvList"
+                    v-if="more.resourcePermissionCodeKvList"
                     showSearch
                     :filterOption="(input, option) => filterPermissionCodeOption(permission, input, option)"
                     @change="value => changePermissionName(permission, value)"
                     placeholder="请选择按钮/权限编码"
-                    v-model="permission.frontendCode"
+                    v-model="permission.resourceCode"
                   >
                     <a-select-option
-                      v-for="(item, i) in more.frontendPermissionCodeKvList"
-                      v-if="!existPermissionCodes.includes(item.v) || permission.frontendCode === item.v"
+                      v-for="(item, i) in more.resourcePermissionCodeKvList"
+                      v-if="!existPermissionCodes.includes(item.v) || permission.resourceCode === item.v"
                       :key="i"
                       :value="item.v"
                     >
@@ -192,14 +192,14 @@ const NEW_PERMISSION_ITEM = {
   parentId: '',
   displayType: 'PERMISSION',
   displayName: '新按钮/权限',
-  frontendCode: '',
+  resourceCode: '',
   apiSetList: []
 }
 export default {
-  name: 'IamFrontendPermissionDrawer',
+  name: 'IamResourcePermissionDrawer',
   data () {
     return {
-      baseApi: '/iam/frontendPermission',
+      baseApi: '/iam/resourcePermission',
       form: this.$form.createForm(this),
       currentPermissionActiveKey: 0,
       currentMenu: '',
@@ -243,7 +243,7 @@ export default {
         }
         // 自动设置菜单名称与菜单编码
         this.form.setFieldsValue({
-          frontendCode: currentMenu.value,
+          resourceCode: currentMenu.value,
           displayName: currentMenu.title
         })
         // 自动设置菜单页面所需接口
@@ -282,7 +282,7 @@ export default {
                   notChangePerIdxList.push(i + 1)
                 }
                 // 校验按钮/权限编码是否设置
-                if (!permission.frontendCode) {
+                if (!permission.resourceCode) {
                   nullFrontendCodeIdxList.push(i + 1)
                 }
               })
@@ -344,11 +344,11 @@ export default {
       this.permissionList.push(newPermission)
       this.currentPermissionActiveKey = this.permissionList.length - 1
       // 自动补全编码选项
-      if (this.more && this.more.frontendPermissionCodeKvList) {
-        const validKv = this.more.frontendPermissionCodeKvList.find(kv => {
+      if (this.more && this.more.resourcePermissionCodeKvList) {
+        const validKv = this.more.resourcePermissionCodeKvList.find(kv => {
           return !this.existPermissionCodes.includes(kv.v)
         })
-        newPermission.frontendCode = validKv.v
+        newPermission.resourceCode = validKv.v
         this.changePermissionName(newPermission, validKv.v)
       }
     },
@@ -365,11 +365,11 @@ export default {
       if (value.indexOf(input.toLowerCase()) >= 0) {
         return true
       }
-      permission.frontendCode = input
+      permission.resourceCode = input
       return false
     },
     changePermissionName (permission, value) {
-      const validKv = this.more.frontendPermissionCodeKvList.find(item => {
+      const validKv = this.more.resourcePermissionCodeKvList.find(item => {
         return item.v === value
       })
       // 自动补全按钮/权限名称
@@ -456,7 +456,7 @@ export default {
         return []
       }
       return this.permissionList.map(item => {
-        return item.frontendCode
+        return item.resourceCode
       })
     }
   },
@@ -478,7 +478,7 @@ export default {
 </script>
 
 <style scoped>
-  .iamFrontendPermissionForm .ant-form-item {
+  .iamResourcePermissionForm .ant-form-item {
     margin-bottom: 10px;
   }
 </style>

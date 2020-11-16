@@ -39,7 +39,7 @@ export function permissionListToPermissions (permissionList) {
     if (actionEntitySet !== undefined) {
       actionEntitySet = actionEntitySet.map(action => {
         return {
-          action: action.frontendCode,
+          action: action.resourceCode,
           describe: action.displayName,
           defaultCheck: false
         }
@@ -52,7 +52,7 @@ export function permissionListToPermissions (permissionList) {
     })
 
     permissions.push({
-      permissionId: item.frontendCode,
+      permissionId: item.resourceCode,
       permissionName: item.displayName,
       actionEntitySet,
       actionList
