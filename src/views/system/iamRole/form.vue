@@ -101,14 +101,6 @@ import _ from 'lodash'
 
 export default {
   name: 'IamRoleForm',
-  props: {
-    more: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    }
-  },
   mixins: [ form ],
   data () {
     return {
@@ -232,7 +224,7 @@ export default {
       }
     },
     enhance (values) {
-      const checkedIdList = this.checkedKeys.checked
+      const checkedIdList = this.checkedKeys.checked ? this.checkedKeys.checked : []
       // 自动选择没有选到的父级
       checkedIdList.forEach(id => {
         const permission = this.permissionList.find(item => {
