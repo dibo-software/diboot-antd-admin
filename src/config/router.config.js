@@ -40,9 +40,15 @@ export const asyncRouterMap = [
             meta: { title: '数据字典管理', keepAlive: true, permission: ['Dictionary'] }
           },
           {
-            path: '/system/iamUser/list',
-            name: 'IamUserList',
-            component: () => import('@/views/system/iamUser/list'),
+            path: '/system/iamOrg/index',
+            name: 'IamOrgIndex',
+            component: () => import('@/views/system/iamOrg/Index'),
+            meta: { title: '部门信息管理', keepAlive: true, permission: ['IamOrg'] }
+          },
+          {
+            path: '/system/iamUser/index',
+            name: 'IamUserIndex',
+            component: () => import('@/views/system/iamUser/Index'),
             meta: { title: '系统用户管理', keepAlive: true, permission: ['IamUser'] }
           },
           {

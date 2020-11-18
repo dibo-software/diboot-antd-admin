@@ -159,7 +159,23 @@ export default {
     dibootForm,
     dibootDetail
   },
-  mixins: [list]
+  mixins: [list],
+  watch: {
+    currentNodeId: function (val) {
+      if (!val || val === '0' || val === 0) {
+        this.customQueryParam = {}
+      } else {
+        this.customQueryParam = { orgId: val }
+      }
+      this.getList()
+    }
+  },
+  props: {
+    currentNodeId: {
+      type: String,
+      default: '0'
+    }
+  }
 }
 </script>
 

@@ -167,7 +167,7 @@ export default {
           result = await this.update(values)
         }
 
-        // 执行提交失败后的一系列后续操作
+        // 执行提交成功后的一系列后续操作
         this.submitSuccess(result)
       } catch (e) {
         // 执行一系列后续操作
