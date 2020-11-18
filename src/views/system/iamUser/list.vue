@@ -87,7 +87,7 @@
     <!--表单页抽屉-->
     <diboot-form
       ref="form"
-      :more="more"
+      :current-node-id="currentNodeId"
       @complete="getList"
     ></diboot-form>
     <!--详情页抽屉-->

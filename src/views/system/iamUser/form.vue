@@ -8,6 +8,33 @@
   >
     <a-form layout="vertical" :form="form">
       <a-row :gutter="16">
+        <a-col :span="24">
+          <a-form-item label="所属部门">
+            <template v-if="orgTreeList.length > 0">
+              <a-tree-select
+                placeholder="请选择所属部门"
+                :dropdownStyle="{ maxHeight: '400px', overflow: 'auto' }"
+                :treeData="orgTreeList"
+                treeNodeFilterProp="title"
+                showSearch
+                treeDefaultExpandAll
+                v-decorator="[
+                  'orgId',
+                  {
+                    rules: [{ required: true, message: '请选择上级部门' }],
+                    initialValue: model.orgId !== undefined ? `${model.orgId}` : currentNodeId
+                  }
+                ]"
+              >
+              </a-tree-select>
+            </template>
+            <template v-else>
+              无
+            </template>
+          </a-form-item>
+        </a-col>
+      </a-row>
+      <a-row :gutter="16">
         <a-col :span="12">
           <a-form-item label="用户名">
             <a-input
@@ -189,14 +216,17 @@
 <script>
 import form from '@/components/diboot/mixins/form'
 import { dibootApi } from '@/utils/request'
+import _ from 'lodash'
+import { treeListFormatter } from '@/utils/treeDataUtil'
 
 export default {
   name: 'IamUserForm',
   data () {
     return {
       baseApi: '/iam/user',
-      setPassword: false,
       form: this.$form.createForm(this),
+      orgList: [],
+      setPassword: false,
       attachMoreList: [
         {
           type: 'D',
@@ -217,16 +247,34 @@ export default {
   },
   methods: {
     async afterOpen (id) {
+      // 新建显示密码填写，更新隐藏密码填写
       if (id === undefined) {
         this.setPassword = true
       } else {
         this.setPassword = false
       }
+      // 加载部门树数据
+      this.loadOrgTree()
       // 获取account的username信息到表单中
+      this.loadUsername()
+    },
+    async loadOrgTree () {
+      const res = await dibootApi.get(`/iam/org/tree`)
+      if (res.code === 0) {
+        this.orgList = res.data
+      } else {
+        this.$message.error(res.msg)
+      }
+    },
+    async loadUsername () {
+      const id = this.model.id
       if (id !== undefined) {
         const res = await dibootApi.get(`${this.baseApi}/getUsername/${id}`)
-        if (res.code === 0) {
-          this.form.setFieldsValue({ username: res.data })
+        if (res.code === 0 && res.data) {
+          this.systemUser = true
+          setTimeout(() => {
+            this.form.setFieldsValue({ username: res.data })
+          }, 200)
         }
       }
     },
@@ -256,14 +304,29 @@ export default {
         callback(res.msg.split(':')[1])
       }
     },
-    enhance (values) {
-      values.orgId = 0
-    },
     afterClose () {
       this.setPassword = false
     }
   },
-  mixins: [form]
+  computed: {
+    orgTreeList: function () {
+      if (this.orgList === undefined || this.orgList.length === 0) {
+        return []
+      }
+      const orgTreeList = treeListFormatter(_.cloneDeep(this.orgList), 'id', 'shortName', true)
+      orgTreeList.unshift({ title: '无', value: '0', key: '0' })
+      return orgTreeList
+    }
+  },
+  mixins: [form],
+  props: {
+    currentNodeId: {
+      type: String,
+      default: () => {
+        return '0'
+      }
+    }
+  }
 }
 </script>
 
