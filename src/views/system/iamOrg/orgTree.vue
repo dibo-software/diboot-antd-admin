@@ -2,7 +2,8 @@
   <div>
     <div class="table-operator" v-if="canChange">
       <a-button type="primary" icon="plus" @click="$refs.orgForm.open()">新增</a-button>
-      <a-button type="default" icon="drag">排序</a-button>
+      <a-button type="default" icon="drag" @click="$refs.orgTreeSort.open()">排序</a-button>
+      <slot name="extra"></slot>
     </div>
     <tree
       ref="tree"
@@ -33,19 +34,22 @@
       </template>
     </tree>
     <org-form :current-node-id="`${currentNode.value}`" ref="orgForm" @complete="$refs.tree.loadTree()" @changeKey="$emit('changeCurrentNode', currentNode.value)"></org-form>
+    <org-tree-sort ref="orgTreeSort" @complete="$refs.tree.loadTree()"></org-tree-sort>
   </div>
 </template>
 
 <script>
 import tree from '@/components/diboot/components/tree/index'
 import orgForm from '@/views/system/iamOrg/form'
+import orgTreeSort from '@/views/system/iamOrg/orgTreeSort'
 import { dibootApi } from '@/utils/request'
 
 export default {
   name: 'OrgTree',
   components: {
     tree,
-    orgForm
+    orgForm,
+    orgTreeSort
   },
   data () {
     return {
