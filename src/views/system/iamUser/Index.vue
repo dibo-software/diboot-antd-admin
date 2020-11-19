@@ -1,6 +1,6 @@
 <template>
   <a-card :bordered="false">
-    <a-row>
+    <a-row v-permission="['orgTree']">
       <a-col :span="6">
         <org-tree ref="orgTree" @changeCurrentNode="onChangeCurrentNode" />
       </a-col>
@@ -8,6 +8,7 @@
         <user-list :current-node-id="currentNodeId" ref="userList" />
       </a-col>
     </a-row>
+    <user-list v-permission-missing="['orgTree']" :current-node-id="currentNodeId" ref="userList" />
   </a-card>
 </template>
 
