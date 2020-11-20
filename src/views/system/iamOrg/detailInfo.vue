@@ -24,7 +24,7 @@
 import { dibootApi } from '@/utils/request'
 
 export default {
-  name: 'OrgDetailContent',
+  name: 'OrgDetailInfo',
   data () {
     return {
       model: {}
