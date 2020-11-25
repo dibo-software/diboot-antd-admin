@@ -117,7 +117,7 @@ export default {
               if (res.page) {
                 this.pagination.pageSize = res.page.pageSize
                 this.pagination.current = res.page.pageIndex
-                this.pagination.total = res.page.totalCount
+                this.pagination.total = res.page.totalCount ? Number(res.page.totalCount) : 0
               }
               // eslint-disable-next-line no-undef
               resolve(this.data)
@@ -170,7 +170,7 @@ export default {
             if (res.page) {
               this.pagination.pageSize = res.page.pageSize
               this.pagination.current = res.page.pageIndex
-              this.pagination.total = res.page.totalCount
+              this.pagination.total = res.page.totalCount ? Number(res.page.totalCount) : 0
             }
             resolve(this.data)
           } else {
