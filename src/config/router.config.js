@@ -64,6 +64,12 @@ export const asyncRouterMap = [
             meta: { title: '资源权限管理', keepAlive: true, permission: ['IamResourcePermission'] }
           },
           {
+            path: '/system/scheduleJob/list',
+            name: 'ScheduleJob',
+            component: () => import('@/views/system/scheduleJob/list'),
+            meta: {title: '定时任务管理', keepAlive: true, permission: ['ScheduleJob']}
+          },
+          {
             path: '/system/iamOperationLog/list',
             name: 'IamOperationLogList',
             component: () => import('@/views/system/iamOperationLog/list'),

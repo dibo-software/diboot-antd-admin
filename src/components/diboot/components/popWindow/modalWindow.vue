@@ -26,6 +26,9 @@ export default {
     },
     confirm () {
 
+    },
+    close () {
+      this.state.visible = false
     }
   },
   props: {
