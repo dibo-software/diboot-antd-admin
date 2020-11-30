@@ -28,7 +28,7 @@ export default {
 
     },
     close () {
-      this.visible = false
+      this.state.visible = false
     }
   },
   props: {
