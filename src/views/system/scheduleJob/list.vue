@@ -10,7 +10,14 @@
           </a-col>
           <a-col :md="8" :sm="24">
             <a-form-item label="状态" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
-              <a-input v-model="queryParam.jobStatus" placeholder="" style="width: 100%;"/>
+              <a-select v-model="queryParam.jobStatus" placeholder="请选择多选框" style="width: 100%;">
+                <a-select-option value="A">
+                  正常
+                </a-select-option>
+                <a-select-option value="I">
+                  停用
+                </a-select-option>
+              </a-select>
             </a-form-item>
           </a-col>
           <a-col :md="8" :sm="24">
@@ -24,8 +31,8 @@
     </div>
     <div class="table-operator">
       <a-button v-action:create type="primary" icon="plus" @click="$refs.form.open()">新建</a-button>
+      <a-button v-action:detail icon="profile" @click="$refs.logList.open()">日志记录</a-button>
     </div>
-
 <a-table
       ref="table"
       size="default"
@@ -33,9 +40,13 @@
       :dataSource="data"
       :pagination="pagination"
       :scroll="{ x: 'calc(700px + 50%)', y: 240 }"
-      :loading="loadingData"@change="handleTableChange"
+      :loading="loadingData"
+      @change="handleTableChange"
       rowKey="id"
     >
+      <span slot="jobStatus" slot-scope="text, record">
+        <a-switch :key="loadingData" checked-children="正常" un-checked-children="停用" :defaultChecked="record.jobStatus === 'A'" @change="handleSwitchChange(record)"/>
+      </span>
       <span slot="action" slot-scope="text, record">
         <a v-action:detail href="javascript:;" @click="$refs.detail.open(record.id)">详情</a>
         <a-divider v-action:detail v-permission="['update', 'delete']" type="vertical" />
@@ -56,6 +67,7 @@
     </a-table>
     <diboot-form ref="form" @complete="getList"></diboot-form>
 		<diboot-detail ref="detail"></diboot-detail>
+    <diboot-log-list ref="logList"></diboot-log-list>
   </a-card>
 </template>
 
@@ -63,12 +75,14 @@
 import list from '@/components/diboot/mixins/list'
 import dibootForm from './form'
 import dibootDetail from './detail'
+import dibootLogList from './log/list'
 
 export default {
   name: 'ScheduleJobList',
   components: {
     dibootForm,
-    dibootDetail
+    dibootDetail,
+    dibootLogList
   },
   mixins: [list],
   data () {
@@ -102,7 +116,8 @@ export default {
         },
         {
           title: '状态',
-          dataIndex: 'jobStatus'
+          dataIndex: 'jobStatus',
+          scopedSlots: { customRender: 'jobStatus' }
         },
         {
           title: '备注',
@@ -120,6 +135,28 @@ export default {
           scopedSlots: { customRender: 'action' }
         }
       ]
+    }
+  },
+  methods: {
+
+    /**
+     * 改变状态
+     * @param value
+     * @returns {Promise<void>}
+     */
+    async handleSwitchChange (value) {
+      try {
+        const res = await this.$http.put(`/${value.id}/${value.jobStatus === 'A' ? 'I' : 'A'}`)
+        if (res.code === 0) {
+          this.$message.success('修改任务状态成功！')
+        } else {
+          this.$message.error('修改任务状态失败！')
+        }
+      } catch (e) {
+        console.log(e)
+        this.$message.error('修改任务状态失败！')
+      }
+      this.getList()
     }
   }
 

@@ -1,30 +1,36 @@
 <template>
-  <a-card :bordered="false">
-<div class="table-page-search-wrapper">
-      <a-form layout="inline">
-        <a-row :gutter="18">
-                <a-col :md="8" :sm="24">
-            <a-form-item label="job名称" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
-              <a-input v-model="queryParam.jobName" placeholder="" style="width: 100%;"/>
-            </a-form-item>
-          </a-col>
-          <a-col :md="8" :sm="24">
-            <a-form-item label="开始时间" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
-              <a-date-picker
-                format="YYYY-MM-DD"
-                v-model="queryParam.startTime"
-                style="width: 100%;"
-              />
-          </a-form-item>
-        </a-col>
-          <template v-if="advanced">
-          <a-col :md="8" :sm="24">
-            <a-form-item label="状态" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
-              <a-input v-model="queryParam.jobStatus" placeholder="" style="width: 100%;"/>
-            </a-form-item>
-          </a-col>
-          </template>
-          <a-col :md="!advanced && 8 || 24" :sm="24">
+  <a-modal
+    title="Title"
+    :visible="listState.visible"
+    width="70%"
+    :footer="null"
+  >
+    <a-card :bordered="false">
+      <div class="table-page-search-wrapper">
+        <a-form layout="inline">
+          <a-row :gutter="18">
+            <a-col :md="8" :sm="24">
+              <a-form-item label="job名称" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
+                <a-input v-model="queryParam.jobName" placeholder="" style="width: 100%;"/>
+              </a-form-item>
+            </a-col>
+            <a-col :md="8" :sm="24">
+              <a-form-item label="开始时间" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
+                <a-date-picker
+                  format="YYYY-MM-DD"
+                  v-model="queryParam.startTime"
+                  style="width: 100%;"
+                />
+              </a-form-item>
+            </a-col>
+            <template v-if="advanced">
+              <a-col :md="8" :sm="24">
+                <a-form-item label="状态" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
+                  <a-input v-model="queryParam.jobStatus" placeholder="" style="width: 100%;"/>
+                </a-form-item>
+              </a-col>
+            </template>
+            <a-col :md="!advanced && 8 || 24" :sm="24">
             <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
               <a-button type="primary" @click="onSearch">查询</a-button>
               <a-button style="margin-left: 8px" @click="reset">重置</a-button>
@@ -33,18 +39,18 @@
                 <a-icon :type="advanced ? 'up' : 'down'"/>
               </a>
             </span>
-          </a-col>
-        </a-row>
-      </a-form>
-    </div>
-<a-table
-      ref="table"
-      size="default"
-      :columns="columns"
-      :dataSource="data"
-      :pagination="pagination":loading="loadingData"@change="handleTableChange"
-      rowKey="id"
-    >
+            </a-col>
+          </a-row>
+        </a-form>
+      </div>
+      <a-table
+        ref="table"
+        size="default"
+        :columns="columns"
+        :dataSource="data"
+        :pagination="pagination":loading="loadingData"@change="handleTableChange"
+        rowKey="id"
+      >
       <span slot="action" slot-scope="text, record">
         <a v-action:detail href="javascript:;" @click="$refs.detail.open(record.id)">详情</a>
         <a-divider v-action:detail v-permission="['update', 'delete']" type="vertical" />
@@ -59,9 +65,10 @@
           </a-menu>
         </a-dropdown>
       </span>
-    </a-table>
-		<diboot-detail ref="detail"></diboot-detail>
-  </a-card>
+      </a-table>
+      <diboot-detail ref="detail"></diboot-detail>
+    </a-card>
+  </a-modal>
 </template>
 
 <script>
@@ -125,7 +132,15 @@ export default {
           dataIndex: 'action',
           scopedSlots: { customRender: 'action' }
         }
-      ]
+      ],
+      listState: {
+        visible: false
+      }
+    }
+  },
+  methods: {
+    open () {
+      this.listState.visible = true
     }
   }
 
