@@ -154,27 +154,16 @@
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item label="状态">
-            <a-select
-              v-if="more.userStatusKvList"
-              :getPopupContainer="getPopupContainer"
-              placeholder="请选择"
+          <a-form-item label="生日">
+            <a-date-picker
+              format="YYYY-MM-DD" valueFormat="YYYY-MM-DD"
               v-decorator="[
-                'status',
-                {
-                  initialValue: model.status,
-                  rules: [{ required: true, message: '用户状态不能为空' }]
-                }
-              ]"
-            >
-              <a-select-option
-                v-for="(status, index) in more.userStatusKvList"
-                :key="index"
-                :value="status.v"
-              >
-                {{ status.k }}
-              </a-select-option>
-            </a-select>
+                          'birthdate',
+                          {
+                            initialValue: model.birthdate ? moment(model.birthdate) : undefined
+                          }
+                        ]"
+            />
           </a-form-item>
         </a-col>
       </a-row>
@@ -203,6 +192,32 @@
                 }
               ]"
             />
+          </a-form-item>
+        </a-col>
+      </a-row>
+      <a-row :gutter="16">
+        <a-col :span="12">
+          <a-form-item label="状态">
+            <a-select
+              v-if="more.userStatusKvList"
+              :getPopupContainer="getPopupContainer"
+              placeholder="请选择"
+              v-decorator="[
+                'status',
+                {
+                  initialValue: model.status? model.status : 'A',
+                  rules: [{ required: true, message: '用户状态不能为空' }]
+                }
+              ]"
+            >
+              <a-select-option
+                v-for="(status, index) in more.userStatusKvList"
+                :key="index"
+                :value="status.v"
+              >
+                {{ status.k }}
+              </a-select-option>
+            </a-select>
           </a-form-item>
         </a-col>
       </a-row>

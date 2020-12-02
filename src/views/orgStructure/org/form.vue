@@ -90,7 +90,7 @@
               v-decorator="[
                 'type',
                 {
-                  initialValue: model.type,
+                  initialValue: model.type? model.type : 'DEPT',
                   rules: [{ required: true, message: '类型不能为空' }]
                 }
               ]"

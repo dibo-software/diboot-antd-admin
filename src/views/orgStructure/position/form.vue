@@ -73,7 +73,7 @@
           v-decorator="[
             'dataPermissionType',
             {
-              initialValue: model.dataPermissionType
+              initialValue: model.dataPermissionType? model.dataPermissionType : 'SELF'
             }
           ]"
           placeholder="请选择数据权限类型"

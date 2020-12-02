@@ -83,7 +83,7 @@
 </template>
 
 <script>
-import positionForm from '@/views/orgStructure/orgPosition/positionForm'
+import positionForm from '@/views/orgStructure/position/form'
 import { dibootApi } from '@/utils/request'
 import form from '@/components/diboot/mixins/form'
 import { treeListFormatter } from '@/utils/treeDataUtil'
