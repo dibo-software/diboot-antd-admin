@@ -26,6 +26,34 @@ export const asyncRouterMap = [
           meta: { title: '我的工作台', keepAlive: true }
         }]
       },
+
+      // 组织架构管理
+      {
+        path: '/orgStructure',
+        redirect: '/orgStructure/org-tree-list',
+        component: RouteView,
+        meta: { title: '组织管理', icon: 'team', keepAlive: false, permission: ['IamOrg', 'IamPosition'] },
+        children: [
+          {
+            path: '/orgStructure/org',
+            name: 'OrgIndex',
+            component: () => import('@/views/orgStructure/org/Index'),
+            meta: { title: '组织机构管理', keepAlive: false, permission: ['IamOrg'] }
+          },
+          {
+            path: '/orgStructure/position',
+            name: 'PositionIndex',
+            component: () => import('@/views/orgStructure/position/list'),
+            meta: { title: '岗位管理', keepAlive: false, permission: ['IamPosition'] }
+          },
+          {
+            path: '/orgStructure/orgUser',
+            name: 'OrgUserIndex',
+            component: () => import('@/views/orgStructure/orgUser/Index'),
+            meta: { title: '组织人员管理', keepAlive: false }
+          }
+        ]
+      },
       // 系统管理
       {
         path: '/system',
@@ -35,15 +63,9 @@ export const asyncRouterMap = [
         children: [
           {
             path: '/system/dictionary/list',
-            name: 'DictList',
+            name: 'DictionaryIndex',
             component: () => import('@/views/system/dictionary/list'),
             meta: { title: '数据字典管理', keepAlive: true, permission: ['Dictionary'] }
-          },
-          {
-            path: '/system/iamOrg/index',
-            name: 'IamOrgIndex',
-            component: () => import('@/views/system/iamOrg/Index'),
-            meta: { title: '部门信息管理', keepAlive: true, permission: ['IamOrg'] }
           },
           {
             path: '/system/iamUser/index',
@@ -53,31 +75,31 @@ export const asyncRouterMap = [
           },
           {
             path: '/system/iamRole/list',
-            name: 'IamRoleList',
+            name: 'IamRoleIndex',
             component: () => import('@/views/system/iamRole/list'),
             meta: { title: '角色资源管理', keepAlive: true, permission: ['IamRole'] }
           },
           {
             path: '/system/iamResourcePermission/list',
-            name: 'IamResourcePermission',
+            name: 'IamResourcePermissionIndex',
             component: () => import('@/views/system/iamResourcePermission/list'),
             meta: { title: '资源权限管理', keepAlive: true, permission: ['IamResourcePermission'] }
           },
           {
             path: '/system/scheduleJob/list',
-            name: 'ScheduleJob',
+            name: 'ScheduleJobIndex',
             component: () => import('@/views/system/scheduleJob/list'),
             meta: { title: '定时任务管理', keepAlive: true, permission: ['ScheduleJob'] }
           },
           {
             path: '/system/iamOperationLog/list',
-            name: 'IamOperationLogList',
+            name: 'IamOperationLogIndex',
             component: () => import('@/views/system/iamOperationLog/list'),
             meta: { title: '操作日志查看', keepAlive: true, permission: ['IamOperationLog'] }
           },
           {
             path: '/system/iamLoginTrace/list',
-            name: 'IamLoginTraceList',
+            name: 'IamLoginTraceIndex',
             component: () => import('@/views/system/iamLoginTrace/list'),
             meta: { title: '登录日志查看', keepAlive: true, permission: ['IamLoginTrace'] }
           }
