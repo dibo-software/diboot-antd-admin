@@ -25,7 +25,7 @@
               <a-select-option
                 v-for="(item, index) in jobList"
                 :key="index"
-                :value="item.jobClassName"
+                :value="item.jobName"
               >
                 {{ item.jobName }}
               </a-select-option>
@@ -75,46 +75,21 @@
           </a-form-item>
         </a-col>
         <a-col :span="12">
-          <a-form-item label="失败策略">
-            <a-input
-              placeholder="请输入失败策略"
+          <a-form-item label="初始化策略">
+            <a-select
+              :getPopupContainer="getPopupContainer"
+              placeholder="请选择初始化策略"
               v-decorator="[
-                'failStrategy',
+                'initStrategy',
                 {
-                  initialValue: model.failStrategy
+                  initialValue: model.initStrategy ? model.initStrategy : 'DO_NOTHING',
                 }
               ]"
-            />
-          </a-form-item>
-        </a-col>
-        <a-col :span="12">
-          <a-form-item label="间隔秒数">
-            <a-input-number
-              style="width: 100%"
-              :min="0"
-              placeholder="请输入间隔秒数"
-              v-decorator="[
-                'intervalSecond',
-                {
-                  initialValue: model.intervalSecond
-                }
-              ]"
-            />
-          </a-form-item>
-        </a-col>
-        <a-col :span="12">
-          <a-form-item label="重试次数">
-            <a-input-number
-              style="width: 100%"
-              placeholder="请输入重试次数"
-              :min="0"
-              v-decorator="[
-                'retryTimes',
-                {
-                  initialValue: model.retryTimes
-                }
-              ]"
-            />
+            >
+              <a-select-option value="DO_NOTHING">周期执行</a-select-option>
+              <a-select-option value="FIRE_AND_PROCEED">立即执行一次，并周期执行</a-select-option>
+              <a-select-option value="IGNORE_MISFIRES">超期立即执行，并周期执行</a-select-option>
+            </a-select>
           </a-form-item>
         </a-col>
         <a-col :span="12">
@@ -125,12 +100,12 @@
               v-decorator="[
                 'jobStatus',
                 {
-                  initialValue: model.jobStatus,
+                  initialValue: model.jobStatus ? model.jobStatus : 'A',
                 }
               ]"
             >
               <a-radio-button value="A">
-                正常
+                启用
               </a-radio-button>
               <a-radio-button value="I">
                 停用
@@ -172,7 +147,8 @@ export default {
       baseApi: '/scheduleJob',
       form: this.$form.createForm(this),
       jobList: [],
-      jobExample: {}
+      jobExample: {},
+      jobCron: {}
     }
   },
   methods: {
@@ -188,7 +164,8 @@ export default {
       if (res.code === 0) {
         this.jobList = res.data || []
         this.jobList.forEach(value => {
-          this.jobExample[value.jobClassName] = value.paramJsonExample
+          this.jobExample[value.jobName] = value.paramJsonExample
+          this.jobCron[value.jobName] = value.jobCron
         })
       } else {
         this.$message.error('无可执行定时任务！')
@@ -196,6 +173,7 @@ export default {
     },
     handleJobSelectChange (value) {
       this.$set(this.model, 'paramJson', this.jobExample[value])
+      this.$set(this.model, 'cron', this.jobCron[value])
     }
   }
 }

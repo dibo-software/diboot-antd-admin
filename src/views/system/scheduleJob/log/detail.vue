@@ -18,7 +18,7 @@
         {{ model.cron }}
       </a-descriptions-item>
       <a-descriptions-item label="状态">
-        {{ model.jobStatus }}
+        {{ model.runStatus | toStatusLabel}}
       </a-descriptions-item>
       <a-descriptions-item label="开始时间">
         {{ model.startTime }}
@@ -29,13 +29,10 @@
       <a-descriptions-item label="耗时(s)">
         {{ model.elapsedSeconds }}
       </a-descriptions-item>
-      <a-descriptions-item label="数据计数">
-        {{ model.dataCount }}
-      </a-descriptions-item>
       <a-descriptions-item label="执行结果信息">
         {{ model.executeMsg }}
       </a-descriptions-item>
-      <a-descriptions-item label="创建人ID">
+      <a-descriptions-item label="创建人">
         {{ model.createBy }}
       </a-descriptions-item>
       <a-descriptions-item label="创建时间">
@@ -59,16 +56,10 @@ export default {
   mixins: [detail],
   data () {
     return {
-      baseApi: '/scheduleJobLog'
+      baseApi: '/scheduleJob/log'
     }
   },
   methods: {
-    onAfterOpen() {
-  // 事件处理代码
-},
-    afterOpen () {
-			this.onAfterOpen()
-    }
   }
 }
 </script>
