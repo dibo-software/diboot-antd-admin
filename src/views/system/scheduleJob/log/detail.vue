@@ -8,10 +8,7 @@
     :body-style="{ paddingBottom: '80px' }"
   >
     <a-descriptions :column="2">
-      <a-descriptions-item label="job ID">
-        {{ model.jobId }}
-      </a-descriptions-item>
-      <a-descriptions-item label="job名称">
+      <a-descriptions-item label="任务名称">
         {{ model.jobName }}
       </a-descriptions-item>
       <a-descriptions-item label="定时表达式">
@@ -31,9 +28,6 @@
       </a-descriptions-item>
       <a-descriptions-item label="执行结果信息">
         {{ model.executeMsg }}
-      </a-descriptions-item>
-      <a-descriptions-item label="创建人">
-        {{ model.createBy }}
       </a-descriptions-item>
       <a-descriptions-item label="创建时间">
         {{ model.createTime }}

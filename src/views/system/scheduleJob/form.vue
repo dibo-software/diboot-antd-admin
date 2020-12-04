@@ -9,11 +9,11 @@
     <a-form layout="vertical" :form="form">
       <a-row :gutter="16">
         <a-col :span="12">
-          <a-form-item label="选择定时任务">
+          <a-form-item label="任务">
             <a-select
               @change="handleJobSelectChange"
               :getPopupContainer="getPopupContainer"
-              placeholder="请选择定时任务"
+              placeholder="请选择任务"
               v-decorator="[
                 'jobName',
                 {

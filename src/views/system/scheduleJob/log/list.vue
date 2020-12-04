@@ -11,11 +11,11 @@
         <a-form layout="inline">
           <a-row :gutter="18">
             <a-col :md="8" :sm="24">
-              <a-form-item label="job名称" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
+              <a-form-item label="任务名称" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
                 <a-select
                   v-model="queryParam.jobName"
                   :getPopupContainer="getPopupContainer"
-                  placeholder="请选择job名称"
+                  placeholder="请选择任务"
                 >
                   <a-select-option
                     v-for="(item, index) in jobList"

@@ -8,10 +8,10 @@
     :body-style="{ paddingBottom: '80px' }"
   >
     <a-descriptions :column="2">
-      <a-descriptions-item label="job编码">
+      <a-descriptions-item label="任务编码">
         {{ model.jobKey }}
       </a-descriptions-item>
-      <a-descriptions-item label="job名称">
+      <a-descriptions-item label="任务名称">
         {{ model.jobName }}
       </a-descriptions-item>
       <a-descriptions-item label="定时表达式">
