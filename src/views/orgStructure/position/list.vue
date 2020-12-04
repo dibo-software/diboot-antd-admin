@@ -28,7 +28,7 @@
           <a-col :lg="3" :sm="24" style="text-align: right;">
             <a-button
               v-action:create
-              type="default"
+              type="primary"
               icon="plus"
               @click="$refs.form.open()">
               新建岗位
