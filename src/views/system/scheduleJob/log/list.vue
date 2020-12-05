@@ -27,28 +27,17 @@
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
-              <a-form-item label="开始时间" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
-                <a-date-picker
-                  format="YYYY-MM-DD"
-                  v-model="queryParam.startTime"
-                  style="width: 100%;"
-                />
+              <a-form-item label="执行状态" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
+                <a-select v-model="queryParam.runStatus" placeholder="请选择执行状态" style="width: 100%;">
+                  <a-select-option value="S">
+                    成功
+                  </a-select-option>
+                  <a-select-option value="F">
+                    失败
+                  </a-select-option>
+                </a-select>
               </a-form-item>
             </a-col>
-            <template v-if="advanced">
-              <a-col :md="8" :sm="24">
-                <a-form-item label="执行状态" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
-                  <a-select v-model="queryParam.runStatus" placeholder="请选择执行状态" style="width: 100%;">
-                    <a-select-option value="S">
-                      成功
-                    </a-select-option>
-                    <a-select-option value="F">
-                      失败
-                    </a-select-option>
-                  </a-select>
-                </a-form-item>
-              </a-col>
-            </template>
             <a-col :md="!advanced && 8 || 24" :sm="24">
             <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
               <a-button type="primary" @click="onSearch">查询</a-button>

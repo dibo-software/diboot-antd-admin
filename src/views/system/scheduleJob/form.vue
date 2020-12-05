@@ -18,7 +18,7 @@
                 'jobName',
                 {
                   initialValue: model.jobName,
-                  rules: [{ required: true, message: 'job名称不能为空'}]
+                  rules: [{ required: true, message: '任务不能为空'}]
                 }
               ]"
             >
@@ -52,7 +52,8 @@
               v-decorator="[
                 'cron',
                 {
-                  initialValue: model.cron
+                  initialValue: model.cron,
+                  rules: [{ required: true, message: '定时表达式不能为空'}]
                 }
               ]"
             />
@@ -68,7 +69,8 @@
               v-decorator="[
                 'paramJson',
                 {
-                  initialValue: model.paramJson
+                  initialValue: model.paramJson,
+                  rules: [{ validator: this.checkJson }]
                 }
               ]"
             />
@@ -154,6 +156,21 @@ export default {
   methods: {
     afterOpen (id) {
       this.loadJobs()
+    },
+    /**
+     * 检查json数据格式
+     */
+    checkJson (rule, value, callback) {
+      if (!value) {
+        callback()
+      } else {
+        try {
+          JSON.parse(value)
+          callback()
+        } catch (err) {
+          callback(new Error('请输入正确的JSON格式'))
+        }
+      }
     },
     /**
      * 加载job
