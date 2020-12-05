@@ -1,6 +1,5 @@
 <template>
   <a-modal
-    title="Title"
     :visible="listState.visible"
     width="70%"
     :footer="null"
@@ -11,7 +10,7 @@
         <a-form layout="inline">
           <a-row :gutter="18">
             <a-col :md="8" :sm="24">
-              <a-form-item label="任务名称" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
+              <a-form-item label="任务" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
                 <a-select
                   v-model="queryParam.jobName"
                   :getPopupContainer="getPopupContainer"
@@ -109,7 +108,7 @@ export default {
       getListFromMixin: false,
       columns: [
         {
-          title: 'job名称',
+          title: '任务名称',
           dataIndex: 'jobName'
         },
         {
@@ -135,10 +134,6 @@ export default {
         {
           title: '执行结果信息',
           dataIndex: 'executeMsg'
-        },
-        {
-          title: '更新时间',
-          dataIndex: 'updateTime'
         },
         {
           title: '操作',
