@@ -156,7 +156,7 @@ import _ from 'lodash'
 import userSelectModal from '@/views/orgStructure/orgUser/UserSelectModal'
 
 export default {
-  name: 'OrgStructureDrawer',
+  name: 'IamOrgForm',
   data () {
     return {
       baseApi: '/iam/org',

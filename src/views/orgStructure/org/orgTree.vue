@@ -69,7 +69,7 @@
       </template>
     </a-tree>
     <org-detail ref="orgDetail"></org-detail>
-    <org-form :current-node-id="`${currentNode.id}`" ref="orgForm" @complete="loadTree()"></org-form>
+    <org-form :current-node-id="`${currentNode.key}`" ref="orgForm" @complete="loadTree()"></org-form>
   </div>
 </template>
 

@@ -24,12 +24,7 @@
       <a-col :span="16">
         <current-detail :current-node-id="currentNodeId"></current-detail>
         <a-card :bordered="false" style="padding-top: 0;">
-          <a-tabs v-action:position_list>
-            <a-tab-pane :tab="orgTabTitle" key="1">
-              <org-list :current-node-id="currentNodeId" @formComplete="$refs.orgTree.loadTree()" ref="orgList"></org-list>
-            </a-tab-pane>
-          </a-tabs>
-          <a-tabs v-permission-missing="['position_list']">
+          <a-tabs>
             <a-tab-pane :tab="orgTabTitle" key="0">
               <org-list :current-node-id="currentNodeId" @formComplete="$refs.orgTree.loadTree()" ref="orgList"></org-list>
             </a-tab-pane>
