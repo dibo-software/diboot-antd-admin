@@ -4,13 +4,32 @@
       <a-form layout="inline">
         <a-row :gutter="18">
                 <a-col :md="8" :sm="24">
-            <a-form-item label="job名称" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
-              <a-input v-model="queryParam.jobName" placeholder="" style="width: 100%;"/>
+            <a-form-item label="任务" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
+              <a-select
+                v-model="queryParam.jobName"
+                :getPopupContainer="getPopupContainer"
+                placeholder="请选择任务"
+              >
+                <a-select-option
+                  v-for="(item, index) in jobList"
+                  :key="index"
+                  :value="item.jobName"
+                >
+                  {{ item.jobName }}
+                </a-select-option>
+              </a-select>
             </a-form-item>
           </a-col>
           <a-col :md="8" :sm="24">
             <a-form-item label="状态" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
-              <a-input v-model="queryParam.jobStatus" placeholder="" style="width: 100%;"/>
+              <a-select v-model="queryParam.jobStatus" placeholder="请选择状态" style="width: 100%;">
+                <a-select-option value="A">
+                  启用
+                </a-select-option>
+                <a-select-option value="I">
+                  停用
+                </a-select-option>
+              </a-select>
             </a-form-item>
           </a-col>
           <a-col :md="8" :sm="24">
@@ -24,20 +43,30 @@
     </div>
     <div class="table-operator">
       <a-button v-action:create type="primary" icon="plus" @click="$refs.form.open()">新建</a-button>
+      <a-button v-action:detail icon="profile" @click="$refs.logList.open()">日志记录</a-button>
     </div>
-
 <a-table
       ref="table"
       size="default"
       :columns="columns"
       :dataSource="data"
       :pagination="pagination"
-      :scroll="{ x: 'calc(700px + 50%)', y: 240 }"
-      :loading="loadingData"@change="handleTableChange"
+      :scroll="{ x: 'calc(700px + 50%)'}"
+      :loading="loadingData"
+      @change="handleTableChange"
       rowKey="id"
     >
+      <span slot="initStrategy" slot-scope="text, record">
+        {{initStrategyEnum[record.initStrategy] || '周期执行'}}
+      </span>
+      <span slot="jobStatus" slot-scope="text, record">
+        <a-switch :key="loadingData" checked-children="正常" un-checked-children="停用" :defaultChecked="record.jobStatus === 'A'" @change="handleSwitchChange(record)"/>
+      </span>
       <span slot="action" slot-scope="text, record">
         <a v-action:detail href="javascript:;" @click="$refs.detail.open(record.id)">详情</a>
+        <a-divider type="vertical" />
+        <a v-action:update href="javascript:;" @click="handleExecuteOnce(record.id)">运行一次</a>
+        <a-divider type="vertical" />
         <a-divider v-action:detail v-permission="['update', 'delete']" type="vertical" />
         <a-dropdown v-permission="['update', 'delete']">
           <a class="ant-dropdown-link">
@@ -56,6 +85,7 @@
     </a-table>
     <diboot-form ref="form" @complete="getList"></diboot-form>
 		<diboot-detail ref="detail"></diboot-detail>
+    <diboot-log-list ref="logList"></diboot-log-list>
   </a-card>
 </template>
 
@@ -63,12 +93,14 @@
 import list from '@/components/diboot/mixins/list'
 import dibootForm from './form'
 import dibootDetail from './detail'
+import dibootLogList from './log/list'
 
 export default {
   name: 'ScheduleJobList',
   components: {
     dibootForm,
-    dibootDetail
+    dibootDetail,
+    dibootLogList
   },
   mixins: [list],
   data () {
@@ -77,7 +109,7 @@ export default {
       getListFromMixin: true,
       columns: [
         {
-          title: 'job名称',
+          title: '任务名称',
           dataIndex: 'jobName'
         },
         {
@@ -85,24 +117,15 @@ export default {
           dataIndex: 'cron'
         },
         {
-          title: '参数',
-          dataIndex: 'paramJson'
-        },
-        {
-          title: '失败策略',
-          dataIndex: 'failStrategy'
-        },
-        {
-          title: '重试次数',
-          dataIndex: 'retryTimes'
-        },
-        {
-          title: '间隔秒数',
-          dataIndex: 'intervalSecond'
+          title: '初始化策略',
+          dataIndex: 'initStrategy',
+          scopedSlots: { customRender: 'initStrategy' }
+
         },
         {
           title: '状态',
-          dataIndex: 'jobStatus'
+          dataIndex: 'jobStatus',
+          scopedSlots: { customRender: 'jobStatus' }
         },
         {
           title: '备注',
@@ -114,12 +137,75 @@ export default {
         },
         {
           title: '操作',
-          width: '150px',
+          width: '255px',
           fixed: 'right',
           dataIndex: 'action',
           scopedSlots: { customRender: 'action' }
         }
-      ]
+      ],
+      initStrategyEnum: {
+        DO_NOTHING: '周期执行',
+        FIRE_AND_PROCEED: '立即执行一次，并周期执行',
+        IGNORE_MISFIRES: '超期立即执行，并周期执行'
+      },
+      jobList: []
+    }
+  },
+  created () {
+    this.loadJobs()
+  },
+  methods: {
+
+    /**
+     * 加载job
+     * @returns {Promise<void>}
+     */
+    async loadJobs () {
+      const res = await this.$http.get('/scheduleJob/allJobs')
+      if (res.code === 0) {
+        this.jobList = res.data || []
+      } else {
+        this.$message.error('无可执行定时任务！')
+      }
+    },
+    /**
+     * 改变状态
+     * @param value
+     * @returns {Promise<void>}
+     */
+    async handleSwitchChange (value) {
+      const status = value.jobStatus === 'A' ? 'I' : 'A'
+      try {
+        const res = await this.$http.put(`/scheduleJob/${value.id}/${status}`)
+        if (res.code === 0) {
+          this.$message.success('修改任务状态成功！')
+        } else {
+          this.$message.error('修改任务状态失败！')
+        }
+      } catch (e) {
+        console.log(e)
+        this.$message.error('修改任务状态失败！')
+      }
+      this.getList()
+    },
+    /**
+     * 执行一次任务
+     * @param id
+     * @returns {Promise<void>}
+     */
+    async handleExecuteOnce (id) {
+      try {
+        const res = await this.$http.put(`/scheduleJob/executeOnce/${id}`)
+        if (res.code === 0) {
+          this.$message.success('发送执行任务成功！')
+        } else {
+          this.$message.error('发送执行任务失败！')
+        }
+      } catch (e) {
+        console.log(e)
+        this.$message.error('发送执行任务失败！')
+      }
+      this.getList()
     }
   }
 

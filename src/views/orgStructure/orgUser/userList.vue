@@ -1,0 +1,170 @@
+<template>
+  <div class="userList content">
+    <div class="table-page-search-wrapper">
+      <a-form layout="inline">
+        <a-row :gutter="18">
+          <a-col :md="8" :sm="24">
+            <a-form-item label="姓名">
+              <a-input v-model="queryParam.realname" placeholder=""/>
+            </a-form-item>
+          </a-col>
+          <a-col :md="8" :sm="24">
+            <a-form-item label="工号">
+              <a-input v-model="queryParam.userNum" placeholder=""/>
+            </a-form-item>
+          </a-col>
+          <template v-if="advanced">
+            <a-col :md="8" :sm="24">
+              <a-form-item label="性别">
+                <a-select v-model="queryParam.gender" placeholder="请选择">
+                  <a-select-option
+                    v-for="(gender, index) in more.genderKvList"
+                    :key="index"
+                    :value="gender.v"
+                  >
+                    {{ gender.k }}
+                  </a-select-option>
+                </a-select>
+              </a-form-item>
+            </a-col>
+            <a-col :md="8" :sm="24">
+              <a-form-item label="电话">
+                <a-input v-model="queryParam.mobilePhone" placeholder=""/>
+              </a-form-item>
+            </a-col>
+            <a-col :md="8" :sm="24">
+              <a-form-item label="邮箱">
+                <a-input v-model="queryParam.email" placeholder=""/>
+              </a-form-item>
+            </a-col>
+          </template>
+          <a-col :md="!advanced && 8 || 24" :sm="24">
+            <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
+              <a-button type="primary" @click="onSearch">查询</a-button>
+              <a-button style="margin-left: 8px" @click="reset">重置</a-button>
+              <a @click="toggleAdvanced" style="margin-left: 8px">
+                {{ advanced ? '收起' : '展开' }}
+                <a-icon :type="advanced ? 'up' : 'down'"/>
+              </a>
+            </span>
+          </a-col>
+        </a-row>
+      </a-form>
+    </div>
+
+    <div class="table-operator">
+      <a-button type="primary" icon="plus" @click="$refs.userForm.open()">添加用户</a-button>
+      <a-button type="default" icon="cloud-upload" @click="$refs.userImport.open()">批量导入</a-button>
+      <a-button type="default" icon="cloud-download" @click="exportData">导出</a-button>
+    </div>
+
+    <a-table
+      ref="table"
+      size="default"
+      :columns="columns"
+      :dataSource="data"
+      :pagination="pagination"
+      :loading="loadingData"
+      @change="handleTableChange"
+      rowKey="id"
+    >
+      <span slot="action" slot-scope="text, record">
+        <a @click="$refs.userDetail.open(record.id)">详情</a>
+        <a-divider type="vertical" />
+        <a @click="$refs.userPositionRefForm.open(record)">岗位</a>
+        <a-divider type="vertical" />
+        <a-dropdown>
+          <a class="ant-dropdown-link">
+            更多 <a-icon type="down" />
+          </a>
+          <a-menu slot="overlay">
+            <a-menu-item>
+              <a @click="$refs.userForm.open(record.id)">编辑</a>
+            </a-menu-item>
+            <a-menu-item>
+              <a href="javascript:;" @click="remove(record.id)">删除</a>
+            </a-menu-item>
+          </a-menu>
+        </a-dropdown>
+      </span>
+    </a-table>
+
+    <user-position-ref-form ref="userPositionRefForm"></user-position-ref-form>
+    <user-form ref="userForm" :current-node-id="currentNodeId" @complete="getList"></user-form>
+    <user-detail ref="userDetail"></user-detail>
+    <user-import ref="userImport" :current-node-id="currentNodeId" @complete="getList"></user-import>
+  </div>
+</template>
+
+<script>
+import list from '@/components/diboot/mixins/list'
+import userDetail from '@/views/orgStructure/orgUser/userDetail'
+import userForm from '@/views/orgStructure/orgUser/userForm'
+import userImport from '@/views/orgStructure/orgUser/userImport'
+import userPositionRefForm from '@/views/orgStructure/orgUser/userPositionRefForm'
+
+export default {
+  name: 'UserList',
+  components: {
+    userDetail,
+    userForm,
+    userImport,
+    userPositionRefForm
+  },
+  mixins: [list],
+  data () {
+    return {
+      baseApi: '/iam/user',
+      exportApi: '/excel/export',
+      getMore: true,
+      // 表头
+      columns: [
+        {
+          title: '姓名',
+          dataIndex: 'realname'
+        },
+        {
+          title: '用户编号',
+          dataIndex: 'userNum'
+        },
+        {
+          title: '性别',
+          dataIndex: 'genderLabel'
+        },
+        {
+          title: '电话',
+          dataIndex: 'mobilePhone'
+        },
+        {
+          title: '邮箱',
+          dataIndex: 'email'
+        },
+        {
+          title: '操作',
+          dataIndex: 'action',
+          width: '180px',
+          scopedSlots: { customRender: 'action' }
+        }
+      ]
+    }
+  },
+  watch: {
+    currentNodeId: function (val) {
+      if (!val || val === '0' || val === 0) {
+        this.customQueryParam = {}
+      } else {
+        this.customQueryParam = { orgId: val }
+      }
+      this.getList()
+    }
+  },
+  props: {
+    currentNodeId: {
+      type: String,
+      default: '0'
+    }
+  }
+}
+</script>
+<style lang="less" scoped>
+</style>

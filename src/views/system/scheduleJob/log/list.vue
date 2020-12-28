@@ -1,30 +1,44 @@
 <template>
-  <a-card :bordered="false">
-<div class="table-page-search-wrapper">
-      <a-form layout="inline">
-        <a-row :gutter="18">
-                <a-col :md="8" :sm="24">
-            <a-form-item label="job名称" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
-              <a-input v-model="queryParam.jobName" placeholder="" style="width: 100%;"/>
-            </a-form-item>
-          </a-col>
-          <a-col :md="8" :sm="24">
-            <a-form-item label="开始时间" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
-              <a-date-picker
-                format="YYYY-MM-DD"
-                v-model="queryParam.startTime"
-                style="width: 100%;"
-              />
-          </a-form-item>
-        </a-col>
-          <template v-if="advanced">
-          <a-col :md="8" :sm="24">
-            <a-form-item label="状态" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
-              <a-input v-model="queryParam.jobStatus" placeholder="" style="width: 100%;"/>
-            </a-form-item>
-          </a-col>
-          </template>
-          <a-col :md="!advanced && 8 || 24" :sm="24">
+  <a-modal
+    :visible="listState.visible"
+    width="70%"
+    :footer="null"
+    @cancel="handleCancel"
+  >
+    <a-card :bordered="false">
+      <div class="table-page-search-wrapper">
+        <a-form layout="inline">
+          <a-row :gutter="18">
+            <a-col :md="8" :sm="24">
+              <a-form-item label="任务" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
+                <a-select
+                  v-model="queryParam.jobName"
+                  :getPopupContainer="getPopupContainer"
+                  placeholder="请选择任务"
+                >
+                  <a-select-option
+                    v-for="(item, index) in jobList"
+                    :key="index"
+                    :value="item.jobName"
+                  >
+                    {{ item.jobName }}
+                  </a-select-option>
+                </a-select>
+              </a-form-item>
+            </a-col>
+            <a-col :md="8" :sm="24">
+              <a-form-item label="执行状态" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
+                <a-select v-model="queryParam.runStatus" placeholder="请选择执行状态" style="width: 100%;">
+                  <a-select-option value="S">
+                    成功
+                  </a-select-option>
+                  <a-select-option value="F">
+                    失败
+                  </a-select-option>
+                </a-select>
+              </a-form-item>
+            </a-col>
+            <a-col :md="!advanced && 8 || 24" :sm="24">
             <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
               <a-button type="primary" @click="onSearch">查询</a-button>
               <a-button style="margin-left: 8px" @click="reset">重置</a-button>
@@ -33,20 +47,22 @@
                 <a-icon :type="advanced ? 'up' : 'down'"/>
               </a>
             </span>
-          </a-col>
-        </a-row>
-      </a-form>
-    </div>
-<a-table
-      ref="table"
-      size="default"
-      :columns="columns"
-      :dataSource="data"
-      :pagination="pagination":loading="loadingData"@change="handleTableChange"
-      rowKey="id"
-    >
+            </a-col>
+          </a-row>
+        </a-form>
+      </div>
+      <a-table
+        ref="table"
+        size="default"
+        :columns="columns"
+        :dataSource="data"
+        :pagination="pagination":loading="loadingData" @change="handleTableChange"
+        rowKey="id"
+      >
       <span slot="action" slot-scope="text, record">
         <a v-action:detail href="javascript:;" @click="$refs.detail.open(record.id)">详情</a>
+        <a-divider type="vertical" />
+        <a v-action:update href="javascript:;" @click="handleExecuteOnce(record.jobId)">运行一次</a>
         <a-divider v-action:detail v-permission="['update', 'delete']" type="vertical" />
         <a-dropdown v-permission="['update', 'delete']">
           <a class="ant-dropdown-link">
@@ -59,9 +75,10 @@
           </a-menu>
         </a-dropdown>
       </span>
-    </a-table>
-		<diboot-detail ref="detail"></diboot-detail>
-  </a-card>
+      </a-table>
+      <diboot-detail ref="detail"></diboot-detail>
+    </a-card>
+  </a-modal>
 </template>
 
 <script>
@@ -76,11 +93,11 @@ export default {
   mixins: [list],
   data () {
     return {
-      baseApi: '/scheduleJobLog',
-      getListFromMixin: true,
+      baseApi: '/scheduleJob/log',
+      getListFromMixin: false,
       columns: [
         {
-          title: 'job名称',
+          title: '任务名称',
           dataIndex: 'jobName'
         },
         {
@@ -101,31 +118,67 @@ export default {
         },
         {
           title: '状态',
-          dataIndex: 'jobStatus'
-        },
-        {
-          title: '数据计数',
-          dataIndex: 'dataCount'
+          dataIndex: 'runStatusLabel'
         },
         {
           title: '执行结果信息',
           dataIndex: 'executeMsg'
         },
         {
-          title: '创建人ID',
-          dataIndex: 'createBy'
-        },
-        {
-          title: '更新时间',
-          dataIndex: 'updateTime'
-        },
-        {
           title: '操作',
-          width: '150px',
+          width: '255px',
           dataIndex: 'action',
           scopedSlots: { customRender: 'action' }
         }
-      ]
+      ],
+      listState: {
+        visible: false
+      },
+      jobList: []
+    }
+  },
+  created () {
+    this.loadJobs()
+  },
+  methods: {
+
+    /**
+     * 加载job
+     * @returns {Promise<void>}
+     */
+    async loadJobs () {
+      const res = await this.$http.get('/scheduleJob/allJobs')
+      if (res.code === 0) {
+        this.jobList = res.data || []
+      } else {
+        this.$message.error('无可执行定时任务！')
+      }
+    },
+    open () {
+      this.listState.visible = true
+      this.getList()
+    },
+    handleCancel () {
+      this.listState.visible = false
+    },
+    /**
+     * 执行一次任务
+     * @param id
+     * @returns {Promise<void>}
+     */
+    async handleExecuteOnce (id) {
+      try {
+        const res = await this.$http.put(`/scheduleJob/executeOnce/${id}`)
+        if (res.code === 0) {
+          this.$message.success('发送执行任务成功！')
+        } else {
+          this.$message.error('发送执行任务失败！')
+        }
+      } catch (e) {
+        console.log(e)
+        this.$message.error('发送执行任务失败！')
+      }
+      this.getList()
     }
   }
 

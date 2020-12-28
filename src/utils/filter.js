@@ -31,3 +31,6 @@ Vue.filter('dayjs', function (dataStr, pattern = 'YYYY-MM-DD HH:mm:ss') {
 Vue.filter('moment', function (dataStr, pattern = 'YYYY-MM-DD HH:mm:ss') {
   return moment(dataStr).format(pattern)
 })
+Vue.filter('toStatusLabel', function (resultStatus, enumR = { S: '成功', F: '失败' }) {
+  return enumR[resultStatus]
+})

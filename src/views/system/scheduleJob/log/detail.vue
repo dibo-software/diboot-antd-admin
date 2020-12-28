@@ -8,17 +8,14 @@
     :body-style="{ paddingBottom: '80px' }"
   >
     <a-descriptions :column="2">
-      <a-descriptions-item label="job ID">
-        {{ model.jobId }}
-      </a-descriptions-item>
-      <a-descriptions-item label="job名称">
+      <a-descriptions-item label="任务名称">
         {{ model.jobName }}
       </a-descriptions-item>
       <a-descriptions-item label="定时表达式">
         {{ model.cron }}
       </a-descriptions-item>
       <a-descriptions-item label="状态">
-        {{ model.jobStatus }}
+        {{ model.runStatus | toStatusLabel}}
       </a-descriptions-item>
       <a-descriptions-item label="开始时间">
         {{ model.startTime }}
@@ -29,20 +26,11 @@
       <a-descriptions-item label="耗时(s)">
         {{ model.elapsedSeconds }}
       </a-descriptions-item>
-      <a-descriptions-item label="数据计数">
-        {{ model.dataCount }}
-      </a-descriptions-item>
       <a-descriptions-item label="执行结果信息">
         {{ model.executeMsg }}
       </a-descriptions-item>
-      <a-descriptions-item label="创建人ID">
-        {{ model.createBy }}
-      </a-descriptions-item>
       <a-descriptions-item label="创建时间">
         {{ model.createTime }}
-      </a-descriptions-item>
-      <a-descriptions-item label="更新时间">
-        {{ model.updateTime }}
       </a-descriptions-item>
     </a-descriptions>
     <div class="drawer-footer">
@@ -59,16 +47,10 @@ export default {
   mixins: [detail],
   data () {
     return {
-      baseApi: '/scheduleJobLog'
+      baseApi: '/scheduleJob/log'
     }
   },
   methods: {
-    onAfterOpen() {
-  // 事件处理代码
-},
-    afterOpen () {
-			this.onAfterOpen()
-    }
   }
 }
 </script>
