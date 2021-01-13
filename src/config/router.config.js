@@ -64,43 +64,43 @@ export const asyncRouterMap = [
             path: '/system/dictionary/list',
             name: 'DictionaryIndex',
             component: () => import('@/views/system/dictionary/list'),
-            meta: { title: '数据字典管理', keepAlive: true, permission: ['Dictionary'] }
+            meta: { title: '数据字典管理', keepAlive: false, permission: ['Dictionary'] }
           },
           {
             path: '/system/iamUser/index',
             name: 'IamUserIndex',
             component: () => import('@/views/system/iamUser/Index'),
-            meta: { title: '系统用户管理', keepAlive: true, permission: ['IamUser'] }
+            meta: { title: '系统用户管理', keepAlive: false, permission: ['IamUser'] }
           },
           {
             path: '/system/iamRole/list',
             name: 'IamRoleIndex',
             component: () => import('@/views/system/iamRole/list'),
-            meta: { title: '角色资源管理', keepAlive: true, permission: ['IamRole'] }
+            meta: { title: '角色资源管理', keepAlive: false, permission: ['IamRole'] }
           },
           {
             path: '/system/iamResourcePermission/list',
             name: 'IamResourcePermissionIndex',
             component: () => import('@/views/system/iamResourcePermission/list'),
-            meta: { title: '资源权限管理', keepAlive: true, permission: ['IamResourcePermission'] }
+            meta: { title: '资源权限管理', keepAlive: false, permission: ['IamResourcePermission'] }
           },
           {
             path: '/system/scheduleJob/list',
             name: 'ScheduleJobIndex',
             component: () => import('@/views/system/scheduleJob/list'),
-            meta: { title: '定时任务管理', keepAlive: true, permission: ['ScheduleJob'] }
+            meta: { title: '定时任务管理', keepAlive: false, permission: ['ScheduleJob'] }
           },
           {
             path: '/system/iamOperationLog/list',
             name: 'IamOperationLogIndex',
             component: () => import('@/views/system/iamOperationLog/list'),
-            meta: { title: '操作日志查看', keepAlive: true, permission: ['IamOperationLog'] }
+            meta: { title: '操作日志查看', keepAlive: false, permission: ['IamOperationLog'] }
           },
           {
             path: '/system/iamLoginTrace/list',
             name: 'IamLoginTraceIndex',
             component: () => import('@/views/system/iamLoginTrace/list'),
-            meta: { title: '登录日志查看', keepAlive: true, permission: ['IamLoginTrace'] }
+            meta: { title: '登录日志查看', keepAlive: false, permission: ['IamLoginTrace'] }
           }
         ]
       },
