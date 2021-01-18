@@ -27,12 +27,6 @@
           </a-col>
           <a-col :lg="5" :sm="24" style="text-align: right;">
             <a-button
-              v-action:sort
-              @click="$refs.sort.open()"
-              icon="drag"
-              style="margin-right: 8px;"
-              type="default">排序</a-button>
-            <a-button
               v-action:create
               type="primary"
               icon="plus"
@@ -95,7 +89,6 @@
 
     <diboot-form ref="form" @complete="getList"></diboot-form>
     <diboot-detail ref="detail"></diboot-detail>
-    <tree-sort ref="sort" @complete="getList"></tree-sort>
   </a-card>
 </template>
 
@@ -103,13 +96,11 @@
 import list from '@/components/diboot/mixins/list'
 import dibootForm from './form'
 import dibootDetail from './detail'
-import treeSort from '@/views/system/dictionary/treeSort'
 export default {
   name: 'DictionaryList',
   components: {
     dibootForm,
-    dibootDetail,
-    treeSort
+    dibootDetail
   },
   mixins: [ list ],
   data () {
