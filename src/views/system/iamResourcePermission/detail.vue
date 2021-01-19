@@ -17,19 +17,7 @@
         <detail-list-item term="菜单编码">{{ model.resourceCode }}</detail-list-item>
       </detail-list>
       <detail-list :col="1">
-        <detail-list-item term="页面按钮/权限">
-          <template v-if="model.permissionList && model.permissionList.length > 0">
-            <a-tag color="cyan" :key="i" v-for="(permission,i) in model.permissionList">
-              {{ `${permission.displayName}[${permission.resourceCode}]` }}
-            </a-tag>
-          </template>
-          <template v-else>
-            无
-          </template>
-        </detail-list-item>
-      </detail-list>
-      <detail-list :col="1">
-        <detail-list-item term="接口列表">
+        <detail-list-item term="页面接口列表">
           <template v-if="model.apiSetList && model.apiSetList.length > 0">
             <a-tag color="green" :key="i" v-for="(api,i) in model.apiSetList">
               {{ api }}
@@ -40,6 +28,38 @@
           </template>
         </detail-list-item>
       </detail-list>
+      <detail-list :col="1">
+        <detail-list-item term="页面资源权限">
+          <template v-if="!model.permissionList || model.permissionList.length === 0">
+            无
+          </template>
+        </detail-list-item>
+      </detail-list>
+      <a-tabs :default-active-key="0" v-if="model.permissionList && model.permissionList.length > 0">
+        <a-tab-pane
+          v-for="(p, i) in model.permissionList"
+          :key="i"
+          :tab="p.displayName">
+          <detail-list :col="1">
+            <detail-list-item term="名称">{{ p.displayName }}</detail-list-item>
+          </detail-list>
+          <detail-list :col="1">
+            <detail-list-item term="编码">{{ p.resourceCode }}</detail-list-item>
+          </detail-list>
+          <detail-list :col="1">
+            <detail-list-item term="接口列表">
+              <template v-if="p.apiSetList && p.apiSetList.length > 0">
+                <a-tag color="green" :key="j" v-for="(api,j) in p.apiSetList">
+                  {{ api }}
+                </a-tag>
+              </template>
+              <template v-else>
+                无
+              </template>
+            </detail-list-item>
+          </detail-list>
+        </a-tab-pane>
+      </a-tabs>
     </a-spin>
 
     <div class="drawer-footer">
