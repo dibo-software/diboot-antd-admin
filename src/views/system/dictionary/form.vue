@@ -80,7 +80,7 @@
           </a-form-item>
         </a-col>
       </a-row>
-      <a-row :gutter="16" v-show="!childItem.itemName && !childItem.itemValue">
+      <a-row :gutter="16" v-show="children && children.length > 0 && !childItem.itemName && !childItem.itemValue">
         <a-col :span="24">
           <a-form-item label="拖拽排序">
             <draggable element="span" v-model="children">
