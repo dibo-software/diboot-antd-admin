@@ -111,7 +111,7 @@ import list from '@/components/diboot/mixins/list'
 import dibootDetail from './detail'
 
 export default {
-  name: 'TableList',
+  name: 'IamOperationLogList',
   components: {
     dibootDetail
   },
