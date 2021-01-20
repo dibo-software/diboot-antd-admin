@@ -120,6 +120,10 @@ export default {
       // 表头
       columns: [
         {
+          title: '部门',
+          dataIndex: 'orgShortName'
+        },
+        {
           title: '姓名',
           dataIndex: 'realname'
         },
