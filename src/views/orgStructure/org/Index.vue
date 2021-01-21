@@ -3,17 +3,6 @@
     <a-row :gutter="16">
       <a-col :span="8">
         <a-card :bordered="false">
-          <a-row style="margin-bottom: 10px;">
-            <a-col :span="24">
-              <a-button-group block>
-                <a-button
-                  v-action:drag
-                  @click="$refs.orgTreeSort.open()"
-                  icon="drag"
-                  type="default">排序</a-button>
-              </a-button-group>
-            </a-col>
-          </a-row>
           <org-tree
             :can-change="true"
             @changeCurrentNode="node => this.currentNodeId = `${node.value ? node.value : '0'}`"

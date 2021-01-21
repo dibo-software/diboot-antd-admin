@@ -1,8 +1,8 @@
 <template>
   <div class="diboot-tree">
-    <a-row style="margin-bottom: 10px;">
+    <a-row style="margin-bottom: 10px;" v-if="currentNode.title">
       <a-col :span="24">
-        <a-alert v-if="currentNode.title" type="info" showIcon>
+        <a-alert type="info" showIcon>
           <template slot="message">
             {{ label }}：{{ currentNode.title }}
             <a

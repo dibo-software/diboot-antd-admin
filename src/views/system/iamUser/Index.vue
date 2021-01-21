@@ -2,7 +2,7 @@
   <a-card :bordered="false">
     <a-row v-permission="['orgTree']">
       <a-col :span="6">
-        <org-tree ref="orgTree" @changeCurrentNode="onChangeCurrentNode" />
+        <org-tree @changeCurrentNode="node => this.currentNodeId = `${node.value ? node.value : '0'}`" ref="orgTree"></org-tree>
       </a-col>
       <a-col :span="18">
         <user-list :current-node-id="currentNodeId" ref="userList" />
@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import orgTree from '@/views/system/iamOrg/orgTree'
+import orgTree from '@/views/orgStructure/org/orgTree'
 import userList from './list'
 
 export default {
@@ -25,12 +25,6 @@ export default {
   data () {
     return {
       currentNodeId: ''
-    }
-  },
-  methods: {
-    onChangeCurrentNode (value) {
-      // 事件处理代码
-      this.currentNodeId = value
     }
   }
 

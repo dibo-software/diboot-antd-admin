@@ -1,94 +1,68 @@
 <template>
-  <div class="orgTree">
-    <a-row style="margin-bottom: 10px;">
-      <a-col :span="24">
-        <a-alert v-if="currentNode.title" type="info" showIcon>
-          <template slot="message">
-            {{ currentNode.title }}
-            <a
-              v-if="showCancel"
-              @click="cancelSelect"
-              href="javascript:;"
-              style="margin-left: 10px;">取消选中</a>
-            <a
-              v-if="canChange"
-              v-action:create
-              @click="$refs.orgForm.open(undefined)"
-              href="javascript:;"
-              style="margin-left: 10px;">
-              <a-icon type="plus" />
-            </a>
-            <a
-              v-if="canChange"
-              v-action:update
-              @click="$refs.orgForm.open(currentNodeId)"
-              href="javascript:;"
-              style="margin-left: 10px;">
-              <a-icon type="edit" />
-            </a>
-            <a
-              v-if="canChange"
-              v-action:detail
-              @click="$refs.orgDetail.open(currentNodeId)"
-              href="javascript:;"
-              style="margin-left: 10px;">
-              <a-icon type="eye" />
-            </a>
-            <a
-              v-if="canChange"
-              v-action:delete
-              @click="remove(currentNodeId)"
-              href="javascript:;"
-              style="margin-left: 10px;">
-              <a-icon type="delete" />
-            </a>
-          </template>
-        </a-alert>
-      </a-col>
-    </a-row>
-    <a-row>
-      <a-col :span="24">
-        <a-input-search style="margin-bottom: 8px" placeholder="组织名称" @change="onSearchChange" />
-      </a-col>
-    </a-row>
-    <a-tree
-      v-if="treeList.length > 0"
-      @select="onTreeSelect"
-      @expand="onExpand"
-      :expandedKeys="expandedKeys"
-      :autoExpandParent="autoExpandParent"
-      :selectedKeys="selectedKeys"
-      :treeData="treeList">
-      <template slot="title" slot-scope="{title}">
-        <span v-if="title.indexOf(searchValue) > -1">
-          {{ title.substr(0, title.indexOf(searchValue)) }}
-          <span style="color: #f50">{{ searchValue }}</span>
-          {{ title.substr(title.indexOf(searchValue) + searchValue.length) }}
-        </span>
-        <span v-else>{{ title }}</span>
+  <div class="content">
+    <div v-permission="['create', 'sortList']" class="table-operator" v-if="canChange">
+      <a-button v-action:create type="primary" icon="plus" @click="$refs.orgForm.open()">新增</a-button>
+      <a-button v-action:sortList type="default" icon="drag" @click="$refs.orgTreeSort.open()">排序</a-button>
+      <slot name="extra"></slot>
+    </div>
+    <tree
+      ref="tree"
+      nodeName="shortName"
+      :tree-api="treeApi"
+      :showCancel="showCancel"
+      @changeCurrentNode="onChangeCurrentNode"
+    >
+      <template slot="header" slot-scope="currentNode">
+        <a
+          v-if="canChange"
+          v-action:update
+          @click="$refs.orgForm.open(currentNode.currentNodeId)"
+          title="编辑"
+          href="javascript:;"
+          style="margin-left: 10px;">
+          <a-icon type="edit" />
+        </a>
+        <a
+          v-if="canChange"
+          v-action:delete
+          @click="remove(currentNode.currentNodeId)"
+          title="删除"
+          href="javascript:;"
+          style="margin-left: 10px;">
+          <a-icon type="delete" />
+        </a>
       </template>
-    </a-tree>
-    <org-detail ref="orgDetail"></org-detail>
-    <org-form :current-node-id="`${currentNode.key}`" ref="orgForm" @complete="loadTree()"></org-form>
+    </tree>
+    <org-form :current-node-id="`${currentNode.value}`" ref="orgForm" @complete="$refs.tree.loadTree()" @changeKey="$emit('changeCurrentNode', currentNode.value)"></org-form>
+    <org-tree-sort ref="orgTreeSort" @complete="$refs.tree.loadTree()"></org-tree-sort>
   </div>
 </template>
 
 <script>
-import tree from '@/components/diboot/mixins/tree'
+import tree from '@/components/diboot/components/tree/index'
 import orgForm from './form'
-import orgDetail from './detail'
+import orgTreeSort from './treeSort'
 import { dibootApi } from '@/utils/request'
+
 export default {
   name: 'OrgTree',
+  components: {
+    tree,
+    orgForm,
+    orgTreeSort
+  },
   data () {
     return {
+      currentNode: { value: '0' },
       baseApi: '/iam/org',
-      treeListApi: '/iam/org/tree'
+      treeApi: '/iam/org/tree'
     }
   },
   methods: {
-    afterTreeSelect () {
-      this.$emit('changeCurrentNode', this.currentNode)
+    onChangeCurrentNode (currentNode) {
+      // 事件处理代码
+      this.currentNode = currentNode
+      this.$emit('changeCurrentNode', currentNode)
     },
     remove (id) {
       return new Promise((resolve, reject) => {
@@ -107,8 +81,8 @@ export default {
                   description: '已删除该数据',
                   duration: 3
                 })
-                _this.cancelSelect()
-                _this.loadTree()
+                _this.$refs.tree.cancelSelect()
+                _this.$refs.tree.loadTree()
                 resolve(res.data)
               } else {
                 _this.$notification.error({
@@ -130,39 +104,8 @@ export default {
           }
         })
       })
-    },
-    /***
-     * orgList格式化
-     * @param orgList
-     * @returns {undefined}
-     */
-    treeListFormatter (orgList) {
-      if (!orgList || orgList.length === 0) {
-        return undefined
-      }
-      const formatterOrgList = []
-      orgList.forEach(org => {
-        const formatterOrg = {}
-        formatterOrg.key = org.id
-        formatterOrg.value = org.id
-        formatterOrg.title = org.shortName
-        formatterOrg.scopedSlots = { title: 'title' }
-        const children = this.treeListFormatter(org.children)
-        if (children !== undefined) {
-          formatterOrg.children = children
-        }
-        formatterOrgList.push(formatterOrg)
-      })
-      // 如果需要默认展开所有，则初始化展开数据
-      this.expandedKeys = this.getInitSmartExpandedKeys(formatterOrgList, 5)
-      return formatterOrgList
     }
   },
-  components: {
-    orgForm,
-    orgDetail
-  },
-  mixins: [tree],
   props: {
     showCancel: {
       type: Boolean,
@@ -172,14 +115,11 @@ export default {
     },
     canChange: {
       type: Boolean,
-      default: () => {
-        return false
-      }
+      default: false
     }
   }
+
 }
 </script>
-
-<style scoped>
-
+<style lang="less" scoped>
 </style>
