@@ -24,6 +24,15 @@
         </a>
         <a
           v-if="canChange"
+          v-action:detail
+          @click="$refs.orgDetail.open(currentNode.currentNodeId)"
+          title="详情"
+          href="javascript:;"
+          style="margin-left: 10px;">
+          <a-icon type="eye" />
+        </a>
+        <a
+          v-if="canChange"
           v-action:delete
           @click="remove(currentNode.currentNodeId)"
           title="删除"
@@ -34,6 +43,7 @@
       </template>
     </tree>
     <org-form :current-node-id="`${currentNode.value}`" ref="orgForm" @complete="$refs.tree.loadTree()" @changeKey="$emit('changeCurrentNode', currentNode.value)"></org-form>
+    <org-detail ref="orgDetail"></org-detail>
     <org-tree-sort ref="orgTreeSort" @complete="$refs.tree.loadTree()"></org-tree-sort>
   </div>
 </template>
@@ -41,6 +51,7 @@
 <script>
 import tree from '@/components/diboot/components/tree/index'
 import orgForm from './form'
+import orgDetail from './detail'
 import orgTreeSort from './treeSort'
 import { dibootApi } from '@/utils/request'
 
@@ -49,6 +60,7 @@ export default {
   components: {
     tree,
     orgForm,
+    orgDetail,
     orgTreeSort
   },
   data () {
