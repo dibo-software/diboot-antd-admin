@@ -53,9 +53,9 @@
     </div>
 
     <div class="table-operator">
-      <a-button type="primary" icon="plus" @click="$refs.userForm.open()">添加用户</a-button>
-      <a-button type="default" icon="cloud-upload" @click="$refs.userImport.open()">批量导入</a-button>
-      <a-button type="default" icon="cloud-download" @click="exportData">导出</a-button>
+      <a-button v-action:create type="primary" icon="plus" @click="$refs.userForm.open()">添加用户</a-button>
+      <a-button v-action:import type="default" icon="cloud-upload" @click="$refs.userImport.open()">批量导入</a-button>
+      <a-button v-action:export type="default" icon="cloud-download" @click="exportData">导出</a-button>
     </div>
 
     <a-table
@@ -69,19 +69,19 @@
       rowKey="id"
     >
       <span slot="action" slot-scope="text, record">
-        <a @click="$refs.userDetail.open(record.id)">详情</a>
-        <a-divider type="vertical" />
-        <a @click="$refs.userPositionRefForm.open(record)">岗位</a>
-        <a-divider type="vertical" />
-        <a-dropdown>
+        <a v-action:detail @click="$refs.userDetail.open(record.id)">详情</a>
+        <a-divider v-action:detail v-permission="['position', 'update', 'delete']" type="vertical" />
+        <a v-action:position @click="$refs.userPositionRefForm.open(record)">岗位</a>
+        <a-divider v-action:position v-permission="['update', 'delete']" type="vertical" />
+        <a-dropdown v-permission="['update', 'delete']">
           <a class="ant-dropdown-link">
             更多 <a-icon type="down" />
           </a>
           <a-menu slot="overlay">
-            <a-menu-item>
+            <a-menu-item v-action:update>
               <a @click="$refs.userForm.open(record.id)">编辑</a>
             </a-menu-item>
-            <a-menu-item>
+            <a-menu-item v-action:delete>
               <a href="javascript:;" @click="remove(record.id)">删除</a>
             </a-menu-item>
           </a-menu>

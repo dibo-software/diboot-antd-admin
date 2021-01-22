@@ -9,7 +9,7 @@
   >
     <div class="table-operator">
       <a-button type="primary" icon="plus" @click="addUserPosition">添加人员岗位设置</a-button>
-      <a-button type="default" icon="plus" @click="$refs.positionForm.open()">添加岗位</a-button>
+      <a-button v-action:addPosition type="default" icon="plus" @click="$refs.positionForm.open()">添加岗位</a-button>
     </div>
     <a-form-model ref="form" layout="inline" :model="form" :rules="formRules">
       <template v-for="(item, i) in form.userPositionList">

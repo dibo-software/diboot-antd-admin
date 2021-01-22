@@ -1,8 +1,8 @@
 <template>
   <div class="content">
-    <div v-permission="['create', 'sortList']" class="table-operator" v-if="canChange">
+    <div v-permission="['create', 'sort']" class="table-operator" v-if="canChange">
       <a-button v-action:create type="primary" icon="plus" @click="$refs.orgForm.open()">新增</a-button>
-      <a-button v-action:sortList type="default" icon="drag" @click="$refs.orgTreeSort.open()">排序</a-button>
+      <a-button v-action:sort type="default" icon="drag" @click="$refs.orgTreeSort.open()">排序</a-button>
       <slot name="extra"></slot>
     </div>
     <tree

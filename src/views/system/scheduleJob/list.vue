@@ -1,9 +1,9 @@
 <template>
   <a-card :bordered="false">
-<div class="table-page-search-wrapper">
+    <div class="table-page-search-wrapper">
       <a-form layout="inline">
         <a-row :gutter="18">
-                <a-col :md="8" :sm="24">
+          <a-col :md="8" :sm="24">
             <a-form-item label="任务" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
               <a-select
                 v-model="queryParam.jobName"
@@ -43,9 +43,9 @@
     </div>
     <div class="table-operator">
       <a-button v-action:create type="primary" icon="plus" @click="$refs.form.open()">新建</a-button>
-      <a-button v-action:detail icon="profile" @click="$refs.logList.open()">日志记录</a-button>
+      <a-button v-action:logList icon="profile" @click="$refs.logList.open()">日志记录</a-button>
     </div>
-<a-table
+    <a-table
       ref="table"
       size="default"
       :columns="columns"
@@ -57,17 +57,27 @@
       rowKey="id"
     >
       <span slot="initStrategy" slot-scope="text, record">
-        {{initStrategyEnum[record.initStrategy] || '周期执行'}}
+        {{ initStrategyEnum[record.initStrategy] || '周期执行' }}
       </span>
       <span slot="jobStatus" slot-scope="text, record">
-        <a-switch :key="loadingData" checked-children="正常" un-checked-children="停用" :defaultChecked="record.jobStatus === 'A'" @change="handleSwitchChange(record)"/>
+        <a-switch
+          v-action:update
+          :key="loadingData"
+          checked-children="正常"
+          un-checked-children="停用"
+          :defaultChecked="record.jobStatus === 'A'"
+          @change="handleSwitchChange(record)"/>
+        <span v-permission-missing="['update']">
+          <a-tag v-if="record.jobStatus === 'A'" color="#1095f9">{{ record.jobStatusLabel }}</a-tag>
+          <a-tag v-else color="#bcbcbc">{{ record.jobStatusLabel }}</a-tag>
+        </span>
       </span>
       <span slot="action" slot-scope="text, record">
         <a v-action:detail href="javascript:;" @click="$refs.detail.open(record.id)">详情</a>
-        <a-divider type="vertical" />
-        <a v-action:update href="javascript:;" @click="handleExecuteOnce(record.id)">运行一次</a>
-        <a-divider type="vertical" />
-        <a-divider v-action:detail v-permission="['update', 'delete']" type="vertical" />
+        <a-divider v-action:detail v-permission="['executeOnce', 'update', 'delete']" type="vertical" />
+        <a v-action:executeOnce href="javascript:;" @click="handleExecuteOnce(record.id)">运行一次</a>
+        <a-divider v-action:executeOnce v-permission="['update', 'delete']" type="vertical" />
+        <a-divider v-action:executeOnce v-permission="['update', 'delete']" type="vertical" />
         <a-dropdown v-permission="['update', 'delete']">
           <a class="ant-dropdown-link">
             更多 <a-icon type="down"/>
@@ -84,7 +94,7 @@
       </span>
     </a-table>
     <diboot-form ref="form" @complete="getList"></diboot-form>
-		<diboot-detail ref="detail"></diboot-detail>
+    <diboot-detail ref="detail"></diboot-detail>
     <diboot-log-list ref="logList"></diboot-log-list>
   </a-card>
 </template>

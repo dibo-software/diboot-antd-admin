@@ -27,7 +27,7 @@ const treeListFormatter = function (treeList, valueField, titleField, toString) 
         title: item[titleField]
       }
     }
-    if (item.children !== undefined && item.children.length > 0) {
+    if (item.children && item.children.length > 0) {
       formatterItem.children = treeListFormatter(item.children, valueField, titleField, toString)
     }
     formatterList.push(formatterItem)

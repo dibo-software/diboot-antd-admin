@@ -1,21 +1,8 @@
 <template>
   <div class="orgList">
-    <div class="table-page-search-wrapper">
-      <a-form layout="inline" @submit.native="onSearch">
-        <a-row :gutter="48">
-          <a-col :md="18" :sm="24">
-          </a-col>
-          <a-col :lg="6" :sm="24" style="text-align: right;">
-            <a-button
-              v-action:create
-              type="default"
-              icon="plus"
-              @click="$refs.form.open(undefined)">新建部门</a-button>
-          </a-col>
-        </a-row>
-      </a-form>
+    <div v-action:create class="table-operator" style="text-align: right; margin-bottom: 10px;">
+      <a-button v-action:create type="default" icon="plus" @click="$refs.form.open(undefined)">新建部门</a-button>
     </div>
-
     <a-table
       ref="table"
       size="default"
