@@ -29,9 +29,6 @@
         <detail-list-item term="请求参数">{{ model.requestParams }}</detail-list-item>
       </detail-list>
       <detail-list :col="1">
-        <detail-list-item term="IP">{{ model.requestIp }}</detail-list-item>
-      </detail-list>
-      <detail-list :col="1">
         <detail-list-item term="状态码">
           <span>
             <a-tag v-if="model.statusCode === 0" color="green">成功</a-tag>
