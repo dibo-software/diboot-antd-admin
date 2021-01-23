@@ -5,7 +5,7 @@
         <a-card :bordered="false">
           <org-tree
             :can-change="true"
-            @changeCurrentNode="node => this.currentNodeId = `${node.value ? node.value : '0'}`"
+            @changeCurrentNode="node => currentNodeId = `${node.value ? node.value : '0'}`"
             ref="orgTree"
             @change="onTreeChange"></org-tree>
         </a-card>

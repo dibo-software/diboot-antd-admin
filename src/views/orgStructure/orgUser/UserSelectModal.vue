@@ -12,7 +12,7 @@
       <a-row :gutter="16">
         <a-col :span="8">
           <a-card :bordered="false">
-            <readonly-org-tree @changeCurrentNode="node => this.currentNodeId = `${node.value ? node.value : '0'}`" ref="userSelectOrgTree"></readonly-org-tree>
+            <readonly-org-tree @changeCurrentNode="node => currentNodeId = `${node.value ? node.value : '0'}`" ref="userSelectOrgTree"></readonly-org-tree>
           </a-card>
         </a-col>
         <a-col :span="16">
