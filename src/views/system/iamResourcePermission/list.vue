@@ -98,8 +98,7 @@ import list from '@/components/diboot/mixins/list'
 import dibootForm from './form'
 import dibootDetail from './detail'
 import permissionTreeSort from './treeSort'
-import { clearNullChildren, treeList2list } from '@/utils/treeDataUtil'
-import _ from 'lodash'
+import { clearNullChildren } from '@/utils/treeDataUtil'
 
 export default {
   name: 'IamResourcePermissionList',
