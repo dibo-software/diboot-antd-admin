@@ -146,7 +146,6 @@ export default {
   methods: {
     afterLoadList (data) {
       this.data = clearNullChildren(data)
-      this.attachMore()
     },
     create () {
       this.formParentId = '0'

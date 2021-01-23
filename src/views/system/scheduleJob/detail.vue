@@ -20,7 +20,7 @@
       <a-descriptions-item label="参数">
         {{ model.paramJson }}
       </a-descriptions-item>
-      <a-descriptions-item label="失败策略">
+      <a-descriptions-item label="初始化策略">
         {{initStrategyEnum[model.initStrategy] || '周期执行'}}
       </a-descriptions-item>
       <a-descriptions-item label="状态">
