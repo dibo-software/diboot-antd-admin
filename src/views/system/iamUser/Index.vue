@@ -17,7 +17,6 @@ import orgTree from '@/views/orgStructure/org/orgTree'
 import userList from './list'
 import { hasPermissions } from '@/utils/helper/checkPermission'
 
-
 export default {
   name: 'OrgUserList',
   components: {
