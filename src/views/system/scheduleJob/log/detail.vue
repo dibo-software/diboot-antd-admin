@@ -15,7 +15,7 @@
         {{ model.cron }}
       </a-descriptions-item>
       <a-descriptions-item label="状态">
-        {{ model.runStatus | toStatusLabel}}
+        {{ model.runStatus | toStatusLabel }}
       </a-descriptions-item>
       <a-descriptions-item label="开始时间">
         {{ model.startTime }}

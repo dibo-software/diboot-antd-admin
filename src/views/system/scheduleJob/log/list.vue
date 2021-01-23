@@ -39,14 +39,14 @@
               </a-form-item>
             </a-col>
             <a-col :md="!advanced && 8 || 24" :sm="24">
-            <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
-              <a-button type="primary" @click="onSearch">查询</a-button>
-              <a-button style="margin-left: 8px" @click="reset">重置</a-button>
-              <a @click="toggleAdvanced" style="margin-left: 8px">
-                {{ advanced ? '收起' : '展开' }}
-                <a-icon :type="advanced ? 'up' : 'down'"/>
-              </a>
-            </span>
+              <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
+                <a-button type="primary" @click="onSearch">查询</a-button>
+                <a-button style="margin-left: 8px" @click="reset">重置</a-button>
+                <a @click="toggleAdvanced" style="margin-left: 8px">
+                  {{ advanced ? '收起' : '展开' }}
+                  <a-icon :type="advanced ? 'up' : 'down'"/>
+                </a>
+              </span>
             </a-col>
           </a-row>
         </a-form>
@@ -56,25 +56,27 @@
         size="default"
         :columns="columns"
         :dataSource="data"
-        :pagination="pagination":loading="loadingData" @change="handleTableChange"
+        :pagination="pagination"
+        :loading="loadingData"
+        @change="handleTableChange"
         rowKey="id"
       >
-      <span slot="action" slot-scope="text, record">
-        <a v-action:detail href="javascript:;" @click="$refs.detail.open(record.id)">详情</a>
-        <a-divider type="vertical" />
-        <a v-action:update href="javascript:;" @click="handleExecuteOnce(record.jobId)">运行一次</a>
-        <a-divider v-action:detail v-permission="['update', 'delete']" type="vertical" />
-        <a-dropdown v-permission="['update', 'delete']">
-          <a class="ant-dropdown-link">
-            更多 <a-icon type="down"/>
-          </a>
-          <a-menu slot="overlay">
-            <a-menu-item v-action:delete>
-              <a href="javascript:;" @click="remove(record.id)">删除</a>
-            </a-menu-item>
-          </a-menu>
-        </a-dropdown>
-      </span>
+        <span slot="action" slot-scope="text, record">
+          <a v-action:detail href="javascript:;" @click="$refs.detail.open(record.id)">详情</a>
+          <a-divider type="vertical" />
+          <a v-action:update href="javascript:;" @click="handleExecuteOnce(record.jobId)">运行一次</a>
+          <a-divider v-action:detail v-permission="['update', 'delete']" type="vertical" />
+          <a-dropdown v-permission="['update', 'delete']">
+            <a class="ant-dropdown-link">
+              更多 <a-icon type="down"/>
+            </a>
+            <a-menu slot="overlay">
+              <a-menu-item v-action:delete>
+                <a href="javascript:;" @click="remove(record.id)">删除</a>
+              </a-menu-item>
+            </a-menu>
+          </a-dropdown>
+        </span>
       </a-table>
       <diboot-detail ref="detail"></diboot-detail>
     </a-card>

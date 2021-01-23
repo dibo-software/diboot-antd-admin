@@ -34,23 +34,23 @@
 </template>
 
 <script>
-  import detail from '@/components/diboot/mixins/detail'
-  import DetailList from '@/components/tools/DetailList'
+import detail from '@/components/diboot/mixins/detail'
+import DetailList from '@/components/tools/DetailList'
 
-  const DetailListItem = DetailList.Item
-  export default {
-    name: 'PositionDetail',
-    data () {
-      return {
-        baseApi: '/iam/position'
-      }
-    },
-    components: {
-      DetailList,
-      DetailListItem
-    },
-    mixins: [ detail ]
-  }
+const DetailListItem = DetailList.Item
+export default {
+  name: 'PositionDetail',
+  data () {
+    return {
+      baseApi: '/iam/position'
+    }
+  },
+  components: {
+    DetailList,
+    DetailListItem
+  },
+  mixins: [ detail ]
+}
 </script>
 
 <style lang="less" scoped>

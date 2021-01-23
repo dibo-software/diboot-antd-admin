@@ -43,6 +43,7 @@
     </div>
     <a-alert v-if="!loadingData && (!data || data.length === 0)" message="请点击右上角新建开始配置系统菜单与权限！" banner style="margin-bottom: 20px;" />
     <a-table
+      v-if="data && data.length > 0"
       ref="table"
       size="default"
       :columns="columns"
@@ -50,7 +51,7 @@
       :pagination="false"
       :loading="loadingData"
       @change="handleTableChange"
-      :expandedRowKeys="dataIdList"
+      :defaultExpandAllRows="true"
       rowKey="id"
     >
       <span slot="permissionList" slot-scope="text, record">
@@ -97,8 +98,7 @@ import list from '@/components/diboot/mixins/list'
 import dibootForm from './form'
 import dibootDetail from './detail'
 import permissionTreeSort from './treeSort'
-import { clearNullChildren, treeList2list } from '@/utils/treeDataUtil'
-import _ from 'lodash'
+import { clearNullChildren } from '@/utils/treeDataUtil'
 
 export default {
   name: 'IamResourcePermissionList',
@@ -154,22 +154,6 @@ export default {
     createSubMenu (parentId) {
       this.formParentId = `${parentId}`
       this.$refs.form.open(undefined)
-    }
-  },
-  computed: {
-    dataList: function () {
-      if (!this.data || this.data.length === 0) {
-        return []
-      }
-      return treeList2list(_.cloneDeep(this.data))
-    },
-    dataIdList: function () {
-      if (this.dataList.length === 0) {
-        return []
-      }
-      return this.dataList.map(item => {
-        return item.id
-      })
     }
   }
 }

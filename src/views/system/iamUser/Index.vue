@@ -2,7 +2,7 @@
   <a-card :bordered="false">
     <a-row v-if="showTreeNode">
       <a-col :span="6">
-        <org-tree @changeCurrentNode="node => this.currentNodeId = `${node.value ? node.value : '0'}`" ref="orgTree"></org-tree>
+        <org-tree @changeCurrentNode="node => currentNodeId = `${node.value ? node.value : '0'}`" ref="orgTree"></org-tree>
       </a-col>
       <a-col :span="18">
         <user-list :current-node-id="currentNodeId" ref="userList" />

@@ -12,11 +12,11 @@
       :showCancel="showCancel"
       @changeCurrentNode="onChangeCurrentNode"
     >
-      <template slot="header" slot-scope="currentNode">
+      <template slot="header" slot-scope="node">
         <a
           v-if="canChange"
           v-action:update
-          @click="$refs.orgForm.open(currentNode.currentNodeId)"
+          @click="$refs.orgForm.open(node.currentNodeId)"
           title="编辑"
           href="javascript:;"
           style="margin-left: 10px;">
@@ -25,7 +25,7 @@
         <a
           v-if="canChange"
           v-action:detail
-          @click="$refs.orgDetail.open(currentNode.currentNodeId)"
+          @click="$refs.orgDetail.open(node.currentNodeId)"
           title="详情"
           href="javascript:;"
           style="margin-left: 10px;">
@@ -34,7 +34,7 @@
         <a
           v-if="canChange"
           v-action:delete
-          @click="remove(currentNode.currentNodeId)"
+          @click="remove(node.currentNodeId)"
           title="删除"
           href="javascript:;"
           style="margin-left: 10px;">

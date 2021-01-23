@@ -72,77 +72,77 @@
 </template>
 
 <script>
-  import list from '@/components/diboot/mixins/list'
-  import dibootForm from './form'
-  import dibootDetail from './detail'
+import list from '@/components/diboot/mixins/list'
+import dibootForm from './form'
+import dibootDetail from './detail'
 
-  export default {
-    name: 'TableList',
-    components: {
-      dibootForm,
-      dibootDetail
-    },
-    mixins: [list],
-    data () {
-      return {
-        baseApi: '/iam/position',
-        listApi: '',
-        getListFromMixin: false,
-        // 表头
-        columns: [
-          {
-            title: '岗位名称',
-            dataIndex: 'name'
-          },
-          {
-            title: '岗位编码',
-            dataIndex: 'code'
-          },
-          {
-            title: '职级',
-            dataIndex: 'gradeValue'
-          },
-          {
-            title: '职级头衔',
-            dataIndex: 'gradeName'
-          },
-          {
-            title: '数据权限',
-            dataIndex: 'dataPermissionTypeLabel'
-          },
-          {
-            title: '操作',
-            width: '150px',
-            dataIndex: 'action',
-            scopedSlots: { customRender: 'action' }
-          }
-        ]
-      }
-    },
-    methods: {
-      afterLoadList () {
-      }
-    },
-    watch: {
-      currentNodeId: function (val) {
-        if (val && val !== '0' && val !== 0) {
-          this.listApi = `${this.baseApi}/list/${val}`
-        } else {
-          this.listApi = `${this.baseApi}/list`
+export default {
+  name: 'TableList',
+  components: {
+    dibootForm,
+    dibootDetail
+  },
+  mixins: [list],
+  data () {
+    return {
+      baseApi: '/iam/position',
+      listApi: '',
+      getListFromMixin: false,
+      // 表头
+      columns: [
+        {
+          title: '岗位名称',
+          dataIndex: 'name'
+        },
+        {
+          title: '岗位编码',
+          dataIndex: 'code'
+        },
+        {
+          title: '职级',
+          dataIndex: 'gradeValue'
+        },
+        {
+          title: '职级头衔',
+          dataIndex: 'gradeName'
+        },
+        {
+          title: '数据权限',
+          dataIndex: 'dataPermissionTypeLabel'
+        },
+        {
+          title: '操作',
+          width: '150px',
+          dataIndex: 'action',
+          scopedSlots: { customRender: 'action' }
         }
-        this.getList()
+      ]
+    }
+  },
+  methods: {
+    afterLoadList () {
+    }
+  },
+  watch: {
+    currentNodeId: function (val) {
+      if (val && val !== '0' && val !== 0) {
+        this.listApi = `${this.baseApi}/list/${val}`
+      } else {
+        this.listApi = `${this.baseApi}/list`
       }
-    },
-    props: {
-      currentNodeId: {
-        type: String,
-        default: '0'
-      }
-    },
-    created () {
       this.getList()
     }
+  },
+  props: {
+    currentNodeId: {
+      type: String,
+      default: '0'
+    }
+  },
+  created () {
+    this.getList()
   }
+}
 </script>
 <style lang="less" scoped>
 </style>

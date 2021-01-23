@@ -183,7 +183,8 @@ export default {
      * 地址前缀
      */
     prefix: {
-      type: String
+      type: String,
+      default: ''
     },
     /**
      * 请求地址
@@ -257,7 +258,8 @@ export default {
       default: '上传'
     },
     value: {
-      type: String
+      type: String,
+      default: ''
     }
   }
 }
