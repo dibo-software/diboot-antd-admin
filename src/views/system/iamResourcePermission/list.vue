@@ -157,22 +157,6 @@ export default {
       this.formParentId = `${parentId}`
       this.$refs.form.open(undefined)
     }
-  },
-  computed: {
-    dataList: function () {
-      if (!this.data || this.data.length === 0) {
-        return []
-      }
-      return treeList2list(_.cloneDeep(this.data))
-    },
-    dataIdList: function () {
-      if (this.dataList.length === 0) {
-        return []
-      }
-      return this.dataList.map(item => {
-        return item.id
-      })
-    }
   }
 }
 </script>
