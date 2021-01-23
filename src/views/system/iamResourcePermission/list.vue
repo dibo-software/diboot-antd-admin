@@ -43,6 +43,7 @@
     </div>
     <a-alert v-if="!loadingData && (!data || data.length === 0)" message="请点击右上角新建开始配置系统菜单与权限！" banner style="margin-bottom: 20px;" />
     <a-table
+      v-if="data && data.length > 0"
       ref="table"
       size="default"
       :columns="columns"
@@ -50,7 +51,7 @@
       :pagination="false"
       :loading="loadingData"
       @change="handleTableChange"
-      :expandedRowKeys="dataIdList"
+      :defaultExpandAllRows="true"
       rowKey="id"
     >
       <span slot="permissionList" slot-scope="text, record">
