@@ -45,7 +45,7 @@
                   </template>
                   <a-icon type="question-circle" style="cursor: pointer"/>
                 </a-tooltip>
-                </span>
+              </span>
             </template>
             <a-input
               placeholder="* * 1 * * ? (秒 分 时 日 月 星期 年)"

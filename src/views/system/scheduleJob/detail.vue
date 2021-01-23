@@ -21,10 +21,10 @@
         {{ model.paramJson }}
       </a-descriptions-item>
       <a-descriptions-item label="失败策略">
-        {{initStrategyEnum[model.initStrategy] || '周期执行'}}
+        {{ initStrategyEnum[model.initStrategy] || '周期执行' }}
       </a-descriptions-item>
       <a-descriptions-item label="状态">
-        {{ model.jobStatus | toStatusLabel({A: '启用', I : '停用'})}}
+        {{ model.jobStatus | toStatusLabel({A: '启用', I : '停用'}) }}
       </a-descriptions-item>
       <a-descriptions-item label="备注">
         {{ model.jobComment }}
@@ -57,7 +57,7 @@ export default {
         IGNORE_MISFIRES: '超期立即执行，并周期执行'
       }
     }
-  },
+  }
 }
 </script>
 <style lang="less" scoped>

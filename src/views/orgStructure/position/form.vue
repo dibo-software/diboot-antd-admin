@@ -107,63 +107,63 @@
 </template>
 
 <script>
-  import form from '@/components/diboot/mixins/form'
-  import { dibootApi } from '@/utils/request'
-  export default {
-    name: 'PositionForm',
-    data () {
-      return {
-        baseApi: '/iam/position',
-        attachMoreList: [
-          {
-            type: 'D',
-            target: 'POSITION_GRADE'
-          },
-          {
-            type: 'D',
-            target: 'DATA_PERMISSION_TYPE'
-          }
-        ],
-        form: this.$form.createForm(this)
+import form from '@/components/diboot/mixins/form'
+import { dibootApi } from '@/utils/request'
+export default {
+  name: 'PositionForm',
+  data () {
+    return {
+      baseApi: '/iam/position',
+      attachMoreList: [
+        {
+          type: 'D',
+          target: 'POSITION_GRADE'
+        },
+        {
+          type: 'D',
+          target: 'DATA_PERMISSION_TYPE'
+        }
+      ],
+      form: this.$form.createForm(this)
+    }
+  },
+  mixins: [form],
+  methods: {
+    afterOpen () {
+    },
+    onGradeValueChanged (value) {
+      if (value && this.positionGradeKvMap && this.positionGradeKvMap[value]) {
+        this.form.setFieldsValue({
+          gradeName: this.positionGradeKvMap[value]['k']
+        })
       }
     },
-    mixins: [form],
-    methods: {
-      afterOpen () {
-      },
-      onGradeValueChanged (value) {
-        if (value && this.positionGradeKvMap && this.positionGradeKvMap[value]) {
-          this.form.setFieldsValue({
-            gradeName: this.positionGradeKvMap[value]['k']
-          })
-        }
-      },
-      async checkCodeDuplicate (rule, value, callback) {
-        if (!value) {
-          callback()
-          return
-        }
-        const params = { id: this.model.id, code: value }
-        const res = await dibootApi.get(`${this.baseApi}/checkCodeDuplicate`, params)
-        if (res.code === 0) {
-          callback()
-        } else {
-          callback(res.msg.split(':')[1])
-        }
+    async checkCodeDuplicate (rule, value, callback) {
+      if (!value) {
+        callback()
+        return
       }
-    },
-    computed: {
-      positionGradeKvMap: function () {
-        const positionGradeKvMap = {}
-        if (this.more && this.more.positionGradeKvList) {
-          this.more.positionGradeKvList.forEach(item => {
-            positionGradeKvMap[item.v] = item
-          })
-        }
-        return positionGradeKvMap
+      const params = { id: this.model.id, code: value }
+      const res = await dibootApi.get(`${this.baseApi}/checkCodeDuplicate`, params)
+      if (res.code === 0) {
+        callback()
+      } else {
+        callback(res.msg.split(':')[1])
       }
     }
+  },
+  computed: {
+    positionGradeKvMap: function () {
+      const positionGradeKvMap = {}
+      if (this.more && this.more.positionGradeKvList) {
+        this.more.positionGradeKvList.forEach(item => {
+          positionGradeKvMap[item.v] = item
+        })
+      }
+      return positionGradeKvMap
+    }
   }
+}
 </script>
 
 <style scoped>
