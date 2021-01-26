@@ -7,27 +7,27 @@
     :visible="visible"
     :body-style="{ paddingBottom: '80px' }"
   >
-    <a-descriptions :column="2">
-      <a-descriptions-item label="任务编码">
-        {{ model.jobKey }}
+    <a-descriptions :column="1">
+      <a-descriptions-item label="公司名">
+        {{ model.name }}
       </a-descriptions-item>
-      <a-descriptions-item label="任务名称">
-        {{ model.jobName }}
+      <a-descriptions-item label="简称">
+        {{ model.shortName }}
       </a-descriptions-item>
-      <a-descriptions-item label="定时表达式">
-        {{ model.cron }}
+      <a-descriptions-item label="税号">
+        {{ model.taxid }}
       </a-descriptions-item>
-      <a-descriptions-item label="参数">
-        {{ model.paramJson }}
+      <a-descriptions-item label="电话">
+        {{ model.telphone }}
       </a-descriptions-item>
-      <a-descriptions-item label="初始化策略">
-        {{ initStrategyEnum[model.initStrategy] || '周期执行' }}
-      </a-descriptions-item>
-      <a-descriptions-item label="状态">
-        {{ model.jobStatus | toStatusLabel({A: '启用', I : '停用'}) }}
+      <a-descriptions-item label="地址">
+        {{ model.address }}
       </a-descriptions-item>
       <a-descriptions-item label="备注">
-        {{ model.jobComment }}
+        {{ model.remark }}
+      </a-descriptions-item>
+      <a-descriptions-item label="客户状态">
+        {{ model.cusStatusLabel }}
       </a-descriptions-item>
       <a-descriptions-item label="创建时间">
         {{ model.createTime }}
@@ -46,16 +46,19 @@
 import detail from '@/components/diboot/mixins/detail'
 
 export default {
-  name: 'ScheduleJobDetail',
+  name: 'CustomerDetail',
   mixins: [detail],
   data () {
     return {
-      baseApi: '/scheduleJob',
-      initStrategyEnum: {
-        DO_NOTHING: '周期执行',
-        FIRE_AND_PROCEED: '立即执行一次，并周期执行',
-        IGNORE_MISFIRES: '超期立即执行，并周期执行'
-      }
+      baseApi: '/customer'
+    }
+  },
+  methods: {
+    onAfterOpen () {
+      // 事件处理代码
+    },
+    afterOpen () {
+      this.onAfterOpen()
     }
   }
 }
