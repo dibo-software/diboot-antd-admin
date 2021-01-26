@@ -33,6 +33,8 @@ export default {
       dateRangeQuery: {},
       // 标记加载状态
       loadingData: false,
+      // 窗口高度
+      windowHeight: 240,
       // 分页数据
       pagination: {
         pageSize: 10,
@@ -392,6 +394,10 @@ export default {
           this.queryParam[`${k}End`] = v[1].format('YYYY-MM-DD')
         }
       })
+    },
+    windowResize () {
+      // 设置workPanel的高度
+      this.windowHeight = window.innerHeight
     }
   },
   async mounted () {
@@ -399,5 +405,18 @@ export default {
       await this.getList()
     }
     await this.attachMore()
+  },
+  computed: {
+    tableScrollData: function () {
+      return { x: 'calc(700px + 50%)', y: `${this.windowHeight > 560 ? this.windowHeight - 420 : 1200}px` }
+    }
+  },
+  created () {
+    // 设置workPanel的高度
+    this.windowResize(false)
+    window.addEventListener('resize', this.windowResize)
+  },
+  destroyed () {
+    window.removeEventListener('resize', this.windowResize)
   }
 }
