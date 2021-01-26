@@ -69,7 +69,7 @@
       :columns="columns"
       :dataSource="data"
       :pagination="pagination"
-      :scroll="{ x: 'calc(700px + 50%)', y: 240 }"
+      :scroll="tableScrollData"
       :loading="loadingData"
       :rowSelection="rowSelection"
       @change="handleTableChange"
@@ -164,7 +164,6 @@ export default {
     }
   },
   methods: {
-
     onRowSelectChange (selectedRowKeys) {
       this.selectedRowKeys = selectedRowKeys
     }
