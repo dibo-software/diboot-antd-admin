@@ -51,7 +51,7 @@
       :columns="columns"
       :dataSource="data"
       :pagination="pagination"
-      :scroll="{ x: 'calc(700px + 50%)'}"
+      :scroll="tableScrollData"
       :loading="loadingData"
       @change="handleTableChange"
       rowKey="id"
