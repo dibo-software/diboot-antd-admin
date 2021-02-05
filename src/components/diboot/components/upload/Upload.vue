@@ -11,7 +11,7 @@
       @preview="handlePreview"
     >
       <template v-if="limitCount === 1 && isImage">
-        <img v-if="imageUrl" :src="imageUrl" alt="avatar" />
+        <img v-if="imageUrl" :src="imageUrl" alt="avatar"  style="width: 128px;height: 128px;"/>
         <div v-else>
           <a-icon :type="loading ? 'loading' : 'plus'" />
           <div class="ant-upload-text">
