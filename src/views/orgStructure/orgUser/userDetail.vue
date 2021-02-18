@@ -7,23 +7,21 @@
     :body-style="{ paddingBottom: '80px' }"
   >
     <a-spin :spinning="spinning">
-      <detail-list :col="2">
-        <detail-list-item term="姓名">{{ model.realname }}</detail-list-item>
-        <detail-list-item term="用户编号">{{ model.userNum }}</detail-list-item>
-      </detail-list>
-      <detail-list :col="2" v-if="systemUser">
-        <detail-list-item term="用户名">{{ username }}</detail-list-item>
-        <detail-list-item term="角色">
-          <template v-if="model.roleList">
-            <span v-for="(role, idx) in model.roleList" :key="idx">
-              <a-tag color="cyan">{{ role.name }}</a-tag>
-            </span>
-          </template>
-        </detail-list-item>
-      </detail-list>
-      <detail-list :col="2">
-        <detail-list-item term="部门">{{ model.orgShortName }}</detail-list-item>
-        <detail-list-item term="岗位">
+      <a-descriptions :column="2">
+        <a-descriptions-item label="姓名">{{ model.realname }}</a-descriptions-item>
+        <a-descriptions-item label="用户编号">{{ model.userNum }}</a-descriptions-item>
+        <template v-if="systemUser">
+          <a-descriptions-item label="用户名">{{ username }}</a-descriptions-item>
+          <a-descriptions-item label="角色">
+            <template v-if="model.roleList">
+              <span v-for="(role, idx) in model.roleList" :key="idx">
+                <a-tag color="cyan">{{ role.name }}</a-tag>
+              </span>
+            </template>
+          </a-descriptions-item>
+        </template>
+        <a-descriptions-item label="部门">{{ model.orgShortName }}</a-descriptions-item>
+        <a-descriptions-item label="岗位">
           <template v-if="model.positionList && model.positionList.length > 0">
             <a-tag v-for="item in model.positionList" :key="item.id">
               {{ item.name }}
@@ -32,19 +30,13 @@
           <template v-else>
             无
           </template>
-        </detail-list-item>
-      </detail-list>
-      <detail-list :col="2">
-        <detail-list-item term="性别">{{ model.genderLabel || '-' }}</detail-list-item>
-        <detail-list-item term="生日">{{ model.birthdate || '-' }}</detail-list-item>
-      </detail-list>
-      <detail-list :col="2">
-        <detail-list-item term="电话">{{ model.mobilePhone || '-' }}</detail-list-item>
-        <detail-list-item term="邮箱">{{ model.email || '-' }}</detail-list-item>
-      </detail-list>
-      <detail-list :col="2">
-        <detail-list-item term="状态">{{ model.statusLabel || '-' }}</detail-list-item>
-      </detail-list>
+        </a-descriptions-item>
+        <a-descriptions-item label="性别">{{ model.genderLabel || '-' }}</a-descriptions-item>
+        <a-descriptions-item label="生日">{{ model.birthdate || '-' }}</a-descriptions-item>
+        <a-descriptions-item label="电话">{{ model.mobilePhone || '-' }}</a-descriptions-item>
+        <a-descriptions-item label="邮箱">{{ model.email || '-' }}</a-descriptions-item>
+        <a-descriptions-item label="状态">{{ model.statusLabel || '-' }}</a-descriptions-item>
+      </a-descriptions>
     </a-spin>
 
     <div class="drawer-footer">
@@ -55,9 +47,7 @@
 
 <script>
 import detail from '@/components/diboot/mixins/detail'
-import DetailList from '@/components/tools/DetailList'
 import { dibootApi } from '@/utils/request'
-const DetailListItem = DetailList.Item
 export default {
   name: 'IamUserDetail',
   data () {
@@ -79,10 +69,6 @@ export default {
     afterClose () {
       this.username = ''
     }
-  },
-  components: {
-    DetailList,
-    DetailListItem
   },
   mixins: [ detail ]
 }

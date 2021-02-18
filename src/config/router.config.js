@@ -1,8 +1,12 @@
 // eslint-disable-next-line
-import { UserLayout, BasicLayout, RouteView, BlankLayout, PageView } from '@/layouts'
+import { UserLayout, PageView, BasicLayout, BlankLayout } from '@/layouts'
+
+const RouteView = {
+  name: 'RouteView',
+  render: h => h('router-view')
+}
 
 export const asyncRouterMap = [
-
   {
     path: '/',
     name: 'index',
@@ -15,7 +19,7 @@ export const asyncRouterMap = [
         path: '/dashboard',
         name: 'dashboard',
         redirect: '/dashboard/index',
-        component: PageView,
+        component: RouteView,
         hideChildrenInMenu: true,
         meta: { title: '我的工作台', keepAlive: true, icon: 'dashboard' },
         children: [{
@@ -170,7 +174,9 @@ export const asyncRouterMap = [
     ]
   },
   {
-    path: '*', redirect: '/404', hidden: true
+    path: '*',
+    redirect: '/404',
+    hidden: true
   }
 ]
 
@@ -189,22 +195,12 @@ export const constantRouterMap = [
         path: 'login',
         name: 'login',
         component: () => import(/* webpackChunkName: "user" */ '@/views/user/Login')
-      },
-      {
-        path: 'register',
-        name: 'register',
-        component: () => import(/* webpackChunkName: "user" */ '@/views/user/Register')
-      },
-      {
-        path: 'register-result',
-        name: 'registerResult',
-        component: () => import(/* webpackChunkName: "user" */ '@/views/user/RegisterResult')
       }
     ]
   },
+
   {
     path: '/404',
     component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/404')
   }
-
 ]

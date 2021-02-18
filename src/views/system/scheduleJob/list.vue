@@ -100,126 +100,126 @@
 </template>
 
 <script>
-import list from '@/components/diboot/mixins/list'
-import dibootForm from './form'
-import dibootDetail from './detail'
-import dibootLogList from './log/list'
+  import list from '@/components/diboot/mixins/list'
+  import dibootForm from './form'
+  import dibootDetail from './detail'
+  import dibootLogList from './log/list'
 
-export default {
-  name: 'ScheduleJobList',
-  components: {
-    dibootForm,
-    dibootDetail,
-    dibootLogList
-  },
-  mixins: [list],
-  data () {
-    return {
-      baseApi: '/scheduleJob',
-      getListFromMixin: true,
-      columns: [
-        {
-          title: '任务名称',
-          dataIndex: 'jobName'
-        },
-        {
-          title: '定时表达式',
-          dataIndex: 'cron'
-        },
-        {
-          title: '初始化策略',
-          dataIndex: 'initStrategy',
-          scopedSlots: { customRender: 'initStrategy' }
+  export default {
+    name: 'ScheduleJobList',
+    components: {
+      dibootForm,
+      dibootDetail,
+      dibootLogList
+    },
+    mixins: [list],
+    data () {
+      return {
+        baseApi: '/scheduleJob',
+        getListFromMixin: true,
+        columns: [
+          {
+            title: '任务名称',
+            dataIndex: 'jobName'
+          },
+          {
+            title: '定时表达式',
+            dataIndex: 'cron'
+          },
+          {
+            title: '初始化策略',
+            dataIndex: 'initStrategy',
+            scopedSlots: { customRender: 'initStrategy' }
 
+          },
+          {
+            title: '状态',
+            dataIndex: 'jobStatus',
+            scopedSlots: { customRender: 'jobStatus' }
+          },
+          {
+            title: '备注',
+            dataIndex: 'jobComment'
+          },
+          {
+            title: '创建时间',
+            dataIndex: 'createTime'
+          },
+          {
+            title: '操作',
+            width: '255px',
+            fixed: 'right',
+            dataIndex: 'action',
+            scopedSlots: { customRender: 'action' }
+          }
+        ],
+        initStrategyEnum: {
+          DO_NOTHING: '周期执行',
+          FIRE_AND_PROCEED: '立即执行一次，并周期执行',
+          IGNORE_MISFIRES: '超期立即执行，并周期执行'
         },
-        {
-          title: '状态',
-          dataIndex: 'jobStatus',
-          scopedSlots: { customRender: 'jobStatus' }
-        },
-        {
-          title: '备注',
-          dataIndex: 'jobComment'
-        },
-        {
-          title: '创建时间',
-          dataIndex: 'createTime'
-        },
-        {
-          title: '操作',
-          width: '255px',
-          fixed: 'right',
-          dataIndex: 'action',
-          scopedSlots: { customRender: 'action' }
+        jobList: []
+      }
+    },
+    created () {
+      this.loadJobs()
+    },
+    methods: {
+
+      /**
+       * 加载job
+       * @returns {Promise<void>}
+       */
+      async loadJobs () {
+        const res = await this.$http.get('/scheduleJob/allJobs')
+        if (res.code === 0) {
+          this.jobList = res.data || []
+        } else {
+          this.$message.error('无可执行定时任务！')
         }
-      ],
-      initStrategyEnum: {
-        DO_NOTHING: '周期执行',
-        FIRE_AND_PROCEED: '立即执行一次，并周期执行',
-        IGNORE_MISFIRES: '超期立即执行，并周期执行'
       },
-      jobList: []
+      /**
+       * 改变状态
+       * @param value
+       * @returns {Promise<void>}
+       */
+      async handleSwitchChange (value) {
+        const status = value.jobStatus === 'A' ? 'I' : 'A'
+        try {
+          const res = await this.$http.put(`/scheduleJob/${value.id}/${status}`)
+          if (res.code === 0) {
+            this.$message.success('修改任务状态成功！')
+          } else {
+            this.$message.error(res.msg)
+          }
+        } catch (e) {
+          console.log(e)
+          this.$message.error('修改任务状态失败！')
+        }
+        this.getList()
+      },
+      /**
+       * 执行一次任务
+       * @param id
+       * @returns {Promise<void>}
+       */
+      async handleExecuteOnce (id) {
+        try {
+          const res = await this.$http.put(`/scheduleJob/executeOnce/${id}`)
+          if (res.code === 0) {
+            this.$message.success('发送执行任务成功！')
+          } else {
+            this.$message.error(res.msg)
+          }
+        } catch (e) {
+          console.log(e)
+          this.$message.error('发送执行任务失败！')
+        }
+        this.getList()
+      }
     }
-  },
-  created () {
-    this.loadJobs()
-  },
-  methods: {
 
-    /**
-     * 加载job
-     * @returns {Promise<void>}
-     */
-    async loadJobs () {
-      const res = await this.$http.get('/scheduleJob/allJobs')
-      if (res.code === 0) {
-        this.jobList = res.data || []
-      } else {
-        this.$message.error('无可执行定时任务！')
-      }
-    },
-    /**
-     * 改变状态
-     * @param value
-     * @returns {Promise<void>}
-     */
-    async handleSwitchChange (value) {
-      const status = value.jobStatus === 'A' ? 'I' : 'A'
-      try {
-        const res = await this.$http.put(`/scheduleJob/${value.id}/${status}`)
-        if (res.code === 0) {
-          this.$message.success('修改任务状态成功！')
-        } else {
-          this.$message.error(res.msg)
-        }
-      } catch (e) {
-        console.log(e)
-        this.$message.error('修改任务状态失败！')
-      }
-      this.getList()
-    },
-    /**
-     * 执行一次任务
-     * @param id
-     * @returns {Promise<void>}
-     */
-    async handleExecuteOnce (id) {
-      try {
-        const res = await this.$http.put(`/scheduleJob/executeOnce/${id}`)
-        if (res.code === 0) {
-          this.$message.success('发送执行任务成功！')
-        } else {
-          this.$message.error(res.msg)
-        }
-      } catch (e) {
-        console.log(e)
-        this.$message.error('发送执行任务失败！')
-      }
-      this.getList()
-    }
   }
-
-}
 </script>
 <style lang="less" scoped>
 </style>

@@ -3,15 +3,15 @@ import { asyncRouterMap, constantRouterMap } from '@/config/router.config'
 /**
  * 过滤账户是否拥有某一个权限，并将菜单从加载列表移除
  *
- * @param permissionList
+ * @param permission
  * @param route
  * @returns {boolean}
  */
-function hasPermission (permissionList, route) {
+function hasPermission (permission, route) {
   if (route.meta && route.meta.permission) {
     let flag = false
-    for (let i = 0, len = permissionList.length; i < len; i++) {
-      flag = route.meta.permission.includes(permissionList[i])
+    for (let i = 0, len = permission.length; i < len; i++) {
+      flag = route.meta.permission.includes(permission[i])
       if (flag) {
         return true
       }

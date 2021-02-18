@@ -7,20 +7,16 @@
     :body-style="{ paddingBottom: '80px' }"
   >
     <a-spin :spinning="spinning">
-      <detail-list :col="2">
-        <detail-list-item term="类型名称">{{ model.itemName }}</detail-list-item>
-        <detail-list-item term="类型编码">{{ model.type }}</detail-list-item>
-      </detail-list>
-      <detail-list :col="1">
-        <detail-list-item term="包含子项">
+      <a-descriptions :column="1">
+        <a-descriptions-item label="类型名称">{{ model.itemName }}</a-descriptions-item>
+        <a-descriptions-item label="类型编码">{{ model.type }}</a-descriptions-item>
+        <a-descriptions-item label="包含子项">
           <template v-for="(item,i) in children">
             <a-tag color="blue" :key="i">{{ item.itemName }}({{ item.itemValue }})</a-tag>
           </template>
-        </detail-list-item>
-      </detail-list>
-      <detail-list :col="1">
-        <detail-list-item term="备注">{{ model.description || '-' }}</detail-list-item>
-      </detail-list>
+        </a-descriptions-item>
+        <a-descriptions-item label="备注">{{ model.description || '-' }}</a-descriptions-item>
+      </a-descriptions>
     </a-spin>
 
     <div class="drawer-footer">
@@ -31,8 +27,6 @@
 
 <script>
 import detail from '@/components/diboot/mixins/detail'
-import DetailList from '@/components/tools/DetailList'
-const DetailListItem = DetailList.Item
 export default {
   name: 'DictionaryDetail',
   data () {
@@ -40,10 +34,6 @@ export default {
       baseApi: '/dictionary',
       children: []
     }
-  },
-  components: {
-    DetailList,
-    DetailListItem
   },
   mixins: [ detail ],
   methods: {

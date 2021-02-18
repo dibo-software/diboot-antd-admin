@@ -1,18 +1,14 @@
-import Vue from 'vue'
 import axios from 'axios'
 import store from '@/store'
-import {
-  VueAxios
-} from './axios'
-import notification from 'ant-design-vue/es/notification'
-import {
-  ACCESS_TOKEN
-} from '@/store/mutation-types'
-import router from '@/router/index'
+import storage from 'store'
 import qs from 'qs'
+import notification from 'ant-design-vue/es/notification'
+import { VueAxios } from './axios'
+import { ACCESS_TOKEN } from '@/store/mutation-types'
+import router from '@/router/index'
 
 // baseURL
-const BASE_URL = '/api'
+const BASE_URL = process.env.VUE_APP_API_BASE_URL
 // token在Header中的key，需要与后端对diboot.iam.jwt-signkey配置相同
 const JWT_HEADER_KEY = 'authtoken'
 // token自动刷新（发送心跳）的时间间隔（分钟），建议为后端配置的token过期时间的1/8
@@ -22,15 +18,18 @@ let pingTimer = {}
 setPingTimer()
 
 // 创建 axios 实例
-const service = axios.create({
-  baseURL: BASE_URL, // api base_url
-  timeout: 30000 // 请求超时时间
+const request = axios.create({
+  // API 请求的默认前缀
+  baseURL: BASE_URL,
+  timeout: 6000 // 请求超时时间
 })
 
-const err = (error) => {
+// 异常拦截处理器
+const errorHandler = (error) => {
   if (error.response) {
     const data = error.response.data
-    const token = Vue.ls.get(ACCESS_TOKEN)
+    // 从 localstorage 获取 token
+    const token = storage.get(ACCESS_TOKEN)
     if (error.response.status === 403) {
       notification.error({
         message: 'Forbidden',
@@ -55,8 +54,8 @@ const err = (error) => {
 }
 
 // request interceptor
-service.interceptors.request.use(config => {
-  const token = Vue.ls.get(ACCESS_TOKEN)
+request.interceptors.request.use(config => {
+  const token = storage.get(ACCESS_TOKEN)
   if (token) {
     config.headers[JWT_HEADER_KEY] = token // 让每个请求携带自定义 token 请根据实际情况自行修改
   }
@@ -67,15 +66,15 @@ service.interceptors.request.use(config => {
     }
   }
   return config
-}, err)
+}, errorHandler)
 
 // response interceptor
-service.interceptors.response.use((response) => {
+request.interceptors.response.use((response) => {
   // 检查是否携带有新的token
   const newToken = response.headers[JWT_HEADER_KEY]
   if (newToken) {
     // 将该token设置到vuex以及本地存储中
-    Vue.ls.set(ACCESS_TOKEN, newToken, 7 * 24 * 60 * 60 * 1000)
+    storage.set(ACCESS_TOKEN, newToken, 7 * 24 * 60 * 60 * 1000)
     store.commit('SET_TOKEN', newToken)
   }
   // 如果请求成功，则重置心跳定时器
@@ -85,7 +84,7 @@ service.interceptors.response.use((response) => {
 
   // 如果返回的自定义状态码为 4001， 则token过期，需要清理掉token并跳转至登录页面重新登录
   if (response.data && response.data.code === 4001) {
-    Vue.ls.remove(ACCESS_TOKEN)
+    storage.remove(ACCESS_TOKEN)
     store.commit('SET_TOKEN', '')
     store.commit('SET_ROLES', [])
     router.push('/login')
@@ -102,17 +101,17 @@ service.interceptors.response.use((response) => {
     }
   }
   return response.data
-}, err)
+}, errorHandler)
 
 // 自定义dibootApi请求快捷方式
 const dibootApi = {
   get (url, params) {
-    return service.get(url, {
+    return request.get(url, {
       params
     })
   },
   post (url, data) {
-    return service({
+    return request({
       method: 'POST',
       url,
       data: JSON.stringify(data),
@@ -122,7 +121,7 @@ const dibootApi = {
     })
   },
   put (url, data) {
-    return service({
+    return request({
       method: 'PUT',
       url,
       data: JSON.stringify(data),
@@ -138,7 +137,7 @@ const dibootApi = {
    * @returns {AxiosPromise}
    */
   delete (url, params) {
-    return service({
+    return request({
       url,
       method: 'DELETE',
       params,
@@ -156,7 +155,7 @@ const dibootApi = {
    * @returns {AxiosPromise}
    */
   upload (url, formData) {
-    return service({
+    return request({
       url,
       method: 'POST',
       data: formData
@@ -169,7 +168,7 @@ const dibootApi = {
    * @returns {AxiosPromise}
    */
   download (url, params) {
-    return service({
+    return request({
       url,
       method: 'GET',
       responseType: 'arraybuffer',
@@ -189,7 +188,7 @@ const dibootApi = {
    * @returns {AxiosPromise}
    */
   postDownload (url, data) {
-    return service({
+    return request({
       url,
       method: 'POST',
       responseType: 'arraybuffer',
@@ -207,7 +206,7 @@ const dibootApi = {
 const installer = {
   vm: {},
   install (Vue) {
-    Vue.use(VueAxios, service)
+    Vue.use(VueAxios, request)
   }
 }
 
@@ -229,9 +228,11 @@ function resetPingTimer () {
   setPingTimer()
 }
 
+export default request
+
 export {
   installer as VueAxios,
-  service as axios,
+  request as axios,
   BASE_URL as baseURL,
   dibootApi
 }

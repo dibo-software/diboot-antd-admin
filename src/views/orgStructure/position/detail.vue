@@ -7,24 +7,14 @@
     :body-style="{ paddingBottom: '80px' }"
   >
     <a-spin :spinning="spinning">
-      <detail-list :col="1">
-        <detail-list-item term="岗位名称">{{ model.name }}</detail-list-item>
-      </detail-list>
-      <detail-list :col="1">
-        <detail-list-item term="岗位编码">{{ model.code }}</detail-list-item>
-      </detail-list>
-      <detail-list :col="2">
-        <detail-list-item term="职级名称">{{ model.gradeValue }}</detail-list-item>
-      </detail-list>
-      <detail-list :col="1">
-        <detail-list-item term="职级头衔">{{ model.gradeName || '-' }}</detail-list-item>
-      </detail-list>
-      <detail-list :col="1">
-        <detail-list-item term="数据权限">{{ model.dataPermissionTypeLabel }}</detail-list-item>
-      </detail-list>
-      <detail-list :col="1">
-        <detail-list-item term="虚拟岗位">{{ model.virtual ? '是' : '否' }}</detail-list-item>
-      </detail-list>
+      <a-descriptions :column="1">
+        <a-descriptions-item label="岗位名称">{{ model.name }}</a-descriptions-item>
+        <a-descriptions-item label="岗位编码">{{ model.code }}</a-descriptions-item>
+        <a-descriptions-item label="职级名称">{{ model.gradeValue }}</a-descriptions-item>
+        <a-descriptions-item label="职级头衔">{{ model.gradeName || '-' }}</a-descriptions-item>
+        <a-descriptions-item label="数据权限">{{ model.dataPermissionTypeLabel }}</a-descriptions-item>
+        <a-descriptions-item label="虚拟岗位">{{ model.virtual ? '是' : '否' }}</a-descriptions-item>
+      </a-descriptions>
     </a-spin>
 
     <div class="drawer-footer">
@@ -35,19 +25,13 @@
 
 <script>
 import detail from '@/components/diboot/mixins/detail'
-import DetailList from '@/components/tools/DetailList'
 
-const DetailListItem = DetailList.Item
 export default {
   name: 'PositionDetail',
   data () {
     return {
       baseApi: '/iam/position'
     }
-  },
-  components: {
-    DetailList,
-    DetailListItem
   },
   mixins: [ detail ]
 }

@@ -7,21 +7,15 @@
     :body-style="{ paddingBottom: '80px' }"
   >
     <a-spin :spinning="spinning">
-      <detail-list :col="2">
-        <detail-list-item term="上级部门">{{ parentName }}</detail-list-item>
-        <detail-list-item term="编码">{{ model.code }}</detail-list-item>
-      </detail-list>
-      <detail-list :col="2">
-        <detail-list-item term="简称">{{ model.shortName }}</detail-list-item>
-        <detail-list-item term="全称">{{ model.name }}</detail-list-item>
-      </detail-list>
-      <detail-list :col="2">
-        <detail-list-item term="类型">{{ model.typeLabel }}</detail-list-item>
-        <detail-list-item term="负责人">{{ model.managerName || '-' }}</detail-list-item>
-      </detail-list>
-      <detail-list :col="1">
-        <detail-list-item term="备注">{{ model.orgComment ? model.orgComment : '-' }}</detail-list-item>
-      </detail-list>
+      <a-descriptions :column="2">
+        <a-descriptions-item label="上级部门">{{ parentName }}</a-descriptions-item>
+        <a-descriptions-item label="编码">{{ model.code }}</a-descriptions-item>
+        <a-descriptions-item label="简称">{{ model.shortName }}</a-descriptions-item>
+        <a-descriptions-item label="全称">{{ model.name }}</a-descriptions-item>
+        <a-descriptions-item label="类型">{{ model.typeLabel }}</a-descriptions-item>
+        <a-descriptions-item label="负责人">{{ model.managerName || '-' }}</a-descriptions-item>
+        <a-descriptions-item label="备注">{{ model.orgComment ? model.orgComment : '-' }}</a-descriptions-item>
+      </a-descriptions>
     </a-spin>
 
     <div class="drawer-footer">
@@ -32,19 +26,12 @@
 
 <script>
 import detail from '@/components/diboot/mixins/detail'
-import DetailList from '@/components/tools/DetailList'
-
-const DetailListItem = DetailList.Item
 export default {
   name: 'OrgDetail',
   data () {
     return {
       baseApi: '/iam/org'
     }
-  },
-  components: {
-    DetailList,
-    DetailListItem
   },
   mixins: [ detail ],
   methods: {

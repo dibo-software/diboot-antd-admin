@@ -1,11 +1,11 @@
 <template>
   <div class="page-header-index-wide">
     <a-card :bordered="false" :bodyStyle="{ padding: '16px 0', height: '100%' }" :style="{ height: '100%' }">
-      <div class="account-settings-info-main" :class="device">
+      <div class="account-settings-info-main" :class="{ 'mobile': isMobile }">
         <div class="account-settings-info-left">
           <a-menu
-            :mode="device == 'mobile' ? 'horizontal' : 'inline'"
-            :style="{ border: '0', width: device == 'mobile' ? '560px' : 'auto'}"
+            :mode="isMobile ? 'horizontal' : 'inline'"
+            :style="{ border: '0', width: isMobile ? '560px' : 'auto'}"
             :selectedKeys="selectedKeys"
             type="inner"
             @openChange="onOpenChange"
@@ -24,7 +24,7 @@
         </div>
         <div class="account-settings-info-right">
           <div class="account-settings-info-title">
-            <span>{{ $route.meta.title }}</span>
+            <span>{{ $t($route.meta.title) }}</span>
           </div>
           <route-view></route-view>
         </div>
@@ -34,62 +34,61 @@
 </template>
 
 <script>
-import { PageView, RouteView } from '@/layouts'
-import { mixinDevice } from '@/utils/mixin.js'
+  import { RouteView } from '@/layouts'
+  import { baseMixin } from '@/store/app-mixin'
 
-export default {
-  components: {
-    RouteView,
-    PageView
-  },
-  mixins: [mixinDevice],
-  data () {
-    return {
-      // horizontal  inline
-      mode: 'inline',
-
-      openKeys: [],
-      selectedKeys: [],
-
-      // cropper
-      preview: {},
-      option: {
-        img: '/avatar2.jpg',
-        info: true,
-        size: 1,
-        outputType: 'jpeg',
-        canScale: false,
-        autoCrop: true,
-        // 只有自动截图开启 宽度高度才生效
-        autoCropWidth: 180,
-        autoCropHeight: 180,
-        fixedBox: true,
-        // 开启宽度和高度比例
-        fixed: true,
-        fixedNumber: [1, 1]
-      },
-
-      pageTitle: ''
-    }
-  },
-  created () {
-    this.updateMenu()
-  },
-  methods: {
-    onOpenChange (openKeys) {
-      this.openKeys = openKeys
+  export default {
+    components: {
+      RouteView
     },
-    updateMenu () {
-      const routes = this.$route.matched.concat()
-      this.selectedKeys = [ routes.pop().path ]
-    }
-  },
-  watch: {
-    '$route' (val) {
+    mixins: [baseMixin],
+    data () {
+      return {
+        // horizontal  inline
+        mode: 'inline',
+
+        openKeys: [],
+        selectedKeys: [],
+
+        // cropper
+        preview: {},
+        option: {
+          img: '/avatar2.jpg',
+          info: true,
+          size: 1,
+          outputType: 'jpeg',
+          canScale: false,
+          autoCrop: true,
+          // 只有自动截图开启 宽度高度才生效
+          autoCropWidth: 180,
+          autoCropHeight: 180,
+          fixedBox: true,
+          // 开启宽度和高度比例
+          fixed: true,
+          fixedNumber: [1, 1]
+        },
+
+        pageTitle: ''
+      }
+    },
+    mounted () {
       this.updateMenu()
+    },
+    methods: {
+      onOpenChange (openKeys) {
+        this.openKeys = openKeys
+      },
+      updateMenu () {
+        const routes = this.$route.matched.concat()
+        this.selectedKeys = [ routes.pop().path ]
+      }
+    },
+    watch: {
+      '$route' (val) {
+        this.updateMenu()
+      }
     }
   }
-}
 </script>
 
 <style lang="less" scoped>

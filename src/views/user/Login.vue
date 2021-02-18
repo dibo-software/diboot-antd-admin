@@ -15,7 +15,7 @@
           placeholder="请输入用户名"
           v-decorator="[
             'username',
-            {rules: [{ required: true, message: '请输入用户名' }, { validator: handleUsernameOrEmail }], validateTrigger: 'change'}
+            {rules: [{ required: true, message: '请输入用户名' }, { validator: userNameValidator }], validateTrigger: 'change'}
           ]"
         >
           <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }"/>
@@ -73,180 +73,112 @@
         >确定</a-button>
       </a-form-item>
     </a-form>
-
-    <two-step-captcha
-      v-if="requiredTwoStepCaptcha"
-      :visible="stepCaptchaVisible"
-      @success="stepCaptchaSuccess"
-      @cancel="stepCaptchaCancel"
-    ></two-step-captcha>
   </div>
 </template>
 
 <script>
-import TwoStepCaptcha from '@/components/tools/TwoStepCaptcha'
-import { mapActions } from 'vuex'
-import { timeFix } from '@/utils/util'
-import { getSmsCaptcha, get2step } from '@/api/login'
-import { baseURL } from '@/utils/request'
+  import { mapActions } from 'vuex'
+  import { timeFix } from '@/utils/util'
+  import { baseURL } from '@/utils/request'
 
-export default {
-  components: {
-    TwoStepCaptcha
-  },
-  data () {
-    return {
-      customActiveKey: 'tab1',
-      loginBtn: false,
-      // login type: 0 email, 1 username, 2 telephone
-      loginType: 0,
-      requiredTwoStepCaptcha: false,
-      stepCaptchaVisible: false,
-      form: this.$form.createForm(this),
-      state: {
-        time: 60,
+  export default {
+    data () {
+      return {
+        customActiveKey: 'tab1',
         loginBtn: false,
         // login type: 0 email, 1 username, 2 telephone
         loginType: 0,
-        smsSendBtn: false
-      },
-      baseURL,
-      captchaParam: 0
-    }
-  },
-  created () {
-    get2step({ })
-      .then(res => {
-        this.requiredTwoStepCaptcha = res.result.stepCode
-      })
-      .catch(() => {
-        this.requiredTwoStepCaptcha = false
-      })
-    // this.requiredTwoStepCaptcha = true
-  },
-  methods: {
-    ...mapActions(['Login', 'Logout', 'GetInfo']),
-    // handler
-    handleUsernameOrEmail (rule, value, callback) {
-      const { state } = this
-      const regex = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/
-      if (regex.test(value)) {
-        state.loginType = 0
-      } else {
-        state.loginType = 1
+        requiredTwoStepCaptcha: false,
+        stepCaptchaVisible: false,
+        form: this.$form.createForm(this),
+        state: {
+          time: 60,
+          loginBtn: false,
+          // login type: 0 email, 1 username, 2 telephone
+          loginType: 0,
+          smsSendBtn: false
+        },
+        baseURL,
+        captchaParam: 0
       }
-      callback()
     },
-    handleTabClick (key) {
-      this.customActiveKey = key
-    },
-    handleGetInfo () {
-      const { GetInfo } = this
-      GetInfo().then((res) => {
-        console.log(res)
-      })
-    },
-    handleSubmit (e) {
-      e.preventDefault()
-      const {
-        form: { validateFields },
-        state,
-        Login
-      } = this
-
-      state.loginBtn = true
-
-      const validateFieldsKey = ['username', 'password', 'captcha']
-
-      validateFields(validateFieldsKey, { force: true }, (err, values) => {
-        if (!err) {
-          const loginParams = { ...values }
-          Login(loginParams)
-            .then((res) => {
-              if (res.code === 0) {
-                this.loginSuccess(res)
-              } else {
-                ++this.captchaParam
-                this.$notification.error({
-                  message: '登录失败',
-                  description: res.msg,
-                  duration: 2
-                })
-              }
-            })
-            .catch(err => this.requestFailed(err))
-            .finally(() => {
-              state.loginBtn = false
-            })
+    methods: {
+      ...mapActions(['Login', 'Logout', 'GetInfo']),
+      // handler
+      userNameValidator (rule, value, callback) {
+        const { state } = this
+        const regex = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/
+        if (regex.test(value)) {
+          state.loginType = 0
         } else {
-          setTimeout(() => {
-            state.loginBtn = false
-          }, 600)
+          state.loginType = 1
         }
-      })
-    },
-    getCaptcha (e) {
-      e.preventDefault()
-      const { form: { validateFields }, state } = this
-
-      validateFields(['mobile'], { force: true }, (err, values) => {
-        if (!err) {
-          state.smsSendBtn = true
-
-          const interval = window.setInterval(() => {
-            if (state.time-- <= 0) {
-              state.time = 60
-              state.smsSendBtn = false
-              window.clearInterval(interval)
-            }
-          }, 1000)
-
-          const hide = this.$message.loading('验证码发送中..', 0)
-          getSmsCaptcha({ mobile: values.mobile }).then(res => {
-            setTimeout(hide, 2500)
-            this.$notification['success']({
-              message: '提示',
-              description: '验证码获取成功，您的验证码为：' + res.result.captcha,
-              duration: 8
-            })
-          }).catch(err => {
-            setTimeout(hide, 1)
-            clearInterval(interval)
-            state.time = 60
-            state.smsSendBtn = false
-            this.requestFailed(err)
-          })
-        }
-      })
-    },
-    stepCaptchaSuccess () {
-      this.loginSuccess()
-    },
-    stepCaptchaCancel () {
-      this.Logout().then(() => {
-        this.loginBtn = false
-        this.stepCaptchaVisible = false
-      })
-    },
-    loginSuccess (res) {
-      this.$router.push('/dashboard')
-      // 延迟 1 秒显示欢迎信息
-      setTimeout(() => {
-        this.$notification.success({
-          message: '欢迎',
-          description: `${timeFix()}，欢迎回来`
+        callback()
+      },
+      handleGetInfo () {
+        const { GetInfo } = this
+        GetInfo().then((res) => {
+          console.log(res)
         })
-      }, 1000)
-    },
-    requestFailed (err) {
-      this.$notification['error']({
-        message: '错误',
-        description: ((err.response || {}).data || {}).message || '请求出现错误，请稍后再试',
-        duration: 4
-      })
+      },
+      handleSubmit (e) {
+        e.preventDefault()
+        const {
+          form: { validateFields },
+          state,
+          Login
+        } = this
+
+        state.loginBtn = true
+
+        const validateFieldsKey = ['username', 'password', 'captcha']
+
+        validateFields(validateFieldsKey, { force: true }, (err, values) => {
+          if (!err) {
+            const loginParams = { ...values }
+            Login(loginParams)
+              .then((res) => {
+                if (res.code === 0) {
+                  this.loginSuccess(res)
+                } else {
+                  ++this.captchaParam
+                  this.$notification.error({
+                    message: '登录失败',
+                    description: res.msg,
+                    duration: 2
+                  })
+                }
+              })
+              .catch(err => this.requestFailed(err))
+              .finally(() => {
+                state.loginBtn = false
+              })
+          } else {
+            setTimeout(() => {
+              state.loginBtn = false
+            }, 600)
+          }
+        })
+      },
+      loginSuccess (res) {
+        this.$router.push('/dashboard')
+        // 延迟 1 秒显示欢迎信息
+        setTimeout(() => {
+          this.$notification.success({
+            message: '欢迎',
+            description: `${timeFix()}，欢迎回来`
+          })
+        }, 1000)
+      },
+      requestFailed (err) {
+        this.$notification['error']({
+          message: '错误',
+          description: ((err.response || {}).data || {}).message || '请求出现错误，请稍后再试',
+          duration: 4
+        })
+      }
     }
   }
-}
 </script>
 
 <style lang="less" scoped>

@@ -7,17 +7,11 @@
     :body-style="{ paddingBottom: '80px' }"
   >
     <a-spin :spinning="spinning">
-      <detail-list :col="1">
-        <detail-list-item term="角色名称">{{ model.name }}</detail-list-item>
-      </detail-list>
-      <detail-list :col="1">
-        <detail-list-item term="角色编码">{{ model.code }}</detail-list-item>
-      </detail-list>
-      <detail-list :col="1">
-        <detail-list-item term="角色描述">{{ model.description || '-' }}</detail-list-item>
-      </detail-list>
-      <detail-list :col="1">
-        <detail-list-item term="已授权权限">
+      <a-descriptions :column="1">
+        <a-descriptions-item label="角色名称">{{ model.name }}</a-descriptions-item>
+        <a-descriptions-item label="角色编码">{{ model.code }}</a-descriptions-item>
+        <a-descriptions-item label="角色描述">{{ model.description || '-' }}</a-descriptions-item>
+        <a-descriptions-item label="已授权权限">
           <a-tree
             v-if="permissionTreeList.length > 0"
             showIcon
@@ -31,8 +25,8 @@
           <template v-else>
             无
           </template>
-        </detail-list-item>
-      </detail-list>
+        </a-descriptions-item>
+      </a-descriptions>
     </a-spin>
 
     <div class="drawer-footer">
@@ -43,10 +37,8 @@
 
 <script>
 import detail from '@/components/diboot/mixins/detail'
-import DetailList from '@/components/tools/DetailList'
 import { permissionTreeListFormatter } from '@/utils/treeDataUtil'
 
-const DetailListItem = DetailList.Item
 export default {
   name: 'IamRoleDetail',
   data () {
@@ -64,10 +56,6 @@ export default {
     afterClose () {
       this.permissionTreeList = []
     }
-  },
-  components: {
-    DetailList,
-    DetailListItem
   },
   mixins: [ detail ]
 }
