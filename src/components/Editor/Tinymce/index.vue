@@ -12,6 +12,7 @@
 import plugins from './plugins'
 import toolbar from './toolbar'
 import load from './dynamicLoadScript'
+import { baseURL, dibootApi } from '@/utils/request'
 
 // why use this cdn, detail see https://github.com/PanJiaChen/tinymce-all-in-one
 const tinymceCDN = 'https://cdn.jsdelivr.net/npm/tinymce-all-in-one@4.9.3/tinymce.min.js'
@@ -49,6 +50,15 @@ export default {
       type: [Number, String],
       required: false,
       default: 'auto'
+    },
+    relObjType: {
+      type: String,
+      required: true
+    },
+    relObjId: {
+      type: [Number, String],
+      required: false,
+      default: ''
     }
   },
   data () {
@@ -146,7 +156,27 @@ export default {
         // it will try to keep these URLs intact
         // https://www.tiny.cloud/docs-3x/reference/configuration/Configuration3x@convert_urls/
         // https://stackoverflow.com/questions/5196205/disable-tinymce-absolute-to-relative-url-conversions
-        convert_urls: false
+        convert_urls: false,
+        images_upload_handler (blobInfo, successFunc, failFunc, progress) {
+          // 将文件blob转换为formData
+          const file = blobInfo.blob()
+          const formData = new FormData()
+          formData.append('file', file, file.name)
+          // 添加上传图片的附加属性
+          formData.append('relObjType', _this.relObjType)
+          formData.append('relObjId', _this.relObjId)
+          formData.append('relObjField', 'rich_text')
+          dibootApi.upload('/uploadFile/upload', formData).then(res => {
+            if (res.code === 0) {
+              successFunc(`${baseURL}${res.data.accessUrl}/image`)
+            } else {
+              failFunc(res.msg)
+            }
+          }).catch(() => {
+            failFunc('上传图片出错，请重试')
+          })
+        }
+
         // 整合七牛上传
         // images_dataimg_filter(img) {
         //   setTimeout(() => {
