@@ -46,6 +46,7 @@ import {
   Space,
   Tree,
   TreeSelect,
+  Timeline,
   message,
   notification
 } from 'ant-design-vue'
@@ -105,6 +106,7 @@ Vue.use(Descriptions)
 Vue.use(Space)
 Vue.use(Tree)
 Vue.use(TreeSelect)
+Vue.use(Timeline)
 
 Vue.prototype.$confirm = Modal.confirm
 Vue.prototype.$message = message
