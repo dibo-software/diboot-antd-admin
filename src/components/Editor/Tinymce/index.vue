@@ -15,6 +15,7 @@ import load from './dynamicLoadScript'
 import { baseURL, dibootApi } from '@/utils/request'
 
 // why use this cdn, detail see https://github.com/PanJiaChen/tinymce-all-in-one
+// const tinymceCDN = 'https://cdn.jsdelivr.net/npm/tinymce@5.7.0/tinymce.min.js'
 const tinymceCDN = 'https://cdn.jsdelivr.net/npm/tinymce-all-in-one@4.9.3/tinymce.min.js'
 
 export default {
@@ -66,13 +67,7 @@ export default {
       hasChange: false,
       hasInit: false,
       tinymceId: this.id,
-      fullscreen: false,
-      languageTypeList: {
-        'en': 'en',
-        'zh': 'zh_CN',
-        'es': 'es_MX',
-        'ja': 'ja'
-      }
+      fullscreen: false
     }
   },
   computed: {
@@ -119,9 +114,14 @@ export default {
     },
     initTinymce () {
       const _this = this
+      let publicBaseUrl = process.env.BASE_URL
+      if (publicBaseUrl && publicBaseUrl.endsWith('/')) {
+        publicBaseUrl = publicBaseUrl.substring(0, publicBaseUrl.length - 1)
+      }
       window.tinymce.init({
         selector: `#${this.tinymceId}`,
-        language: this.languageTypeList['zh'],
+        language_url: `${publicBaseUrl}/tinymce/language/zh_CN.js`,
+        language: 'zh_CN',
         height: this.height,
         body_class: 'panel-body ',
         object_resizing: false,
