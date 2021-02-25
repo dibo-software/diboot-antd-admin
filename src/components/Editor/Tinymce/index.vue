@@ -62,10 +62,10 @@ export default {
   },
   data () {
     return {
-      hasChange: false,
       hasInit: false,
       tinymceId: this.id,
-      fullscreen: false
+      fullscreen: false,
+      changeCounter: 0
     }
   },
   computed: {
@@ -78,10 +78,13 @@ export default {
     }
   },
   watch: {
-    value (val) {
-      if (!this.hasChange && this.hasInit) {
-        this.$nextTick(() =>
-          window.tinymce.get(this.tinymceId).setContent(val || ''))
+    value: {
+      handler: function (val) {
+        if (this.hasInit) {
+          this.$nextTick(() => {
+            window.tinymce.get(this.tinymceId).setContent(val || '')
+          })
+        }
       }
     }
   },
@@ -144,8 +147,10 @@ export default {
           }
           _this.hasInit = true
           editor.on('NodeChange Change KeyUp SetContent', () => {
-            this.hasChange = true
-            this.$emit('input', editor.getContent())
+            if (_this.changeCounter > 0) {
+              _this.$emit('input', editor.getContent())
+            }
+            _this.changeCounter++
           })
         },
         setup (editor) {
@@ -227,12 +232,6 @@ export default {
     },
     getContent () {
       window.tinymce.get(this.tinymceId).getContent()
-    },
-    imageSuccessCBK (arr) {
-      const _this = this
-      arr.forEach(v => {
-        window.tinymce.get(_this.tinymceId).insertContent(`<img class="wscnph" src="${v.url}" >`)
-      })
     }
   }
 }
