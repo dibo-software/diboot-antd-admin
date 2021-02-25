@@ -35,8 +35,12 @@ export default {
       getMore: false,
       // 当前组件状态对象
       state: {
+        // 当前抽屉/模态框是否显示
         visible: false,
-        confirmSubmit: false
+        // 当前表单提交按钮状态
+        confirmSubmit: false,
+        // 当前表单数据加载状态
+        formDataLoading: false
       },
       // 当前form是否包含上传
       isUpload: false,
@@ -63,25 +67,35 @@ export default {
   methods: {
     moment,
     async open (id) {
+      this.state.visible = true
       if (id === undefined) {
         // 没有id数据则认为是新建
         this.model = {}
         this.title = '新建'
-        this.state.visible = true
         this.afterOpen()
       } else {
         // 否则作为更新处理
-        const res = await dibootApi.get(`${this.baseApi}/${id}`)
-        if (res.code === 0) {
-          this.model = res.data
-          this.title = '更新'
-          this.state.visible = true
-          this.afterOpen(id)
-        } else {
-          this.$notification.error({
-            message: '获取详情失败',
-            description: res.msg
-          })
+        this.state.formDataLoading = true
+        try {
+          const res = await dibootApi.get(`${this.baseApi}/${id}`)
+          if (res.code === 0) {
+            this.model = res.data
+            this.title = '更新'
+            this.state.visible = true
+            this.state.formDataLoading = false
+            this.afterOpen(id)
+          } else {
+            this.$notification.error({
+              message: '获取表单数据失败，请重试',
+              description: res.msg
+            })
+            this.close()
+            return false
+          }
+        } catch (e) {
+          this.$message.error('获取数据出错，请重试')
+          this.close()
+          return false
         }
       }
       await this.attachMore()
@@ -91,6 +105,7 @@ export default {
      */
     close () {
       this.state.visible = false
+      this.state.formDataLoading = false
       this.model = {}
       this.__defaultFileWrapperKeys__()
       this.form.resetFields()
@@ -106,11 +121,9 @@ export default {
           if (!err) {
             resolve(values)
           } else {
+            this.state.confirmSubmit = false
             reject(err)
           }
-          setTimeout(() => {
-            this.state.confirmSubmit = false
-          }, 600)
         })
       })
     },
@@ -168,9 +181,11 @@ export default {
         }
 
         // 执行提交成功后的一系列后续操作
+        this.state.confirmSubmit = false
         this.submitSuccess(result)
       } catch (e) {
         // 执行一系列后续操作
+        this.state.confirmSubmit = false
         this.submitFailed(e)
       }
     },
@@ -179,6 +194,7 @@ export default {
      * @param msg
      */
     submitSuccess (result) {
+      this.state.confirmSubmit = false
       this.$notification.success({
         message: '操作成功',
         description: result.msg
@@ -205,6 +221,7 @@ export default {
       if (!msg && typeof e === 'object') {
         msg = this.validateErrorToMsg(e)
       }
+      this.state.confirmSubmit = false
       this.$notification.error({
         message: '操作失败',
         description: msg
