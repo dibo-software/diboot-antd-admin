@@ -106,11 +106,9 @@ export default {
           if (!err) {
             resolve(values)
           } else {
+            this.state.confirmSubmit = false
             reject(err)
           }
-          setTimeout(() => {
-            this.state.confirmSubmit = false
-          }, 600)
         })
       })
     },
@@ -168,9 +166,11 @@ export default {
         }
 
         // 执行提交成功后的一系列后续操作
+        this.state.confirmSubmit = false
         this.submitSuccess(result)
       } catch (e) {
         // 执行一系列后续操作
+        this.state.confirmSubmit = false
         this.submitFailed(e)
       }
     },
@@ -179,6 +179,7 @@ export default {
      * @param msg
      */
     submitSuccess (result) {
+      this.state.confirmSubmit = false
       this.$notification.success({
         message: '操作成功',
         description: result.msg
@@ -205,6 +206,7 @@ export default {
       if (!msg && typeof e === 'object') {
         msg = this.validateErrorToMsg(e)
       }
+      this.state.confirmSubmit = false
       this.$notification.error({
         message: '操作失败',
         description: msg
