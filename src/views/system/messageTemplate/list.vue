@@ -9,24 +9,11 @@
             </a-form-item>
           </a-col>
           <a-col :md="8" :sm="24">
-            <a-form-item label="模版策略" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
-              <a-select v-model="queryParam.strategy" placeholder="模版策略" style="width: 100%;">
-                <a-select-option
-                  v-for="strategy in more.templateStrategyList"
-                  :key="strategy.name"
-                  :value="strategy.value"
-                >
-                  {{ strategy.name }}
-                </a-select-option>
-              </a-select>
+            <a-form-item label="模版标题" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
+              <a-input v-model="queryParam.title" placeholder="" style="width: 100%;"/>
             </a-form-item>
           </a-col>
           <template v-if="advanced">
-            <a-col :md="8" :sm="24">
-              <a-form-item label="模版标题" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
-                <a-input v-model="queryParam.title" placeholder="" style="width: 100%;"/>
-              </a-form-item>
-            </a-col>
             <a-col :md="8" :sm="24">
               <a-form-item label="创建时间" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
                 <a-date-picker
