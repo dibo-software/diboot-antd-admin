@@ -11,9 +11,6 @@
       <a-descriptions-item label="模版编码">
         {{ model.code }}
       </a-descriptions-item>
-      <a-descriptions-item label="模版策略">
-        {{ model.strategy }}
-      </a-descriptions-item>
       <a-descriptions-item label="模版标题">
         {{ model.title }}
       </a-descriptions-item>

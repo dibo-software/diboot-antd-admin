@@ -111,10 +111,6 @@ export default {
           dataIndex: 'code'
         },
         {
-          title: '模版策略',
-          dataIndex: 'strategy'
-        },
-        {
           title: '模版标题',
           dataIndex: 'title'
         },
