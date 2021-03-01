@@ -17,9 +17,6 @@
       <a-descriptions-item label="模版内容">
         {{ model.content }}
       </a-descriptions-item>
-      <a-descriptions-item label="创建人">
-        {{ model.createBy }}
-      </a-descriptions-item>
       <a-descriptions-item label="创建时间">
         {{ model.createTime }}
       </a-descriptions-item>
