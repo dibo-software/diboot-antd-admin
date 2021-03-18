@@ -82,6 +82,10 @@ export default {
           dataIndex: 'typeLabel'
         },
         {
+          title: '负责人',
+          dataIndex: 'managerName'
+        },
+        {
           title: '操作',
           width: '150px',
           dataIndex: 'action',
