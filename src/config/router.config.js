@@ -216,3 +216,28 @@ export const constantRouterMap = [
     component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/404')
   }
 ]
+const generateRouterMap = [
+{
+     path: '/g_test',
+     redirect: '/g_test/article/list',
+     component: PageView,
+     name: 'g_test',
+     meta: { title: '生成测试', icon: 'bug', permission: ['g_test'] },
+     children: [
+      {
+         path: '/g_test/article/list',
+         name: 'articleList',
+         component: () => import('@/views/g_test/article/list'),
+         meta: { title: '图文信息管理', keepAlive: true, permission: ['Article'] }
+       },
+       {
+         path: '/g_test/hrInfo/list',
+         name: 'hrInfoList',
+         component: () => import('@/views/g_test/hrInfo/list'),
+         meta: { title: 'HR信息管理', keepAlive: true, permission: ['HrInfo'] }
+       }
+
+      ]
+    }
+]
+asyncRouterMap[0].children.splice(1, 0, ...generateRouterMap)
