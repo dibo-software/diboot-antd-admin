@@ -98,7 +98,7 @@ export const asyncRouterMap = [
             path: '/system/message/list',
             name: 'messageList',
             component: () => import('@/views/system/message/list'),
-            meta: { title: '消息管理', keepAlive: true, permission: ['Message'] }
+            meta: { title: '消息记录管理', keepAlive: true, permission: ['Message'] }
           },
           {
             path: '/system/scheduleJob/list',

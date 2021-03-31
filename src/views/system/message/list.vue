@@ -153,7 +153,7 @@ export default {
           dataIndex: 'receiver'
         },
         {
-          title: '发送状态',
+          title: '消息状态',
           dataIndex: 'statusLabel',
           scopedSlots: { customRender: 'statusLabel' }
         },
