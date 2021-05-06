@@ -176,7 +176,7 @@ export default {
           formData.append('relObjType', _this.relObjType)
           formData.append('relObjId', _this.relObjId)
           formData.append('relObjField', 'rich_text')
-          dibootApi.upload('/uploadFile/upload', formData).then(res => {
+          dibootApi.upload('/uploadFile/upload/dto', formData).then(res => {
             if (res.code === 0) {
               successFunc(`${baseURL}${res.data.accessUrl}/image`)
             } else {
