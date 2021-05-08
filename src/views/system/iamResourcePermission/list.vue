@@ -3,12 +3,12 @@
     <div class="table-page-search-wrapper">
       <a-form layout="inline" @submit.native="onSearch">
         <a-row :gutter="48">
-          <a-col :md="7" :sm="24">
+          <a-col :md="5" :sm="24">
             <a-form-item label="菜单名称">
               <a-input placeholder="名称" v-model="queryParam.displayName" />
             </a-form-item>
           </a-col>
-          <a-col :md="7" :sm="24">
+          <a-col :md="5" :sm="24">
             <a-form-item label="菜单编码">
               <a-input placeholder="菜单编码" v-model="queryParam.resourceCode" />
             </a-form-item>
@@ -25,7 +25,13 @@
                 @click="reset">重置</a-button>
             </span>
           </a-col>
-          <a-col :lg="5" :sm="24" style="text-align: right;">
+          <a-col :md="9" :sm="24" style="text-align: right;">
+            <a-button
+              v-if="canCorrectPermission"
+              @click="$refs.correct.open()"
+              icon="sync"
+              style="margin-right: 8px;"
+              type="default">权限纠错</a-button>
             <a-button
               v-action:sort
               @click="$refs.sort.open()"
@@ -90,6 +96,7 @@
     <diboot-form ref="form" @complete="getList" :initParentId="formParentId"></diboot-form>
     <diboot-detail ref="detail"></diboot-detail>
     <permission-tree-sort ref="sort" @complete="getList"></permission-tree-sort>
+    <correct-permission ref="correct"  @complete="getList"></correct-permission>
   </a-card>
 </template>
 
@@ -99,10 +106,12 @@ import dibootForm from './form'
 import dibootDetail from './detail'
 import permissionTreeSort from './treeSort'
 import { clearNullChildren } from '@/utils/treeDataUtil'
+import CorrectPermission from './correct'
 
 export default {
   name: 'IamResourcePermissionList',
   components: {
+    CorrectPermission,
     dibootForm,
     dibootDetail,
     permissionTreeSort
@@ -111,6 +120,8 @@ export default {
   data () {
     return {
       baseApi: '/iam/resourcePermission',
+      canCorrectPermission: process.env.NODE_ENV !== 'production',
+
       customQueryParam: { displayType: 'MENU' },
       getMore: true,
       formParentId: '0',
