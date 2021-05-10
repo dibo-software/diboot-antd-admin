@@ -90,15 +90,10 @@
         <a-tag v-else color="red">失败</a-tag>
       </span>
       <span slot="action" slot-scope="text, record">
-        <div v-if="record.superAdmin === true">
+        <a v-permission="['detail']" href="javascript:;" @click="$refs.detail.open(record.id)">详情</a>
+        <span v-permission-missing="['detail']">
           -
-        </div>
-        <div v-else>
-          <a v-action:detail href="javascript:;" @click="$refs.detail.open(record.id)">详情</a>
-          <span v-permission-missing="['detail']">
-            -
-          </span>
-        </div>
+        </span>
       </span>
     </a-table>
 
