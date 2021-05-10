@@ -27,10 +27,6 @@ export default {
           title: '权限配置上线注意事项',
           titleUrl: 'https://www.diboot.com/guide/diboot-antd-admin/%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6.html#%E8%8F%9C%E5%8D%95%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86',
           description: '描述内容'
-        },
-        {
-          title: '权限配置上线注意事项',
-          titleUrl: 'https://www.diboot.com/guide/diboot-antd-admin/%E6%9D%83%E9%99%90%E6%8E%A7%E5%88%B6.html#%E8%8F%9C%E5%8D%95%E6%9D%83%E9%99%90%E7%AE%A1%E7%90%86'
         }
       ]
     }
