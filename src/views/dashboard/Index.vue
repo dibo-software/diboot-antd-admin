@@ -1,6 +1,7 @@
 <template>
   <div class="dashboard">
     <h2>欢迎您，{{ nickname() }}！</h2>
+    <h3>上线注意事项列表</h3>
     <a-list :data-source="attentionItems" bordered>
       <a-list-item slot="renderItem" slot-scope="item, index">
         <a-list-item-meta
