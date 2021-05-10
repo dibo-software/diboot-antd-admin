@@ -149,7 +149,7 @@
                       />
                     </a-col>
                     <a-col :span="5">
-                      <a-button type="primary" icon="swap" size="small" @click="handleSwap(permission, index)">{{isSelect ? '切换至输入' : '切换至选择'}}</a-button>
+                      <a-button type="primary" icon="swap" size="small" @click="handleSwap(permission, index)">{{isSelect ? '自定义输入' : '从字典选取'}}</a-button>
                     </a-col>
                   </a-row>
                 </a-form-item>

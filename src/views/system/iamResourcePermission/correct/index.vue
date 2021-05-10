@@ -8,7 +8,7 @@
   >
     <a-spin :spinning="spinning">
       <div :key="refresh" v-if="diffDataIdList.length > 0">
-        <div class="color-tip">仅检索错误权限，其中<span class="red"></span>表示权限不存在，需要调整<span class="blue"></span>表示权限存在，不需要调整</div>
+        <div class="color-tip">仅检索已配置的无效权限接口。<span class="red"></span>表示权限接口不存在，需要调整；<span class="blue"></span>表示权限接口存在</div>
         <div class="operate">
           <a-button type="danger" size="small" @click="handleBatchDelete">全部删除</a-button>
         </div>
@@ -18,7 +18,7 @@
         </div>
       </div>
       <div class="empty" v-else>
-        暂无可纠错数据
+        已配置的权限接口均有效，无需调整。
       </div>
     </a-spin>
   </a-drawer>
