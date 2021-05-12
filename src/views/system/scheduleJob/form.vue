@@ -15,7 +15,7 @@
               :getPopupContainer="getPopupContainer"
               placeholder="请选择任务"
               v-decorator="[
-                'jobName',
+                'jobNameSelector',
                 {
                   initialValue: model.jobName,
                   rules: [{ required: true, message: '任务不能为空'}]
@@ -54,6 +54,23 @@
                 {
                   initialValue: model.cron,
                   rules: [{ required: true, message: '定时表达式不能为空'}]
+                }
+              ]"
+            />
+          </a-form-item>
+        </a-col>
+        <a-col :span="24">
+          <a-form-item>
+            <template slot="label">
+              <span>定时任务标题</span>
+            </template>
+            <a-input
+              placeholder="定时任务自定义标题"
+              v-decorator="[
+                'jobName',
+                {
+                  initialValue: model.jobName,
+                  rules: [{ required: true, message: '定时任务标题不能为空'}]
                 }
               ]"
             />
@@ -191,6 +208,7 @@ export default {
     handleJobSelectChange (value) {
       this.$set(this.model, 'paramJson', this.jobExample[value])
       this.$set(this.model, 'cron', this.jobCron[value])
+      this.$set(this.model, 'jobName', value)
     }
   }
 }
