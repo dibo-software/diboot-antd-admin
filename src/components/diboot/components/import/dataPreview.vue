@@ -1,9 +1,9 @@
 <template>
   <div class="import-preview" v-if="visible">
     <a-divider/>
-    <div v-if="dataList.length>0">
+    <div v-if="totalCount>0">
       <div class="alert alert-info">
-        Excel文件解析成功，共有 <strong>{{ dataList.length }}</strong> 条数据可上传.
+        Excel文件解析成功，共有 <strong>{{ totalCount }}</strong> 条数据可上传.
       </div>
       <a-table
         size="default"
@@ -36,10 +36,11 @@ export default {
      * @param headers  头部列表字段
      * @param dataList  数据
      */
-    preview (headers, dataList) {
+    preview (headers, dataList, totalCount) {
       this.visible = true
       this.headers = headers
       this.dataList = dataList
+      this.totalCount = totalCount || dataList.length
       const columns = []
       if (headers && headers.length > 0) {
         headers.forEach(header => {
