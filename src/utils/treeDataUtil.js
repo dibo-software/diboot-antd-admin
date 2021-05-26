@@ -236,6 +236,22 @@ const sortTreeListFormatter = function (treeList, valueField, titleField) {
   return formatterList
 }
 
+const getDeepExpandKeys = function (treeList, keyField, childrenField) {
+  if (!treeList || treeList.length === 0) {
+    return []
+  }
+  const keys = []
+  keyField = keyField || 'id'
+  childrenField = childrenField || 'children'
+  const newKeys = treeList.map(tree => {
+    const children = tree[childrenField]
+    keys.push(...getDeepExpandKeys(children, keyField, childrenField))
+    return tree[keyField]
+  })
+  keys.push(...newKeys)
+  return keys
+}
+
 export {
   treeListFormatter,
   clearNullChildren,
@@ -245,5 +261,6 @@ export {
   routersFormatter,
   apiListFormatter,
   permissionTreeListFormatter,
-  sortTreeListFormatter
+  sortTreeListFormatter,
+  getDeepExpandKeys
 }
