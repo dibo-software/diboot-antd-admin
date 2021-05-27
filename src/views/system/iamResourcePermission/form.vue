@@ -115,7 +115,7 @@
 
             <a-tabs
               v-if="permissionList.length > 0"
-              defaultActiveKey="0"
+              :defaultActiveKey="0"
               v-model="currentPermissionActiveKey"
             >
               <a-tab-pane
@@ -149,7 +149,7 @@
                       />
                     </a-col>
                     <a-col :span="5">
-                      <a-button type="primary" icon="swap" size="small" @click="handleSwap(permission, index)">{{isSelect ? '自定义输入' : '从字典选取'}}</a-button>
+                      <a-button type="primary" icon="swap" size="small" @click="handleSwap(permission, index)">{{ isSelect ? '自定义输入' : '从字典选取' }}</a-button>
                     </a-col>
                   </a-row>
                 </a-form-item>
@@ -450,6 +450,7 @@ export default {
     afterClose () {
       this.apiSetList = []
       this.permissionList = []
+      this.currentPermissionActiveKey = 0
       this.currentMenu = ''
     }
   },
