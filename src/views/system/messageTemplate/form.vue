@@ -61,7 +61,7 @@
               </span>
               <div class="variable-container">
                 <a-tag @click="handleInsertIntoContent(item)" class="variable-tag" color="blue" v-for="(item, index) in more.templateTemplateVariableList" :key="index">
-                  {{item}}
+                  {{ item }}
                 </a-tag>
               </div>
             </template>

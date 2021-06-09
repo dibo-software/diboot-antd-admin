@@ -13,8 +13,8 @@
           <a-button type="danger" size="small" @click="handleBatchDelete">全部删除</a-button>
         </div>
         <div v-for="(item, index) in diffDataList" :key="`${_uid}_${index}`">
-          <h4>{{item.parentDisplayName}}</h4>
-          <correct-permission-item  :permission-item="item" :api-tree-list="apiTreeList" @refresh="handleRefresh"></correct-permission-item>
+          <h4>{{ item.parentDisplayName }}</h4>
+          <correct-permission-item :permission-item="item" :api-tree-list="apiTreeList" @refresh="handleRefresh"></correct-permission-item>
         </div>
       </div>
       <div class="empty" v-else>

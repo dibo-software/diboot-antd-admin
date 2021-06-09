@@ -5,11 +5,11 @@
       <a-icon
         class="edit"
         v-if="!isOperate"
-              type="edit"
-              theme="twoTone"
-              two-tone-color="#1585ff"
-              title="选取替换"
-              @click="() => isOperate = !isOperate"/>
+        type="edit"
+        theme="twoTone"
+        two-tone-color="#1585ff"
+        title="选取替换"
+        @click="() => isOperate = !isOperate"/>
       <span v-if="isOperate" class="edit finished" @click="handleUpdate">完成</span>
       <span v-if="isOperate" class="edit" @click="handleCancel">取消</span>
     </div>
