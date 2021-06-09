@@ -107,6 +107,7 @@ export default {
     return {
       baseApi: '/dictionary',
       customQueryParam: { parentId: 0 },
+      allowCanceledDelete: false,
       columns: [
         {
           title: '类型名称',

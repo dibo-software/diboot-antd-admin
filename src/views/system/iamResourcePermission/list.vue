@@ -96,7 +96,7 @@
     <diboot-form ref="form" @complete="getList" :initParentId="formParentId"></diboot-form>
     <diboot-detail ref="detail"></diboot-detail>
     <permission-tree-sort ref="sort" @complete="getList"></permission-tree-sort>
-    <correct-permission ref="correct"  @complete="getList"></correct-permission>
+    <correct-permission ref="correct" @complete="getList"></correct-permission>
   </a-card>
 </template>
 
@@ -121,8 +121,8 @@ export default {
     return {
       baseApi: '/iam/resourcePermission',
       canCorrectPermission: process.env.NODE_ENV !== 'production',
-
       customQueryParam: { displayType: 'MENU' },
+      allowCanceledDelete: false,
       getMore: true,
       formParentId: '0',
       columns: [

@@ -35,6 +35,8 @@ export default {
       loadingData: false,
       // 窗口高度
       windowHeight: 240,
+      // 是否允许撤回删除
+      allowCanceledDelete: true,
       // 分页数据
       pagination: {
         pageSize: 10,
@@ -244,21 +246,25 @@ export default {
             const deleteApiPrefix = _this.deleteApiPrefix ? _this.deleteApiPrefix : ''
             dibootApi.delete(`${_this.baseApi}${deleteApiPrefix}/${id}`).then(async (res) => {
               if (res.code === 0) {
-                _this.$message.success(h => {
-                  return h('span', [
-                    '当前数据删除成功',
-                    h('a-button', {
-                      props: {
-                        type: 'link'
-                      },
-                      on: {
-                        click: event => {
-                          _this.cancelRemove(id)
+                if (_this.allowCanceledDelete) {
+                  _this.$message.success(h => {
+                    return h('span', [
+                      '当前数据删除成功',
+                      h('a-button', {
+                        props: {
+                          type: 'link'
+                        },
+                        on: {
+                          click: event => {
+                            _this.canceledDelete(id)
+                          }
                         }
-                      }
-                    }, '撤回')
-                  ])
-                })
+                      }, '撤回')
+                    ])
+                  })
+                } else {
+                  _this.$message.success('当前数据删除成功')
+                }
                 await _this.getList()
                 resolve(res.data)
               } else {
@@ -282,8 +288,8 @@ export default {
         })
       })
     },
-    async cancelRemove (id) {
-      const res = await dibootApi.delete(`${this.baseApi}/cancel/${id}`)
+    async canceledDelete (id) {
+      const res = await dibootApi.delete(`${this.baseApi}/canceled/${id}`)
       if (res.code === 0) {
         this.$message.destroy()
         this.$message.success('撤回成功')

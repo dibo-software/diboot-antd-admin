@@ -117,6 +117,7 @@ export default {
       baseApi: '/iam/user',
       exportApi: '/excel/export',
       getMore: true,
+      allowCanceledDelete: false,
       // 表头
       columns: [
         {

@@ -88,10 +88,20 @@ export default {
           onOk () {
             dibootApi.delete(`${_this.baseApi}/${id}`).then(async (res) => {
               if (res.code === 0) {
-                _this.$notification.success({
-                  message: '删除成功',
-                  description: '已删除该数据',
-                  duration: 3
+                _this.$message.success(h => {
+                  return h('span', [
+                    '当前数据删除成功',
+                    h('a-button', {
+                      props: {
+                        type: 'link'
+                      },
+                      on: {
+                        click: event => {
+                          _this.canceledDelete(id)
+                        }
+                      }
+                    }, '撤回')
+                  ])
                 })
                 _this.$refs.tree.cancelSelect()
                 _this.$refs.tree.loadTree()
@@ -116,6 +126,17 @@ export default {
           }
         })
       })
+    },
+    async canceledDelete (id) {
+      const res = await dibootApi.delete(`${this.baseApi}/canceled/${id}`)
+      if (res.code === 0) {
+        this.$message.destroy()
+        this.$message.success('撤回成功')
+        this.$refs.tree.cancelSelect()
+        this.$refs.tree.loadTree()
+      } else {
+        this.$message.error('撤回失败')
+      }
     }
   },
   props: {
