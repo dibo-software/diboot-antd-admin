@@ -5,12 +5,18 @@
         <a-row :gutter="48">
           <a-col :md="7" :sm="24">
             <a-form-item label="类型名称">
-              <a-input placeholder="名称" v-model="queryParam.itemName" />
+              <a-input
+                @keyup.enter.native="onSearch"
+                placeholder="名称"
+                v-model="queryParam.itemName" />
             </a-form-item>
           </a-col>
           <a-col :md="7" :sm="24">
             <a-form-item label="类型编码">
-              <a-input placeholder="编码" v-model="queryParam.type" />
+              <a-input
+                @keyup.enter.native="onSearch"
+                placeholder="编码"
+                v-model="queryParam.type" />
             </a-form-item>
           </a-col>
           <a-col :md="5" :sm="24">

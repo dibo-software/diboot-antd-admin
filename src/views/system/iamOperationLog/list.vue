@@ -5,22 +5,35 @@
         <a-row :gutter="48">
           <a-col :md="6" :sm="24">
             <a-form-item label="用户类型">
-              <a-input placeholder="IamUser" v-model="queryParam.userType" />
+              <a-input
+                @keyup.enter.native="onSearch"
+                placeholder="IamUser"
+                v-model="queryParam.userType" />
             </a-form-item>
           </a-col>
           <a-col :md="6" :sm="24">
             <a-form-item label="用户ID">
-              <a-input placeholder="10001" v-model="queryParam.userId" />
+              <a-input
+                @keyup.enter.native="onSearch"
+                placeholder="10001"
+                v-model="queryParam.userId" />
             </a-form-item>
           </a-col>
           <a-col :md="6" :sm="24">
             <a-form-item label="业务对象">
-              <a-input placeholder="" v-model="queryParam.businessObj" />
+              <a-input
+                @keyup.enter.native="onSearch"
+                placeholder=""
+                v-model="queryParam.businessObj" />
             </a-form-item>
           </a-col>
           <a-col :md="6" :sm="24">
             <a-form-item label="请求方式">
-              <a-select placeholder="选择" default-value="" v-model="queryParam.requestMethod">
+              <a-select
+                @change="onSearch"
+                placeholder="选择"
+                default-value=""
+                v-model="queryParam.requestMethod">
                 <a-select-option
                   value="GET"
                 >
@@ -46,7 +59,11 @@
           </a-col>
           <a-col :md="6" :sm="24">
             <a-form-item label="状态">
-              <a-select placeholder="选择" default-value="" v-model="queryParam.status">
+              <a-select
+                @change="onSearch"
+                placeholder="选择"
+                default-value=""
+                v-model="queryParam.status">
                 <a-select-option
                   value="0"
                 >

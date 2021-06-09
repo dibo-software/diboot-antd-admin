@@ -10,8 +10,14 @@
         <a-form layout="inline">
           <a-row :gutter="18">
             <a-col :md="8" :sm="24">
-              <a-form-item label="任务" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
+              <a-form-item
+                label="任务"
+                labelAlign="right"
+                :labelCol="{span: 6}"
+                :wrapperCol="{span: 18}"
+                style="width: 100%;">
                 <a-select
+                  @change="onSearch"
                   v-model="queryParam.jobName"
                   :getPopupContainer="getPopupContainer"
                   placeholder="请选择任务"
@@ -28,7 +34,11 @@
             </a-col>
             <a-col :md="8" :sm="24">
               <a-form-item label="执行状态" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
-                <a-select v-model="queryParam.runStatus" placeholder="请选择执行状态" style="width: 100%;">
+                <a-select
+                  @change="onSearch"
+                  v-model="queryParam.runStatus"
+                  placeholder="请选择执行状态"
+                  style="width: 100%;">
                   <a-select-option value="S">
                     成功
                   </a-select-option>

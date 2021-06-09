@@ -5,17 +5,27 @@
         <a-row :gutter="48">
           <a-col :md="6" :sm="24">
             <a-form-item label="用户名">
-              <a-input placeholder="用户名" v-model="queryParam.authAccount" />
+              <a-input
+                @keyup.enter.native="onSearch"
+                placeholder="用户名"
+                v-model="queryParam.authAccount" />
             </a-form-item>
           </a-col>
           <a-col :md="6" :sm="24">
             <a-form-item label="IP地址">
-              <a-input placeholder="IP地址" v-model="queryParam.ipAddress" />
+              <a-input
+                @keyup.enter.native="onSearch"
+                placeholder="IP地址"
+                v-model="queryParam.ipAddress" />
             </a-form-item>
           </a-col>
           <a-col :md="6" :sm="24">
             <a-form-item label="登录状态">
-              <a-select placeholder="请选择" default-value="" v-model="queryParam.success">
+              <a-select
+                @change="onSearch"
+                placeholder="请选择"
+                default-value=""
+                v-model="queryParam.success">
                 <a-select-option
                   :value="true"
                 >

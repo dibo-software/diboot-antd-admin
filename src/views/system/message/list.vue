@@ -6,6 +6,7 @@
           <a-col :md="8" :sm="24">
             <a-form-item label="信息模版" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
               <a-select
+                @change="onSearch"
                 v-if="more.messageTemplateKvList"
                 :getPopupContainer="getPopupContainer"
                 placeholder="请选择信息模版"
@@ -24,7 +25,11 @@
           </a-col>
           <a-col :md="8" :sm="24">
             <a-form-item label="发送通道" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
-              <a-select v-model="queryParam.channel" placeholder="请选择发送通道" style="width: 100%;">
+              <a-select
+                @change="onSearch"
+                v-model="queryParam.channel"
+                placeholder="请选择发送通道"
+                style="width: 100%;">
                 <a-select-option
                   v-for="kv in more.messageChannelKvList"
                   :key="kv.v"
@@ -38,7 +43,11 @@
           <template v-if="advanced">
             <a-col :md="8" :sm="24">
               <a-form-item label="消息状态" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
-                <a-select v-model="queryParam.status" placeholder="请选择消息状态" style="width: 100%;">
+                <a-select
+                  @change="onSearch"
+                  v-model="queryParam.status"
+                  placeholder="请选择消息状态"
+                  style="width: 100%;">
                   <a-select-option
                     v-for="kv in more.messageStatusKvList"
                     :key="kv.v"
@@ -52,6 +61,7 @@
             <a-col :md="8" :sm="24">
               <a-form-item label="创建时间" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
                 <a-date-picker
+                  @change="onSearch"
                   format="YYYY-MM-DD"
                   v-model="queryParam.createTime"
                   style="width: 100%;"
@@ -88,8 +98,8 @@
     >
       <tempalte slot="statusLabel" slot-scope="text, record">
         <a-tag :color="messageStatusColor[record.status]">
-         {{record.statusLabel}}
-      </a-tag>
+          {{ record.statusLabel }}
+        </a-tag>
       </tempalte>
       <span slot="action" slot-scope="text, record">
         <a v-action:detail href="javascript:;" @click="$refs.detail.open(record.id)">详情</a>

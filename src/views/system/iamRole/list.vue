@@ -5,12 +5,18 @@
         <a-row :gutter="48">
           <a-col :md="8" :sm="24">
             <a-form-item label="角色名称">
-              <a-input placeholder="请输入角色名称" v-model="queryParam.name" />
+              <a-input
+                @keyup.enter.native="onSearch"
+                placeholder="请输入角色名称"
+                v-model="queryParam.name" />
             </a-form-item>
           </a-col>
           <a-col :md="8" :sm="24">
             <a-form-item label="编码">
-              <a-input placeholder="请输入编码" v-model="queryParam.code" />
+              <a-input
+                @keyup.enter.native="onSearch"
+                placeholder="请输入编码"
+                v-model="queryParam.code" />
             </a-form-item>
           </a-col>
           <a-col :md="5" :sm="24">

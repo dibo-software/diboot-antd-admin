@@ -5,18 +5,27 @@
         <a-row :gutter="18">
           <a-col :md="8" :sm="24">
             <a-form-item label="姓名">
-              <a-input v-model="queryParam.realname" placeholder=""/>
+              <a-input
+                @keyup.enter.native="onSearch"
+                v-model="queryParam.realname"
+                placeholder=""/>
             </a-form-item>
           </a-col>
           <a-col :md="8" :sm="24">
             <a-form-item label="工号">
-              <a-input v-model="queryParam.userNum" placeholder=""/>
+              <a-input
+                @keyup.enter.native="onSearch"
+                v-model="queryParam.userNum"
+                placeholder=""/>
             </a-form-item>
           </a-col>
           <template v-if="advanced">
             <a-col :md="8" :sm="24">
               <a-form-item label="性别">
-                <a-select v-model="queryParam.gender" placeholder="请选择">
+                <a-select
+                  @change="onSearch"
+                  v-model="queryParam.gender"
+                  placeholder="请选择">
                   <a-select-option
                     v-for="(gender, index) in more.genderKvList"
                     :key="index"
@@ -29,12 +38,18 @@
             </a-col>
             <a-col :md="8" :sm="24">
               <a-form-item label="电话">
-                <a-input v-model="queryParam.mobilePhone" placeholder=""/>
+                <a-input
+                  @keyup.enter.native="onSearch"
+                  v-model="queryParam.mobilePhone"
+                  placeholder=""/>
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
               <a-form-item label="邮箱">
-                <a-input v-model="queryParam.email" placeholder=""/>
+                <a-input
+                  @keyup.enter.native="onSearch"
+                  v-model="queryParam.email"
+                  placeholder=""/>
               </a-form-item>
             </a-col>
           </template>

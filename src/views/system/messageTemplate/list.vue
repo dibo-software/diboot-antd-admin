@@ -5,18 +5,27 @@
         <a-row :gutter="18">
           <a-col :md="8" :sm="24">
             <a-form-item label="模版编码" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
-              <a-input v-model="queryParam.code" placeholder="" style="width: 100%;"/>
+              <a-input
+                @keyup.enter.native="onSearch"
+                v-model="queryParam.code"
+                placeholder=""
+                style="width: 100%;"/>
             </a-form-item>
           </a-col>
           <a-col :md="8" :sm="24">
             <a-form-item label="模版标题" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
-              <a-input v-model="queryParam.title" placeholder="" style="width: 100%;"/>
+              <a-input
+                @keyup.enter.native="onSearch"
+                v-model="queryParam.title"
+                placeholder=""
+                style="width: 100%;"/>
             </a-form-item>
           </a-col>
           <template v-if="advanced">
             <a-col :md="8" :sm="24">
               <a-form-item label="创建时间" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
                 <a-date-picker
+                  @change="onSearch"
                   format="YYYY-MM-DD"
                   v-model="queryParam.createTime"
                   style="width: 100%;"

@@ -5,12 +5,18 @@
         <a-row :gutter="48">
           <a-col :md="5" :sm="24">
             <a-form-item label="菜单名称">
-              <a-input placeholder="名称" v-model="queryParam.displayName" />
+              <a-input
+                @keyup.enter.native="onSearch"
+                placeholder="名称"
+                v-model="queryParam.displayName" />
             </a-form-item>
           </a-col>
           <a-col :md="5" :sm="24">
             <a-form-item label="菜单编码">
-              <a-input placeholder="菜单编码" v-model="queryParam.resourceCode" />
+              <a-input
+                @keyup.enter.native="onSearch"
+                placeholder="菜单编码"
+                v-model="queryParam.resourceCode" />
             </a-form-item>
           </a-col>
           <a-col :md="5" :sm="24">

@@ -5,12 +5,19 @@
         <a-row :gutter="48">
           <a-col :md="8" :sm="24">
             <a-form-item label="姓名">
-              <a-input placeholder="姓名" v-model="queryParam.realname" />
+              <a-input
+                @keyup.enter.native="onSearch"
+                placeholder="姓名"
+                v-model="queryParam.realname" />
             </a-form-item>
           </a-col>
           <a-col :md="8" :sm="24">
             <a-form-item label="状态">
-              <a-select placeholder="请选择" default-value="" v-model="queryParam.status">
+              <a-select
+                @change="onSearch"
+                placeholder="请选择"
+                default-value=""
+                v-model="queryParam.status">
                 <a-select-option
                   v-for="(status, index) in more.userStatusKvList"
                   :key="index"

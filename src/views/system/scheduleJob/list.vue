@@ -6,6 +6,7 @@
           <a-col :md="8" :sm="24">
             <a-form-item label="任务" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
               <a-select
+                @change="onSearch"
                 v-model="queryParam.jobName"
                 :getPopupContainer="getPopupContainer"
                 placeholder="请选择任务"
@@ -22,7 +23,11 @@
           </a-col>
           <a-col :md="8" :sm="24">
             <a-form-item label="状态" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
-              <a-select v-model="queryParam.jobStatus" placeholder="请选择状态" style="width: 100%;">
+              <a-select
+                @change="onSearch"
+                v-model="queryParam.jobStatus"
+                placeholder="请选择状态"
+                style="width: 100%;">
                 <a-select-option value="A">
                   启用
                 </a-select-option>
