@@ -289,7 +289,7 @@ export default {
       })
     },
     async canceledDelete (id) {
-      const res = await dibootApi.delete(`${this.baseApi}/canceled/${id}`)
+      const res = await dibootApi.post(`${this.baseApi}/cancelDeleted/${id}`)
       if (res.code === 0) {
         this.$message.destroy()
         this.$message.success('撤回成功')
