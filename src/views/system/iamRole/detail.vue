@@ -12,16 +12,18 @@
         <a-descriptions-item label="角色编码">{{ model.code }}</a-descriptions-item>
         <a-descriptions-item label="角色描述">{{ model.description || '-' }}</a-descriptions-item>
         <a-descriptions-item label="已授权权限">
-          <a-tree
+          <flat-tree
             v-if="permissionTreeList.length > 0"
             showIcon
             checkStrictly
             :defaultExpandAll="true"
             :treeData="permissionTreeList"
+            :style="{width:width-150+'px'}"
+            style="position: relative; top: -8px"
           >
             <a-icon slot="menu" type="bars" />
             <a-icon slot="permission" type="thunderbolt" />
-          </a-tree>
+          </flat-tree>
           <template v-else>
             无
           </template>
@@ -37,10 +39,12 @@
 
 <script>
 import detail from '@/components/diboot/mixins/detail'
+import FlatTree from '@/components/FlatTree'
 import { permissionTreeListFormatter } from '@/utils/treeDataUtil'
 
 export default {
   name: 'IamRoleDetail',
+  components: { FlatTree },
   data () {
     return {
       baseApi: '/iam/role',
@@ -62,4 +66,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.ant-descriptions /deep/ .ant-descriptions-item{
+  display: flex;
+}
 </style>

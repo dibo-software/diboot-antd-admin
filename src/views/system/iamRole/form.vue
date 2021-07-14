@@ -57,30 +57,24 @@
       <a-row :gutter="16">
         <a-col :span="24">
           <a-form-item label="角色授权">
-            <a-row>
-              <template v-if="isAdmin">
-                <a-col :span="20">
-                  <a-tag>拥有所有权限</a-tag>
-                </a-col>
-              </template>
-              <template v-else>
-                <a-col :span="20">
-                  <a-tree
-                    v-if="permissionTreeList.length > 0"
-                    showIcon
-                    checkable
-                    checkStrictly
-                    @check="onNodeCheck"
-                    :defaultExpandAll="true"
-                    v-model="checkedKeys"
-                    :treeData="permissionTreeList"
-                  >
-                    <a-icon slot="menu" type="bars" />
-                    <a-icon slot="permission" type="thunderbolt" />
-                  </a-tree>
-                </a-col>
-              </template>
-            </a-row>
+            <template v-if="isAdmin">
+              <a-tag>拥有所有权限</a-tag>
+            </template>
+            <template v-else>
+              <flat-tree
+                v-if="permissionTreeList.length > 0"
+                showIcon
+                checkable
+                checkStrictly
+                @check="onNodeCheck"
+                :defaultExpandAll="true"
+                v-model="checkedKeys"
+                :treeData="permissionTreeList"
+              >
+                <a-icon slot="menu" type="bars" />
+                <a-icon slot="permission" type="thunderbolt" />
+              </flat-tree>
+            </template>
           </a-form-item>
         </a-col>
       </a-row>
@@ -96,11 +90,13 @@
 <script>
 import { dibootApi } from '@/utils/request'
 import form from '@/components/diboot/mixins/form'
+import FlatTree from '@/components/FlatTree'
 import { permissionTreeListFormatter, treeList2list, list2childrenMap } from '@/utils/treeDataUtil'
 import _ from 'lodash'
 
 export default {
   name: 'IamRoleForm',
+  components: { FlatTree },
   mixins: [ form ],
   data () {
     return {
