@@ -18,7 +18,7 @@
             checkStrictly
             :defaultExpandAll="true"
             :treeData="permissionTreeList"
-            :style="{width:width-150+'px'}"
+            :style="{width:width-165+'px'}"
             style="position: relative; top: -8px"
           >
             <a-icon slot="menu" type="bars" />

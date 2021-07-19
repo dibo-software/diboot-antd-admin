@@ -3,8 +3,9 @@
     :title="title"
     :visible="visible"
     :confirmLoading="confirmLoading"
-    style="top: 0px;"
-    width="1000"
+    centered
+    style="top: 0"
+    :width="1200"
     @ok="close"
     @cancel="close"
   >
@@ -12,14 +13,14 @@
       <a-row :gutter="16">
         <a-col :span="8">
           <a-card :bordered="false">
-            <readonly-org-tree @changeCurrentNode="node => currentNodeId = `${node.value ? node.value : '0'}`" ref="userSelectOrgTree"></readonly-org-tree>
+            <readonly-org-tree @changeCurrentNode="node => currentNodeId = `${node.value ? node.value : '0'}`" ref="userSelectOrgTree"/>
           </a-card>
         </a-col>
         <a-col :span="16">
           <a-card :bordered="false">
             <a-tabs defaultActiveKey="1">
               <a-tab-pane :tab="tabTitle" key="1">
-                <user-select-list :current-node-id="currentNodeId" ref="userSelectList" @select="record => selectUser(record)"></user-select-list>
+                <user-select-list :current-node-id="currentNodeId" ref="userSelectList" @select="records => selectUsers(records)"/>
               </a-tab-pane>
             </a-tabs>
           </a-card>
