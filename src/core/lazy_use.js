@@ -13,6 +13,7 @@ import {
   Select,
   Card,
   Form,
+  FormModel,
   Row,
   Col,
   Modal,
@@ -73,6 +74,7 @@ Vue.use(Checkbox)
 Vue.use(Select)
 Vue.use(Card)
 Vue.use(Form)
+Vue.use(FormModel)
 Vue.use(Row)
 Vue.use(Col)
 Vue.use(Modal)
