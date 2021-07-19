@@ -138,7 +138,7 @@ export default {
             // eslint-disable-next-line prefer-promise-reject-errors
             this.$notification.error({
               message: '获取列表数据失败',
-              description: err
+              description: err.message
             })
             reject(err)
           })
@@ -186,10 +186,9 @@ export default {
           }
         }).catch(err => {
           this.loadingData = false
-          // eslint-disable-next-line prefer-promise-reject-errors
           this.$notification.error({
             message: '获取列表数据失败',
-            description: err
+            description: err.message
           })
           reject(err)
         })
