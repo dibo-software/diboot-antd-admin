@@ -146,7 +146,7 @@ const apiListFormatter = function (apiList) {
   }
 
   const formatterList = []
-  apiList.forEach(item => {
+  apiList.forEach((item, index) => {
     let children
     if (item.children) {
       children = item.children.map(child => {
@@ -159,7 +159,7 @@ const apiListFormatter = function (apiList) {
     }
     formatterList.push({
       key: item.classTitle,
-      value: '',
+      value: `${index}`,
       title: item.classTitle,
       children,
       disabled: true
