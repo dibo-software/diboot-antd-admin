@@ -11,10 +11,9 @@
         <a-col :span="12">
           <a-form-item label="上级菜单">
             <a-tree-select
-              v-if="menuTreeData.length > 0"
               placeholder="请选择上级菜单"
               :dropdownStyle="{ maxHeight: '400px', overflow: 'auto' }"
-              :treeData="menuTreeData"
+              :treeData="menuTreeDataFilter(model.id)"
               treeNodeFilterProp="title"
               showSearch
               treeDefaultExpandAll
@@ -249,6 +248,31 @@ export default {
           this.$message.error(res.msg)
         }
       })
+    },
+    menuTreeDataFilter (id) {
+      const tree = this.menuTreeData
+      if (id == null) {
+        return tree
+      }
+      // 深度遍历删除指定id对象
+      const deepDelItem = tree => {
+        for (let i = tree.length - 1; i >= 0; i--) {
+          const treeElement = tree[i]
+          if (treeElement.key === id) {
+            tree.splice(i, 1)
+            return true
+          }
+          const children = treeElement.children || []
+          if (children.length > 0) {
+            if (deepDelItem(children)) {
+              return true
+            }
+          }
+        }
+        return false
+      }
+      deepDelItem(tree)
+      return tree
     },
     onMenuNameChange (value) {
       if (this.routerList || this.routerList.length > 0) {
