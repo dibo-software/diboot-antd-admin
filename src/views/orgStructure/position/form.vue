@@ -88,11 +88,11 @@
       </a-form-item>
       <a-form-item label="虚拟岗位" :label-col="{ span: 5 }" :wrapper-col="{ span: 18 }">
         <a-switch
-          :defaultChecked="model.virtual === true"
           v-decorator="[
-            'virtual',
+            'isVirtual',
             {
-              initialValue: model.virtual
+              initialValue: model.isVirtual,
+              valuePropName: 'checked'
             },
           ]"
         />

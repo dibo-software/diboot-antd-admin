@@ -13,7 +13,7 @@
         <a-descriptions-item label="职级名称">{{ model.gradeValue }}</a-descriptions-item>
         <a-descriptions-item label="职级头衔">{{ model.gradeName || '-' }}</a-descriptions-item>
         <a-descriptions-item label="数据权限">{{ model.dataPermissionTypeLabel }}</a-descriptions-item>
-        <a-descriptions-item label="虚拟岗位">{{ model.virtual ? '是' : '否' }}</a-descriptions-item>
+        <a-descriptions-item label="虚拟岗位">{{ model.isVirtual ? '是' : '否' }}</a-descriptions-item>
       </a-descriptions>
     </a-spin>
 
