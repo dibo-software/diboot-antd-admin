@@ -87,14 +87,17 @@ const user = {
     // 登出
     Logout ({ commit, state }) {
       return new Promise((resolve) => {
-        commit('SET_TOKEN', '')
-        commit('SET_ROLES', [])
-        storage.remove(ACCESS_TOKEN)
+        const reset = () => {
+          commit('SET_TOKEN', '')
+          commit('SET_ROLES', [])
+          storage.remove(ACCESS_TOKEN)
+          resolve()
+        }
 
         logout(state.token).then(() => {
-          resolve()
+          reset()
         }).catch(() => {
-          resolve()
+          reset()
         })
       })
     }
