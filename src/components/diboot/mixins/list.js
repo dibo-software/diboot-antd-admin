@@ -2,6 +2,7 @@ import merge from 'lodash.merge'
 import { dibootApi } from '@/utils/request'
 import moment from 'moment'
 import _ from 'lodash'
+import { downloadFileFromRes } from '@/utils/fileUtil'
 export default {
   data () {
     return {
@@ -351,19 +352,7 @@ export default {
      * @param res
      */
     downloadFile (res) {
-      const blob = new Blob([res.data])
-      if ('download' in document.createElement('a')) { // 非IE下载
-        const elink = document.createElement('a')
-        elink.download = res.filename
-        elink.style.display = 'none'
-        elink.href = URL.createObjectURL(blob)
-        document.body.appendChild(elink)
-        elink.click()
-        URL.revokeObjectURL(elink.href) // 释放URL 对象
-        document.body.removeChild(elink)
-      } else { // IE10+下载
-        navigator.msSaveBlob(blob, res.filename)
-      }
+      downloadFileFromRes(res)
     },
     /**
      * 加载数据之后操作
