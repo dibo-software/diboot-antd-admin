@@ -27,7 +27,6 @@
             type="primary"
             @click="handlePreview"
             :disabled="previewDisabled"
-            style="margin-right: 8px;"
           >
             <a-icon type="eye"/>
             预览数据

@@ -27,7 +27,6 @@
                 htmlType="submit">查询</a-button>
               <a-button
                 icon="redo"
-                style="margin-left: 8px"
                 @click="reset">重置</a-button>
             </span>
           </a-col>

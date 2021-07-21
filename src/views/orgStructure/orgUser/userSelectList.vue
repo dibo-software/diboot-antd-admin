@@ -56,8 +56,8 @@
           <a-col :md="!advanced && 8 || 24" :sm="24">
             <span class="table-page-search-submitButtons" :style="advanced && { float: 'right', overflow: 'hidden' } || {} ">
               <a-button type="primary" @click="getList">查询</a-button>
-              <a-button style="margin-left: 8px" @click="reset">重置</a-button>
-              <a @click="toggleAdvanced" style="margin-left: 8px">
+              <a-button @click="reset">重置</a-button>
+              <a @click="toggleAdvanced">
                 {{ advanced ? '收起' : '展开' }}
                 <a-icon :type="advanced ? 'up' : 'down'"/>
               </a>

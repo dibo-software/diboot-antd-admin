@@ -34,14 +34,12 @@ ol {
 .table-alert {
   margin-bottom: 16px;
 }
+
 // 数据列表 操作
 .table-operator {
   margin-bottom: 18px;
-
-  button {
-    margin-right: 8px;
-  }
 }
+
 // 数据列表 搜索条件
 .table-page-search-wrapper {
 
@@ -62,6 +60,7 @@ ol {
         padding-right: 8px;
         width: auto;
       }
+
       .ant-form-item-control {
         height: 32px;
         line-height: 32px;
@@ -76,9 +75,8 @@ ol {
   }
 }
 
-
 // 抽屉footer样式
-.drawer-footer{
+.drawer-footer {
   position: absolute;
   left: 0;
   bottom: 0;
@@ -100,15 +98,27 @@ ol {
   }
 }
 
+// 按钮与按钮相邻的间隔
+.ant-btn + .ant-btn {
+  margin-left: 13px;
+}
+
+// 按钮与a标签相邻的间隔
+.ant-btn + a {
+  margin-left: 8px;
+}
+
 @media (max-width: @screen-xs) {
   .ant-table {
     width: 100%;
     overflow-x: auto;
+
     &-thead > tr,
     &-tbody > tr {
       > th,
       > td {
         white-space: pre;
+
         > span {
           display: block;
         }

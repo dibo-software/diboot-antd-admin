@@ -51,7 +51,7 @@
             <a-col :md="8" :sm="24">
               <span class="table-page-search-submitButtons" >
                 <a-button type="primary" @click="onSearch">查询</a-button>
-                <a-button style="margin-left: 8px" @click="reset">重置</a-button>
+                <a-button @click="reset">重置</a-button>
               </span>
             </a-col>
           </a-row>

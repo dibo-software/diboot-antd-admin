@@ -27,7 +27,6 @@
                 htmlType="submit">查询</a-button>
               <a-button
                 icon="redo"
-                style="margin-left: 8px"
                 @click="reset">重置</a-button>
             </span>
           </a-col>
@@ -36,13 +35,11 @@
               v-if="canCorrectPermission"
               @click="$refs.correct.open()"
               icon="sync"
-              style="margin-right: 8px;"
               type="default">权限纠错</a-button>
             <a-button
               v-action:sort
               @click="$refs.sort.open()"
               icon="drag"
-              style="margin-right: 8px;"
               type="default">排序</a-button>
             <a-button
               v-action:create
