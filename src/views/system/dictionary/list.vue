@@ -7,6 +7,7 @@
             <a-form-item label="类型名称">
               <a-input
                 @keyup.enter.native="onSearch"
+                allowClear
                 placeholder="名称"
                 v-model="queryParam.itemName" />
             </a-form-item>
@@ -15,6 +16,7 @@
             <a-form-item label="类型编码">
               <a-input
                 @keyup.enter.native="onSearch"
+                allowClear
                 placeholder="编码"
                 v-model="queryParam.type" />
             </a-form-item>

@@ -5,12 +5,12 @@
         <a-row :gutter="48">
           <a-col :md="8" :sm="24">
             <a-form-item label="岗位名称">
-              <a-input placeholder="请输入岗位名称" v-model="queryParam.name" />
+              <a-input placeholder="请输入岗位名称" v-model="queryParam.name" allowClear/>
             </a-form-item>
           </a-col>
           <a-col :md="8" :sm="24">
             <a-form-item label="岗位编码">
-              <a-input placeholder="请输入岗位编码" v-model="queryParam.code" />
+              <a-input placeholder="请输入岗位编码" v-model="queryParam.code" allowClear/>
             </a-form-item>
           </a-col>
           <a-col :md="5" :sm="24">

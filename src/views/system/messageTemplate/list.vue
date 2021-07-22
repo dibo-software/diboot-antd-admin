@@ -8,6 +8,7 @@
               <a-input
                 @keyup.enter.native="onSearch"
                 v-model="queryParam.code"
+                allowClear
                 placeholder=""/>
             </a-form-item>
           </a-col>
@@ -16,6 +17,7 @@
               <a-input
                 @keyup.enter.native="onSearch"
                 v-model="queryParam.title"
+                allowClear
                 placeholder=""/>
             </a-form-item>
           </a-col>
@@ -24,6 +26,7 @@
               <a-form-item label="创建时间">
                 <a-date-picker
                   @change="onSearch"
+                  allowClear
                   format="YYYY-MM-DD"
                   v-model="queryParam.createTime"
                 />

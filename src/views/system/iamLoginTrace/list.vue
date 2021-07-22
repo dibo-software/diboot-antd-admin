@@ -7,6 +7,7 @@
             <a-form-item label="用户名">
               <a-input
                 @keyup.enter.native="onSearch"
+                allowClear
                 placeholder="用户名"
                 v-model="queryParam.authAccount" />
             </a-form-item>
@@ -15,6 +16,7 @@
             <a-form-item label="IP地址">
               <a-input
                 @keyup.enter.native="onSearch"
+                allowClear
                 placeholder="IP地址"
                 v-model="queryParam.ipAddress" />
             </a-form-item>
@@ -23,6 +25,7 @@
             <a-form-item label="登录状态">
               <a-select
                 @change="onSearch"
+                allowClear
                 placeholder="请选择"
                 default-value=""
                 v-model="queryParam.success">

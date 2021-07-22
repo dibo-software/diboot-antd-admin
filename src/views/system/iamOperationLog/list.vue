@@ -7,6 +7,7 @@
             <a-form-item label="用户类型">
               <a-input
                 @keyup.enter.native="onSearch"
+                allowClear
                 placeholder="IamUser"
                 v-model="queryParam.userType" />
             </a-form-item>
@@ -15,7 +16,9 @@
             <a-form-item label="用户ID">
               <a-input
                 @keyup.enter.native="onSearch"
+                allowClear
                 placeholder="10001"
+                type="Number"
                 v-model="queryParam.userId" />
             </a-form-item>
           </a-col>
@@ -23,6 +26,7 @@
             <a-form-item label="业务对象">
               <a-input
                 @keyup.enter.native="onSearch"
+                allowClear
                 placeholder=""
                 v-model="queryParam.businessObj" />
             </a-form-item>
@@ -31,6 +35,7 @@
             <a-form-item label="请求方式">
               <a-select
                 @change="onSearch"
+                allowClear
                 placeholder="选择"
                 default-value=""
                 v-model="queryParam.requestMethod">
@@ -61,6 +66,7 @@
             <a-form-item label="状态">
               <a-select
                 @change="onSearch"
+                allowClear
                 placeholder="选择"
                 default-value=""
                 v-model="queryParam.status">

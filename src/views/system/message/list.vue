@@ -9,6 +9,7 @@
                 @change="onSearch"
                 v-if="more.messageTemplateKvList"
                 :getPopupContainer="getPopupContainer"
+                allowClear
                 placeholder="请选择信息模版"
                 v-model="queryParam.templateId"
               >
@@ -27,6 +28,7 @@
               <a-select
                 @change="onSearch"
                 v-model="queryParam.channel"
+                allowClear
                 placeholder="请选择发送通道">
                 <a-select-option
                   v-for="kv in more.messageChannelKvList"
@@ -44,6 +46,7 @@
                 <a-select
                   @change="onSearch"
                   v-model="queryParam.status"
+                  allowClear
                   placeholder="请选择消息状态">
                   <a-select-option
                     v-for="kv in more.messageStatusKvList"
@@ -59,6 +62,7 @@
               <a-form-item label="创建时间">
                 <a-date-picker
                   @change="onSearch"
+                  allowClear
                   format="YYYY-MM-DD"
                   v-model="queryParam.createTime"
                 />

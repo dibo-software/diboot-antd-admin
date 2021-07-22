@@ -9,6 +9,7 @@
                 @change="onSearch"
                 v-model="queryParam.jobName"
                 :getPopupContainer="getPopupContainer"
+                allowClear
                 placeholder="请选择任务"
               >
                 <a-select-option
@@ -26,6 +27,7 @@
               <a-select
                 @change="onSearch"
                 v-model="queryParam.jobStatus"
+                allowClear
                 placeholder="请选择状态">
                 <a-select-option value="A">
                   启用

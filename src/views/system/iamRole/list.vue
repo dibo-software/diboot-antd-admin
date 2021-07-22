@@ -7,6 +7,7 @@
             <a-form-item label="角色名称">
               <a-input
                 @keyup.enter.native="onSearch"
+                allowClear
                 placeholder="请输入角色名称"
                 v-model="queryParam.name" />
             </a-form-item>
@@ -15,6 +16,7 @@
             <a-form-item label="编码">
               <a-input
                 @keyup.enter.native="onSearch"
+                allowClear
                 placeholder="请输入编码"
                 v-model="queryParam.code" />
             </a-form-item>

@@ -17,7 +17,7 @@
     </a-row>
     <a-row>
       <a-col :span="24">
-        <a-input-search style="margin-bottom: 8px" placeholder="请输入搜索内容" @change="onSearchChange" />
+        <a-input-search style="margin-bottom: 8px" placeholder="请输入搜索内容" @change="onSearchChange" allowClear/>
       </a-col>
     </a-row>
     <a-tree

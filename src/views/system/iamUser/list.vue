@@ -7,6 +7,7 @@
             <a-form-item label="姓名">
               <a-input
                 @keyup.enter.native="onSearch"
+                allowClear
                 placeholder="姓名"
                 v-model="queryParam.realname" />
             </a-form-item>
@@ -15,6 +16,7 @@
             <a-form-item label="状态">
               <a-select
                 @change="onSearch"
+                allowClear
                 placeholder="请选择"
                 default-value=""
                 v-model="queryParam.status">

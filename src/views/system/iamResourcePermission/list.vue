@@ -7,6 +7,7 @@
             <a-form-item label="菜单名称">
               <a-input
                 @keyup.enter.native="onSearch"
+                allowClear
                 placeholder="名称"
                 v-model="queryParam.displayName" />
             </a-form-item>
@@ -15,6 +16,7 @@
             <a-form-item label="菜单编码">
               <a-input
                 @keyup.enter.native="onSearch"
+                allowClear
                 placeholder="菜单编码"
                 v-model="queryParam.resourceCode" />
             </a-form-item>

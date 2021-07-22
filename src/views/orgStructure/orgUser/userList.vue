@@ -7,6 +7,7 @@
             <a-form-item label="姓名">
               <a-input
                 @keyup.enter.native="onSearch"
+                allowClear
                 v-model="queryParam.realname"
                 placeholder=""/>
             </a-form-item>
@@ -15,6 +16,7 @@
             <a-form-item label="工号">
               <a-input
                 @keyup.enter.native="onSearch"
+                allowClear
                 v-model="queryParam.userNum"
                 placeholder=""/>
             </a-form-item>
@@ -25,6 +27,7 @@
                 <a-select
                   @change="onSearch"
                   v-model="queryParam.gender"
+                  allowClear
                   placeholder="请选择">
                   <a-select-option
                     v-for="(gender, index) in more.genderKvList"
@@ -41,6 +44,7 @@
                 <a-input
                   @keyup.enter.native="onSearch"
                   v-model="queryParam.mobilePhone"
+                  allowClear
                   placeholder=""/>
               </a-form-item>
             </a-col>
@@ -49,6 +53,7 @@
                 <a-input
                   @keyup.enter.native="onSearch"
                   v-model="queryParam.email"
+                  allowClear
                   placeholder=""/>
               </a-form-item>
             </a-col>
