@@ -14,8 +14,7 @@
                 label="任务"
                 labelAlign="right"
                 :labelCol="{span: 6}"
-                :wrapperCol="{span: 18}"
-                style="width: 100%;">
+                :wrapperCol="{span: 18}">
                 <a-select
                   @change="onSearch"
                   v-model="queryParam.jobName"
@@ -33,12 +32,11 @@
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
-              <a-form-item label="执行状态" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
+              <a-form-item label="执行状态" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}">
                 <a-select
                   @change="onSearch"
                   v-model="queryParam.runStatus"
-                  placeholder="请选择执行状态"
-                  style="width: 100%;">
+                  placeholder="请选择执行状态">
                   <a-select-option value="S">
                     成功
                   </a-select-option>

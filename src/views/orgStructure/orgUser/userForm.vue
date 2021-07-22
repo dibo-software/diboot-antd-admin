@@ -156,7 +156,6 @@
         <a-col :span="12">
           <a-form-item label="生日">
             <a-date-picker
-              style="width: 100%"
               format="YYYY-MM-DD"
               valueFormat="YYYY-MM-DD"
               v-decorator="[

@@ -4,14 +4,13 @@
       <a-form layout="inline">
         <a-row :gutter="18">
           <a-col :md="8" :sm="24">
-            <a-form-item label="信息模版" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
+            <a-form-item label="信息模版" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}">
               <a-select
                 @change="onSearch"
                 v-if="more.messageTemplateKvList"
                 :getPopupContainer="getPopupContainer"
                 placeholder="请选择信息模版"
                 v-model="queryParam.templateId"
-                style="width: 100%;"
               >
                 <a-select-option
                   v-for="(item, index) in more.messageTemplateKvList"
@@ -24,12 +23,11 @@
             </a-form-item>
           </a-col>
           <a-col :md="8" :sm="24">
-            <a-form-item label="发送通道" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
+            <a-form-item label="发送通道" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}">
               <a-select
                 @change="onSearch"
                 v-model="queryParam.channel"
-                placeholder="请选择发送通道"
-                style="width: 100%;">
+                placeholder="请选择发送通道">
                 <a-select-option
                   v-for="kv in more.messageChannelKvList"
                   :key="kv.v"
@@ -42,12 +40,11 @@
           </a-col>
           <template v-if="advanced">
             <a-col :md="8" :sm="24">
-              <a-form-item label="消息状态" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
+              <a-form-item label="消息状态" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}">
                 <a-select
                   @change="onSearch"
                   v-model="queryParam.status"
-                  placeholder="请选择消息状态"
-                  style="width: 100%;">
+                  placeholder="请选择消息状态">
                   <a-select-option
                     v-for="kv in more.messageStatusKvList"
                     :key="kv.v"
@@ -59,12 +56,11 @@
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
-              <a-form-item label="创建时间" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}" style="width: 100%;">
+              <a-form-item label="创建时间" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}">
                 <a-date-picker
                   @change="onSearch"
                   format="YYYY-MM-DD"
                   v-model="queryParam.createTime"
-                  style="width: 100%;"
                 />
               </a-form-item>
             </a-col>
