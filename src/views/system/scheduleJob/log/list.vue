@@ -7,12 +7,11 @@
   >
     <a-card :bordered="false">
       <div class="table-page-search-wrapper">
-        <a-form layout="inline">
+        <a-form layout="inline" :labelCol="{span: 6}" :wrapperCol="{span: 18}">
           <a-row :gutter="18">
             <a-col :md="8" :sm="24">
               <a-form-item
                 label="任务"
-                labelAlign="right"
                 :labelCol="{span: 6}"
                 :wrapperCol="{span: 18}">
                 <a-select
@@ -32,7 +31,7 @@
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
-              <a-form-item label="执行状态" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}">
+              <a-form-item label="执行状态">
                 <a-select
                   @change="onSearch"
                   v-model="queryParam.runStatus"

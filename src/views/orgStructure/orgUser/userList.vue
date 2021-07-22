@@ -1,7 +1,7 @@
 <template>
   <div class="userList content">
     <div class="table-page-search-wrapper">
-      <a-form layout="inline">
+      <a-form layout="inline" :labelCol="{span: 6}" :wrapperCol="{span: 18}">
         <a-row :gutter="18">
           <a-col :md="8" :sm="24">
             <a-form-item label="姓名">

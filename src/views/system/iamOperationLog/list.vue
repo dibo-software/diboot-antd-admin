@@ -1,9 +1,9 @@
 <template>
   <a-card :bordered="false">
     <div class="table-page-search-wrapper">
-      <a-form layout="inline" @submit.native="onSearch">
+      <a-form layout="inline" :labelCol="{span: 6}" :wrapperCol="{span: 18}" @submit.native="onSearch">
         <a-row :gutter="48">
-          <a-col :md="6" :sm="24">
+          <a-col :md="8" :sm="24">
             <a-form-item label="用户类型">
               <a-input
                 @keyup.enter.native="onSearch"
@@ -11,7 +11,7 @@
                 v-model="queryParam.userType" />
             </a-form-item>
           </a-col>
-          <a-col :md="6" :sm="24">
+          <a-col :md="8" :sm="24">
             <a-form-item label="用户ID">
               <a-input
                 @keyup.enter.native="onSearch"
@@ -19,7 +19,7 @@
                 v-model="queryParam.userId" />
             </a-form-item>
           </a-col>
-          <a-col :md="6" :sm="24">
+          <a-col :md="8" :sm="24">
             <a-form-item label="业务对象">
               <a-input
                 @keyup.enter.native="onSearch"
@@ -27,7 +27,7 @@
                 v-model="queryParam.businessObj" />
             </a-form-item>
           </a-col>
-          <a-col :md="6" :sm="24">
+          <a-col :md="8" :sm="24">
             <a-form-item label="请求方式">
               <a-select
                 @change="onSearch"
@@ -57,7 +57,7 @@
               </a-select>
             </a-form-item>
           </a-col>
-          <a-col :md="6" :sm="24">
+          <a-col :md="8" :sm="24">
             <a-form-item label="状态">
               <a-select
                 @change="onSearch"
@@ -77,7 +77,7 @@
               </a-select>
             </a-form-item>
           </a-col>
-          <a-col :md="6" :sm="24">
+          <a-col :md="8" :sm="24">
             <span class="table-page-search-submitButtons">
               <a-button
                 icon="search"

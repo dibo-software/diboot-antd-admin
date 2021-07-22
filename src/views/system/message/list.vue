@@ -1,10 +1,10 @@
 <template>
   <a-card :bordered="false">
     <div class="table-page-search-wrapper">
-      <a-form layout="inline">
+      <a-form layout="inline" :labelCol="{span: 6}" :wrapperCol="{span: 18}">
         <a-row :gutter="18">
           <a-col :md="8" :sm="24">
-            <a-form-item label="信息模版" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}">
+            <a-form-item label="信息模版">
               <a-select
                 @change="onSearch"
                 v-if="more.messageTemplateKvList"
@@ -23,7 +23,7 @@
             </a-form-item>
           </a-col>
           <a-col :md="8" :sm="24">
-            <a-form-item label="发送通道" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}">
+            <a-form-item label="发送通道">
               <a-select
                 @change="onSearch"
                 v-model="queryParam.channel"
@@ -40,7 +40,7 @@
           </a-col>
           <template v-if="advanced">
             <a-col :md="8" :sm="24">
-              <a-form-item label="消息状态" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}">
+              <a-form-item label="消息状态">
                 <a-select
                   @change="onSearch"
                   v-model="queryParam.status"
@@ -56,7 +56,7 @@
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
-              <a-form-item label="创建时间" labelAlign="right" :labelCol="{span: 6}" :wrapperCol="{span: 18}">
+              <a-form-item label="创建时间">
                 <a-date-picker
                   @change="onSearch"
                   format="YYYY-MM-DD"
