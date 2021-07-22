@@ -24,7 +24,7 @@
         {{ initStrategyEnum[model.initStrategy] || '周期执行' }}
       </a-descriptions-item>
       <a-descriptions-item label="状态">
-        {{ model.jobStatus | toStatusLabel({A: '启用', I : '停用'}) }}
+        {{ model.jobStatusLabel }}
       </a-descriptions-item>
       <a-descriptions-item label="备注">
         {{ model.jobComment }}
