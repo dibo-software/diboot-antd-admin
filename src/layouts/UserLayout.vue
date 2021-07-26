@@ -22,7 +22,7 @@
 
         <div class="footer">
           <div class="copyright">
-            Copyright &copy; 2020 <a
+            Copyright &copy; 2021 <a
               href="https://www.diboot.com/"
               target="_blank"
             >diboot.com</a>

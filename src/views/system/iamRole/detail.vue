@@ -13,7 +13,7 @@
         <a-descriptions-item label="角色描述">{{ model.description || '-' }}</a-descriptions-item>
         <a-descriptions-item label="已授权权限">
           <flat-tree
-            v-if="permissionTreeList.length > 0"
+            v-if="permissionTreeList && permissionTreeList.length > 0"
             showIcon
             checkStrictly
             :defaultExpandAll="true"
