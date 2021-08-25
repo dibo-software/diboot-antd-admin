@@ -524,6 +524,7 @@ on: {
     return h(
       'li',
       {
+        // eslint-disable-next-line no-sequences
         'class': (_ref = {}, _defineProperty(_ref, prefixCls + '-treenode-disabled', disabled), _defineProperty(_ref, prefixCls + '-treenode-switcher-' + (expanded ? 'open' : 'close'), !isLeaf), _defineProperty(_ref, prefixCls + '-treenode-checkbox-checked', checked), _defineProperty(_ref, prefixCls + '-treenode-checkbox-indeterminate', halfChecked), _defineProperty(_ref, prefixCls + '-treenode-selected', selected), _defineProperty(_ref, prefixCls + '-treenode-loading', loading), _defineProperty(_ref, 'drag-over', !disabled && dragOver), _defineProperty(_ref, 'drag-over-gap-top', !disabled && dragOverGapTop), _defineProperty(_ref, 'drag-over-gap-bottom', !disabled && dragOverGapBottom), _defineProperty(_ref, 'filter-node', filterTreeNode && filterTreeNode(this)), _ref),
         attrs: { role: 'treeitem'
         },

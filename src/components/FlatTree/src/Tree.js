@@ -226,6 +226,7 @@ export default {
       }),
       on: getListeners(this),
       ref: 'tree',
+      // eslint-disable-next-line no-sequences
       'class': (_class2 = {}, _defineProperty(_class2, prefixCls + '-icon-hide', !showIcon), _defineProperty(_class2, prefixCls + '-block-node', blockNode), _class2)
     }
     if (treeData) {
