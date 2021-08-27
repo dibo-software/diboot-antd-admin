@@ -56,7 +56,11 @@
                   rules: [{ required: true, message: '定时表达式不能为空'}]
                 }
               ]"
-            />
+            >
+              <a slot="addonAfter" href="https://www.bejson.com/othertools/cron/" target="_blank">
+                在线编辑器
+              </a>
+            </a-input>
           </a-form-item>
         </a-col>
         <a-col :span="24">
