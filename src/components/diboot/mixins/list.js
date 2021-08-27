@@ -404,8 +404,8 @@ export default {
     dateRange2queryParam () {
       _.forEach(this.dateRangeQuery, (v, k) => {
         if (k && v && v.length === 2) {
-          this.queryParam[`${k}Begin`] = v[0].format('YYYY-MM-DD')
-          this.queryParam[`${k}End`] = v[1].format('YYYY-MM-DD')
+          this.queryParam[`${k}Begin`] = v[0] ? v[0].format('YYYY-MM-DD') : ''
+          this.queryParam[`${k}End`] = v[1] ? v[1].format('YYYY-MM-DD') : ''
         }
       })
     },
