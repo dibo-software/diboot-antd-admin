@@ -78,6 +78,10 @@
           <a-tag v-else color="#bcbcbc">{{ record.jobStatusLabel }}</a-tag>
         </span>
       </span>
+      <span slot="saveLog" slot-scope="text, record">
+        <a-tag v-if="record.saveLog" color="cyan">开启</a-tag>
+        <a-tag v-else>关闭</a-tag>
+      </span>
       <span slot="action" slot-scope="text, record">
         <a v-action:detail href="javascript:;" @click="$refs.detail.open(record.id)">详情</a>
         <a-divider v-action:detail v-permission="['executeOnce', 'update', 'delete']" type="vertical" />
@@ -144,8 +148,9 @@
             scopedSlots: { customRender: 'jobStatus' }
           },
           {
-            title: '备注',
-            dataIndex: 'jobComment'
+            title: '记录日志',
+            dataIndex: 'saveLog',
+            scopedSlots: { customRender: 'saveLog' }
           },
           {
             title: '创建时间',

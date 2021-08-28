@@ -119,6 +119,27 @@
             </a-radio-group>
           </a-form-item>
         </a-col>
+        <a-col :span="12">
+          <a-form-item label="记录日志">
+            <a-radio-group
+              :default-value="true"
+              button-style="solid"
+              v-decorator="[
+                'saveLog',
+                {
+                  initialValue: model.saveLog != null ? model.saveLog : true,
+                }
+              ]"
+            >
+              <a-radio-button :value="true">
+                开启
+              </a-radio-button>
+              <a-radio-button :value="false">
+                关闭
+              </a-radio-button>
+            </a-radio-group>
+          </a-form-item>
+        </a-col>
         <a-col :span="24">
           <a-form-item label="备注">
             <a-textarea

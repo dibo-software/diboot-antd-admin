@@ -26,6 +26,9 @@
       <a-descriptions-item label="状态">
         {{ model.jobStatusLabel }}
       </a-descriptions-item>
+      <a-descriptions-item label="记录日志">
+        {{ model.saveLog ? '开启' : '关闭' }}
+      </a-descriptions-item>
       <a-descriptions-item label="备注">
         {{ model.jobComment }}
       </a-descriptions-item>
