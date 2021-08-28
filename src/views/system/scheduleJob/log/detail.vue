@@ -15,7 +15,7 @@
         {{ model.cron }}
       </a-descriptions-item>
       <a-descriptions-item label="状态">
-        {{ {S: '成功', F: '失败'}[model.runStatus] }}
+        {{ model.runStatusLabel }}
       </a-descriptions-item>
       <a-descriptions-item label="开始时间">
         {{ model.startTime }}
@@ -49,8 +49,6 @@ export default {
     return {
       baseApi: '/scheduleJob/log'
     }
-  },
-  methods: {
   }
 }
 </script>
