@@ -32,6 +32,9 @@
       <a-descriptions-item label="创建时间">
         {{ model.createTime }}
       </a-descriptions-item>
+      <a-descriptions-item label="创建者">
+        {{ model.createByName }}
+      </a-descriptions-item>
       <a-descriptions-item label="更新时间">
         {{ model.updateTime }}
       </a-descriptions-item>

@@ -149,7 +149,12 @@
           },
           {
             title: '创建时间',
+            width: 160,
             dataIndex: 'createTime'
+          },
+          {
+            title: '创建者',
+            dataIndex: 'createByName'
           },
           {
             title: '操作',
