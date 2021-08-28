@@ -9,15 +9,15 @@
     <a-form layout="vertical" :form="form">
       <a-row :gutter="16">
         <a-col :span="12">
-          <a-form-item label="选择定时任务">
+          <a-form-item label="定时任务">
             <a-select
               @change="handleJobSelectChange"
               :getPopupContainer="getPopupContainer"
               placeholder="请选择任务"
               v-decorator="[
-                'jobName',
+                'jobKey',
                 {
-                  initialValue: model.jobName,
+                  initialValue: model.jobKey,
                   rules: [{ required: true, message: '任务不能为空'}]
                 }
               ]"
@@ -25,11 +25,25 @@
               <a-select-option
                 v-for="(item, index) in jobList"
                 :key="index"
-                :value="item.jobName"
+                :value="item.jobKey"
               >
-                {{ item.jobName }}
+                {{ item.jobKey + (item.jobName.length > 0 ? `（${item.jobName}）` : '') }}
               </a-select-option>
             </a-select>
+          </a-form-item>
+        </a-col>
+        <a-col :span="12">
+          <a-form-item label="任务名称">
+            <a-input
+              placeholder="请输入任务名称"
+              v-decorator="[
+                'jobName',
+                {
+                  initialValue: model.jobName,
+                  rules: [{ required: true, message: '任务名称不能为空', whitespace: true }]
+                }
+              ]"
+            />
           </a-form-item>
         </a-col>
         <a-col :span="12">
@@ -63,23 +77,6 @@
             </a-input>
           </a-form-item>
         </a-col>
-        <a-col :span="24">
-          <a-form-item>
-            <template slot="label">
-              <span>参数</span>
-            </template>
-            <a-textarea
-              placeholder="请输入参数"
-              v-decorator="[
-                'paramJson',
-                {
-                  initialValue: model.paramJson,
-                  rules: [{ validator: this.checkJson }]
-                }
-              ]"
-            />
-          </a-form-item>
-        </a-col>
         <a-col :span="12">
           <a-form-item label="初始化策略">
             <a-select
@@ -96,6 +93,20 @@
               <a-select-option value="FIRE_AND_PROCEED">立即执行一次，并周期执行</a-select-option>
               <a-select-option value="IGNORE_MISFIRES">超期立即执行，并周期执行</a-select-option>
             </a-select>
+          </a-form-item>
+        </a-col>
+        <a-col :span="24">
+          <a-form-item label="参数">
+            <a-textarea
+              placeholder="请输入参数"
+              v-decorator="[
+                'paramJson',
+                {
+                  initialValue: model.paramJson,
+                  rules: [{ validator: this.checkJson }]
+                }
+              ]"
+            />
           </a-form-item>
         </a-col>
         <a-col :span="12">
@@ -174,8 +185,9 @@ export default {
       baseApi: '/scheduleJob',
       form: this.$form.createForm(this),
       jobList: [],
-      jobExample: {},
-      jobCron: {}
+      jobName: {},
+      jobCron: {},
+      jobExample: {}
     }
   },
   methods: {
@@ -206,16 +218,18 @@ export default {
       if (res.code === 0) {
         this.jobList = res.data || []
         this.jobList.forEach(value => {
-          this.jobExample[value.jobName] = value.paramJsonExample
-          this.jobCron[value.jobName] = value.jobCron
+          this.jobName[value.jobKey] = value.jobName
+          this.jobCron[value.jobKey] = value.jobCron
+          this.jobExample[value.jobKey] = value.paramJsonExample
         })
       } else {
         this.$message.error('无可执行定时任务！')
       }
     },
     handleJobSelectChange (value) {
-      this.$set(this.model, 'paramJson', this.jobExample[value])
+      this.$set(this.model, 'jobName', this.jobName[value])
       this.$set(this.model, 'cron', this.jobCron[value])
+      this.$set(this.model, 'paramJson', this.jobExample[value])
     }
   }
 }
