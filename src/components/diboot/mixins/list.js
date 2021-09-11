@@ -6,6 +6,7 @@ import { downloadFileFromRes } from '@/utils/fileUtil'
 export default {
   data () {
     return {
+      primaryKey: 'id',
       // 请求接口基础路径
       baseApi: '/',
       // 列表数据接口
@@ -30,6 +31,10 @@ export default {
       getListFromMixin: true,
       // 是否使mixin在当前业务的attachMore接口中自动获取关联数据
       getMore: false,
+      // 是否重新加载
+      reload: false,
+      // 是否编辑
+      editable: false,
       // 日期区间选择配置
       dateRangeQuery: {},
       // 标记加载状态
@@ -346,6 +351,29 @@ export default {
           this.$message.error(result.msg)
         }
       })
+    },
+    /**
+     * 编辑表格结束后触发
+     * @param value
+     * @param oldValue
+     */
+    async handleEditTableRow (model) {
+      console.log(model)
+      if (this.editable) {
+        try {
+          const res = await dibootApi.put(`${this.baseApi}/${model[this.primaryKey]}`, model)
+          if (res.code === 0) {
+            await this.getList()
+          } else {
+            this.$message.warning(res.msg)
+          }
+        } catch (e) {
+          this.$message.warning('网络异常')
+        } finally {
+          this.reload = !this.reload
+        }
+      }
+      this.editable = !this.editable
     },
     /**
      * 下载文件
