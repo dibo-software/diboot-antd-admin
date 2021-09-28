@@ -131,7 +131,7 @@ export default {
      * 提交前对数据的处理（在验证正确之后的处理）
      * @param values
      */
-    enhance (values) {
+    async enhance (values) {
     },
     /***
      * 新建记录的提交
@@ -168,7 +168,7 @@ export default {
     async onSubmit () {
       this.state.confirmSubmit = true
       const values = await this.validate()
-      this.enhance(values)
+      await this.enhance(values)
       try {
         let result = {}
         if (this.model[this.primaryKey] === undefined) {
@@ -240,6 +240,12 @@ export default {
     },
     afterClose () {
 
+    },
+    /**
+     * 清除form内容
+     */
+    clearForm () {
+      this.form.resetFields()
     },
     async attachMore () {
       let res = {}
