@@ -144,8 +144,10 @@
        * 预览
        */
       async handlePreview (file) {
-        this.imageUrl = file.url || file.preview
-        this.previewVisible = true
+        if (this.isImage) {
+          this.imageUrl = file.url || file.preview
+          this.previewVisible = true
+        }
       },
       /**
        * 取消预览
