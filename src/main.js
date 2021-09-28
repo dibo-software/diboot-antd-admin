@@ -11,6 +11,9 @@ import { VueAxios } from './utils/request'
 import ProLayout, { PageHeaderWrapper } from '@ant-design-vue/pro-layout'
 import themePluginConfig from '../config/themePluginConfig'
 
+import Viewer from 'v-viewer'
+import 'viewerjs/dist/viewer.css'
+
 // mock
 // WARNING: `mockjs` NOT SUPPORT `IE` PLEASE DO NOT USE IN `production` ENV.
 // import './mock'
@@ -20,6 +23,11 @@ import './core/lazy_use' // use lazy load components
 import './permission' // permission control
 import './utils/filter' // global filter
 import './global.less' // global style
+
+Vue.use(Viewer)
+Viewer.setDefaults({
+  toolbar: true
+})
 
 Vue.config.productionTip = false
 
