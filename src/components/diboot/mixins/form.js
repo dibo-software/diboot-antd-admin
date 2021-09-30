@@ -131,7 +131,7 @@ export default {
      * 提交前对数据的处理（在验证正确之后的处理）
      * @param values
      */
-    enhance (values) {
+    async enhance (values) {
     },
     /***
      * 新建记录的提交
@@ -168,7 +168,7 @@ export default {
     async onSubmit () {
       this.state.confirmSubmit = true
       const values = await this.validate()
-      this.enhance(values)
+      await this.enhance(values)
       try {
         let result = {}
         if (this.model[this.primaryKey] === undefined) {
@@ -241,16 +241,22 @@ export default {
     afterClose () {
 
     },
+    /**
+     * 清除form内容
+     */
+    clearForm () {
+      this.form.resetFields()
+    },
     async attachMore () {
-      let res = {}
-      if (this.getMore === true) {
-        res = await dibootApi.get(`${this.baseApi}/attachMore`)
-      } else if (this.attachMoreList.length > 0) {
-        res = await dibootApi.post('/common/attachMore', this.attachMoreList)
-      }
-      if (res.code === 0) {
-        this.more = res.data
-        return res.data
+      const reqList = []
+      // 个性化接口
+      this.getMore === true && reqList.push(dibootApi.get(`${this.baseApi}/attachMore`))
+      // 通用获取当前对象关联的数据的接口
+      this.attachMoreList.length > 0 && reqList.push(dibootApi.post('/common/attachMore', this.attachMoreList))
+      if (reqList.length > 0) {
+        const resList = await Promise.all(reqList)
+        resList.forEach(res => res.code === 0 && Object.keys(res.data).forEach(key => { this.more[key] = res.data[key] }))
+        this.$forceUpdate()
       }
     },
     /***

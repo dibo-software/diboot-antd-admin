@@ -5,21 +5,11 @@
         <a-row :gutter="18">
           <a-col :md="8" :sm="24">
             <a-form-item label="任务">
-              <a-select
-                @change="onSearch"
+              <a-input
                 v-model="queryParam.jobName"
-                :getPopupContainer="getPopupContainer"
                 allowClear
-                placeholder="请选择任务"
-              >
-                <a-select-option
-                  v-for="(item, index) in jobList"
-                  :key="index"
-                  :value="item.jobName"
-                >
-                  {{ item.jobName }}
-                </a-select-option>
-              </a-select>
+                @keyup.enter.native="onSearch"
+              />
             </a-form-item>
           </a-col>
           <a-col :md="8" :sm="24">
@@ -173,27 +163,10 @@
           DO_NOTHING: '周期执行',
           FIRE_AND_PROCEED: '立即执行一次，并周期执行',
           IGNORE_MISFIRES: '超期立即执行，并周期执行'
-        },
-        jobList: []
+        }
       }
     },
-    created () {
-      this.loadJobs()
-    },
     methods: {
-
-      /**
-       * 加载job
-       * @returns {Promise<void>}
-       */
-      async loadJobs () {
-        const res = await this.$http.get('/scheduleJob/allJobs')
-        if (res.code === 0) {
-          this.jobList = res.data || []
-        } else {
-          this.$message.error('无可执行定时任务！')
-        }
-      },
       /**
        * 改变状态
        * @param value
@@ -234,8 +207,5 @@
         this.getList()
       }
     }
-
   }
 </script>
-<style lang="less" scoped>
-</style>
