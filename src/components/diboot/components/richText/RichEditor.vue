@@ -4,31 +4,31 @@
   </div>
 </template>
 <script>
-  import tinymce from '@/components/Editor/Tinymce/index'
+import tinymce from '@/components/Editor/Tinymce/index'
 
-  export default {
-    name: 'RichEditor',
-    components: {
-      tinymce
+export default {
+  name: 'RichEditor',
+  components: {
+    tinymce
+  },
+  model: {
+    prop: 'value',
+    event: 'change'
+  },
+  props: {
+    value: {
+      type: String,
+      default: ''
     },
-    model: {
-      prop: 'value',
-      event: 'change'
+    relObjType: {
+      type: String,
+      required: true
     },
-    props: {
-      value: {
-        type: String,
-        default: ''
-      },
-      relObjType: {
-        type: String,
-        required: true
-      },
-      relObjId: {
-        type: [Number, String],
-        required: false,
-        default: ''
-      }
+    relObjId: {
+      type: [Number, String],
+      required: false,
+      default: ''
     }
   }
+}
 </script>

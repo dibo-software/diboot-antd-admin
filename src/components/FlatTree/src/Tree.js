@@ -109,8 +109,8 @@ export default {
   }),
   inject: {
     configProvider: { 'default': function _default () {
-        return ConfigConsumerProps
-      } }
+      return ConfigConsumerProps
+    } }
   },
   created: function created () {
     warning(!('treeNodes' in getOptionProps(this)), '`treeNodes` is deprecated. please use treeData instead.')
@@ -120,8 +120,8 @@ export default {
   methods: {
     renderSwitcherIcon: function renderSwitcherIcon (prefixCls, switcherIcon, _ref) {
       var isLeaf = _ref.isLeaf
-        var expanded = _ref.expanded
-        var loading = _ref.loading
+      var expanded = _ref.expanded
+      var loading = _ref.loading
       var h = this.$createElement
       var showLine = this.$props.showLine
 
@@ -156,7 +156,7 @@ export default {
       var _this = this
 
       var $slots = this.$slots
-        var $scopedSlots = this.$scopedSlots
+      var $scopedSlots = this.$scopedSlots
 
       var defaultFields = { children: 'children', title: 'title', key: 'key' }
       var replaceFields = _extends({}, defaultFields, this.$props.replaceFields)
@@ -165,14 +165,14 @@ export default {
         var children = item[replaceFields.children]
 
         var _item$on = item.on
-          var on = _item$on === undefined ? {} : _item$on
-          var _item$slots = item.slots
-          var slots = _item$slots === undefined ? {} : _item$slots
-          var _item$scopedSlots = item.scopedSlots
-          var scopedSlots = _item$scopedSlots === undefined ? {} : _item$scopedSlots
-          var cls = item['class']
-          var style = item.style
-          var restProps = _objectWithoutProperties(item, ['on', 'slots', 'scopedSlots', 'class', 'style'])
+        var on = _item$on === undefined ? {} : _item$on
+        var _item$slots = item.slots
+        var slots = _item$slots === undefined ? {} : _item$slots
+        var _item$scopedSlots = item.scopedSlots
+        var scopedSlots = _item$scopedSlots === undefined ? {} : _item$scopedSlots
+        var cls = item['class']
+        var style = item.style
+        var restProps = _objectWithoutProperties(item, ['on', 'slots', 'scopedSlots', 'class', 'style'])
 
         var treeNodeProps = _extends({}, restProps, {
           icon: $scopedSlots[scopedSlots.icon] || $slots[slots.icon] || restProps.icon,
@@ -193,17 +193,17 @@ export default {
   },
   render: function render () {
     var _this2 = this
-      var _class2
+    var _class2
 
     var h = arguments[0]
 
     var props = getOptionProps(this)
     var $slots = this.$slots
-      var $scopedSlots = this.$scopedSlots
+    var $scopedSlots = this.$scopedSlots
     var customizePrefixCls = props.prefixCls
-      var showIcon = props.showIcon
-      var treeNodes = props.treeNodes
-      var blockNode = props.blockNode
+    var showIcon = props.showIcon
+    var treeNodes = props.treeNodes
+    var blockNode = props.blockNode
 
     var getPrefixCls = this.configProvider.getPrefixCls
     var prefixCls = getPrefixCls('tree', customizePrefixCls)

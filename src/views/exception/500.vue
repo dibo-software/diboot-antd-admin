@@ -9,12 +9,12 @@
 </template>
 
 <script>
-  export default {
-    name: 'Exception500',
-    methods: {
-      toHome () {
-        this.$router.push({ path: '/' })
-      }
+export default {
+  name: 'Exception500',
+  methods: {
+    toHome () {
+      this.$router.push({ path: '/' })
     }
   }
+}
 </script>

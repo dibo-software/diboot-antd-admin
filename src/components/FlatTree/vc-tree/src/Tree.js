@@ -198,10 +198,10 @@ var Tree = {
 
         if (checkedKeyEntity) {
           var _checkedKeyEntity = checkedKeyEntity
-              var _checkedKeyEntity$che = _checkedKeyEntity.checkedKeys
-              var checkedKeys = _checkedKeyEntity$che === undefined ? [] : _checkedKeyEntity$che
-              var _checkedKeyEntity$hal = _checkedKeyEntity.halfCheckedKeys
-              var halfCheckedKeys = _checkedKeyEntity$hal === undefined ? [] : _checkedKeyEntity$hal
+          var _checkedKeyEntity$che = _checkedKeyEntity.checkedKeys
+          var checkedKeys = _checkedKeyEntity$che === undefined ? [] : _checkedKeyEntity$che
+          var _checkedKeyEntity$hal = _checkedKeyEntity.halfCheckedKeys
+          var halfCheckedKeys = _checkedKeyEntity$hal === undefined ? [] : _checkedKeyEntity$hal
 
           if (!props.checkStrictly) {
             var conductKeys = conductCheck(checkedKeys, true, keyEntities)
@@ -246,7 +246,7 @@ var Tree = {
 
       var expandedKeys = this.$data._expandedKeys
       var pos = node.pos
-          var eventKey = node.eventKey
+      var eventKey = node.eventKey
 
       if (!this.dragNode || !node.$refs.selectHandle) return
 
@@ -294,8 +294,8 @@ var Tree = {
     onNodeDragOver: function onNodeDragOver (event, node) {
       var eventKey = node.eventKey
       var _$data = this.$data
-          var _dragOverNodeKey = _$data._dragOverNodeKey
-          var _dropPosition = _$data._dropPosition
+      var _dragOverNodeKey = _$data._dragOverNodeKey
+      var _dropPosition = _$data._dropPosition
       // Update drag position
 
       if (this.dragNode && eventKey === _dragOverNodeKey && node.$refs.selectHandle) {
@@ -329,7 +329,7 @@ var Tree = {
       var _dropPosition = _$data2._dropPosition
 
       var eventKey = node.eventKey
-          var pos = node.pos
+      var pos = node.pos
 
       this.setState({
         _dragOverNodeKey: ''
@@ -369,8 +369,8 @@ var Tree = {
       var multiple = this.$props.multiple
 
       var _getOptionProps = getOptionProps(treeNode)
-          var selected = _getOptionProps.selected
-          var eventKey = _getOptionProps.eventKey
+      var selected = _getOptionProps.selected
+      var eventKey = _getOptionProps.eventKey
 
       var targetSelected = !selected
       // Update selected keys
@@ -406,13 +406,13 @@ var Tree = {
     },
     onNodeCheck: function onNodeCheck (e, treeNode, checked) {
       var _$data3 = this.$data
-          var keyEntities = _$data3._keyEntities
-          var oriCheckedKeys = _$data3._checkedKeys
-          var oriHalfCheckedKeys = _$data3._halfCheckedKeys
+      var keyEntities = _$data3._keyEntities
+      var oriCheckedKeys = _$data3._checkedKeys
+      var oriHalfCheckedKeys = _$data3._halfCheckedKeys
       var checkStrictly = this.$props.checkStrictly
 
       var _getOptionProps2 = getOptionProps(treeNode)
-          var eventKey = _getOptionProps2.eventKey
+      var eventKey = _getOptionProps2.eventKey
 
       // Prepare trigger arguments
 
@@ -443,8 +443,8 @@ var Tree = {
           checkedKeys: oriCheckedKeys,
           halfCheckedKeys: oriHalfCheckedKeys
         })
-            var _checkedKeys = _conductCheck.checkedKeys
-            var _halfCheckedKeys = _conductCheck.halfCheckedKeys
+        var _checkedKeys = _conductCheck.checkedKeys
+        var _halfCheckedKeys = _conductCheck.halfCheckedKeys
 
         checkedObj = _checkedKeys
 
@@ -458,7 +458,7 @@ var Tree = {
           if (!entity) return
 
           var node = entity.node
-              var pos = entity.pos
+          var pos = entity.pos
 
           eventObj.checkedNodes.push(node)
           eventObj.checkedNodesPositions.push({ node: node, pos: pos })
@@ -478,13 +478,13 @@ var Tree = {
         // We need to get the latest state of loading/loaded keys
         _this2.setState(function (_ref) {
           var refLoadedKeys = _ref._loadedKeys
-              var loadedKeys = refLoadedKeys === undefined ? [] : refLoadedKeys
-              var refLoadingKeys = _ref._loadingKeys
-              var loadingKeys = refLoadingKeys === undefined ? [] : refLoadingKeys
+          var loadedKeys = refLoadedKeys === undefined ? [] : refLoadedKeys
+          var refLoadingKeys = _ref._loadingKeys
+          var loadingKeys = refLoadingKeys === undefined ? [] : refLoadingKeys
           var loadData = _this2.$props.loadData
 
           var _getOptionProps3 = getOptionProps(treeNode)
-              var eventKey = _getOptionProps3.eventKey
+          var eventKey = _getOptionProps3.eventKey
 
           if (!loadData || loadedKeys.indexOf(eventKey) !== -1 || loadingKeys.indexOf(eventKey) !== -1) {
             return {}
@@ -494,8 +494,8 @@ var Tree = {
           var promise = loadData(treeNode)
           promise.then(function () {
             var _$data4 = _this2.$data
-                var currentLoadedKeys = _$data4._loadedKeys
-                var currentLoadingKeys = _$data4._loadingKeys
+            var currentLoadedKeys = _$data4._loadedKeys
+            var currentLoadingKeys = _$data4._loadingKeys
 
             var newLoadedKeys = arrAdd(currentLoadedKeys, eventKey)
             var newLoadingKeys = arrDel(currentLoadingKeys, eventKey)
@@ -528,8 +528,8 @@ var Tree = {
       var loadData = this.$props.loadData
 
       var _getOptionProps4 = getOptionProps(treeNode)
-          var eventKey = _getOptionProps4.eventKey
-          var expanded = _getOptionProps4.expanded
+      var eventKey = _getOptionProps4.eventKey
+      var expanded = _getOptionProps4.expanded
 
       // Update selected keys
 
@@ -600,7 +600,7 @@ var Tree = {
     },
     isKeyChecked: function isKeyChecked (key) {
       var dataCheckedKeys = this.$data._checkedKeys
-          var checkedKeys = dataCheckedKeys === undefined ? [] : dataCheckedKeys
+      var checkedKeys = dataCheckedKeys === undefined ? [] : dataCheckedKeys
 
       return checkedKeys.indexOf(key) !== -1
     },
@@ -612,19 +612,19 @@ var Tree = {
     renderTreeNode: function renderTreeNode (child, index) {
       var level = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0
       var _$data5 = this.$data
-          var keyEntities = _$data5._keyEntities
-          var data5expandedKeys = _$data5._expandedKeys
-          var expandedKeys = data5expandedKeys === undefined ? [] : data5expandedKeys
-          var data5selectedKeys = _$data5._selectedKeys
-          var selectedKeys = data5selectedKeys === undefined ? [] : data5selectedKeys
-          var data5halfCheckedK = _$data5._halfCheckedKeys
-          var halfCheckedKeys = data5halfCheckedK === undefined ? [] : data5halfCheckedK
-          var data5loadedKeys = _$data5._loadedKeys
-          var loadedKeys = data5loadedKeys === undefined ? [] : data5loadedKeys
-          var data5loadingKeys = _$data5._loadingKeys
-          var loadingKeys = data5loadingKeys === undefined ? [] : data5loadingKeys
-          var dragOverNodeKey = _$data5._dragOverNodeKey
-          var dropPosition = _$data5._dropPosition
+      var keyEntities = _$data5._keyEntities
+      var data5expandedKeys = _$data5._expandedKeys
+      var expandedKeys = data5expandedKeys === undefined ? [] : data5expandedKeys
+      var data5selectedKeys = _$data5._selectedKeys
+      var selectedKeys = data5selectedKeys === undefined ? [] : data5selectedKeys
+      var data5halfCheckedK = _$data5._halfCheckedKeys
+      var halfCheckedKeys = data5halfCheckedK === undefined ? [] : data5halfCheckedK
+      var data5loadedKeys = _$data5._loadedKeys
+      var loadedKeys = data5loadedKeys === undefined ? [] : data5loadedKeys
+      var data5loadingKeys = _$data5._loadingKeys
+      var loadingKeys = data5loadingKeys === undefined ? [] : data5loadingKeys
+      var dragOverNodeKey = _$data5._dragOverNodeKey
+      var dropPosition = _$data5._dropPosition
 
       var pos = getPosition(level, index)
       var key = child.key
@@ -663,11 +663,11 @@ var Tree = {
     var h = arguments[0]
     var treeNode = this.$data._treeNode
     var _$props = this.$props
-        var prefixCls = _$props.prefixCls
-        var focusable = _$props.focusable
-        var showLine = _$props.showLine
-        var _$props$tabIndex = _$props.tabIndex
-        var tabIndex = _$props$tabIndex === undefined ? 0 : _$props$tabIndex
+    var prefixCls = _$props.prefixCls
+    var focusable = _$props.focusable
+    var showLine = _$props.showLine
+    var _$props$tabIndex = _$props.tabIndex
+    var tabIndex = _$props$tabIndex === undefined ? 0 : _$props$tabIndex
 
     return h(
       'ul',

@@ -26,7 +26,7 @@ function traverseNodesKey (rootChildren, callback) {
 
 export function getFullKeyList (children) {
   var _convertTreeToEntitie = convertTreeToEntities(children)
-      var keyEntities = _convertTreeToEntitie.keyEntities
+  var keyEntities = _convertTreeToEntitie.keyEntities
 
   return [].concat(_toConsumableArray(keyEntities.keys()))
 }

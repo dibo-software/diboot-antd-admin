@@ -29,26 +29,26 @@
 </template>
 
 <script>
-  import ErrorApi from './errorApi'
-  export default {
-    name: 'CorrectPermissionItem',
-    components: { ErrorApi },
-    methods: {
-      handleRefresh () {
-        this.$emit('refresh')
-      }
+import ErrorApi from './errorApi'
+export default {
+  name: 'CorrectPermissionItem',
+  components: { ErrorApi },
+  methods: {
+    handleRefresh () {
+      this.$emit('refresh')
+    }
+  },
+  props: {
+    permissionItem: {
+      type: Object,
+      required: true
     },
-    props: {
-      permissionItem: {
-        type: Object,
-        required: true
-      },
-      apiTreeList: {
-        type: Array,
-        required: true
-      }
+    apiTreeList: {
+      type: Array,
+      required: true
     }
   }
+}
 </script>
 
 <style scoped lang="less" rel="stylesheet/less">

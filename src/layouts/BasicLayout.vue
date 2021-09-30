@@ -154,17 +154,17 @@ export default {
       console.log('type', type, value)
       type && (this.settings[type] = value)
       switch (type) {
-        case 'contentWidth':
-          this.settings[type] = value
-          break
-        case 'layout':
-          if (value === 'sidemenu') {
-            this.settings.contentWidth = CONTENT_WIDTH_TYPE.Fluid
-          } else {
-            this.settings.fixSiderbar = false
-            this.settings.contentWidth = CONTENT_WIDTH_TYPE.Fixed
-          }
-          break
+      case 'contentWidth':
+        this.settings[type] = value
+        break
+      case 'layout':
+        if (value === 'sidemenu') {
+          this.settings.contentWidth = CONTENT_WIDTH_TYPE.Fluid
+        } else {
+          this.settings.fixSiderbar = false
+          this.settings.contentWidth = CONTENT_WIDTH_TYPE.Fixed
+        }
+        break
       }
     }
   }

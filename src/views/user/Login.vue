@@ -77,108 +77,108 @@
 </template>
 
 <script>
-  import { mapActions } from 'vuex'
-  import { timeFix } from '@/utils/util'
-  import { baseURL } from '@/utils/request'
+import { mapActions } from 'vuex'
+import { timeFix } from '@/utils/util'
+import { baseURL } from '@/utils/request'
 
-  export default {
-    data () {
-      return {
-        customActiveKey: 'tab1',
+export default {
+  data () {
+    return {
+      customActiveKey: 'tab1',
+      loginBtn: false,
+      // login type: 0 email, 1 username, 2 telephone
+      loginType: 0,
+      requiredTwoStepCaptcha: false,
+      stepCaptchaVisible: false,
+      form: this.$form.createForm(this),
+      state: {
+        time: 60,
         loginBtn: false,
         // login type: 0 email, 1 username, 2 telephone
         loginType: 0,
-        requiredTwoStepCaptcha: false,
-        stepCaptchaVisible: false,
-        form: this.$form.createForm(this),
-        state: {
-          time: 60,
-          loginBtn: false,
-          // login type: 0 email, 1 username, 2 telephone
-          loginType: 0,
-          smsSendBtn: false
-        },
-        baseURL,
-        captchaParam: 0
+        smsSendBtn: false
+      },
+      baseURL,
+      captchaParam: 0
+    }
+  },
+  methods: {
+    ...mapActions(['Login', 'Logout', 'GetInfo']),
+    // handler
+    userNameValidator (rule, value, callback) {
+      const { state } = this
+      const regex = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/
+      if (regex.test(value)) {
+        state.loginType = 0
+      } else {
+        state.loginType = 1
       }
+      callback()
     },
-    methods: {
-      ...mapActions(['Login', 'Logout', 'GetInfo']),
-      // handler
-      userNameValidator (rule, value, callback) {
-        const { state } = this
-        const regex = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/
-        if (regex.test(value)) {
-          state.loginType = 0
-        } else {
-          state.loginType = 1
-        }
-        callback()
-      },
-      handleGetInfo () {
-        const { GetInfo } = this
-        GetInfo().then((res) => {
-          console.log(res)
-        })
-      },
-      handleSubmit (e) {
-        e.preventDefault()
-        const {
-          form: { validateFields },
-          state,
-          Login
-        } = this
+    handleGetInfo () {
+      const { GetInfo } = this
+      GetInfo().then((res) => {
+        console.log(res)
+      })
+    },
+    handleSubmit (e) {
+      e.preventDefault()
+      const {
+        form: { validateFields },
+        state,
+        Login
+      } = this
 
-        state.loginBtn = true
+      state.loginBtn = true
 
-        const validateFieldsKey = ['username', 'password', 'captcha']
+      const validateFieldsKey = ['username', 'password', 'captcha']
 
-        validateFields(validateFieldsKey, { force: true }, (err, values) => {
-          if (!err) {
-            const loginParams = { ...values }
-            Login(loginParams)
-              .then((res) => {
-                if (res.code === 0) {
-                  this.loginSuccess(res)
-                } else {
-                  ++this.captchaParam
-                  this.$notification.error({
-                    message: '登录失败',
-                    description: res.msg,
-                    duration: 2
-                  })
-                }
-              })
-              .catch(err => this.requestFailed(err))
-              .finally(() => {
-                state.loginBtn = false
-              })
-          } else {
-            setTimeout(() => {
+      validateFields(validateFieldsKey, { force: true }, (err, values) => {
+        if (!err) {
+          const loginParams = { ...values }
+          Login(loginParams)
+            .then((res) => {
+              if (res.code === 0) {
+                this.loginSuccess(res)
+              } else {
+                ++this.captchaParam
+                this.$notification.error({
+                  message: '登录失败',
+                  description: res.msg,
+                  duration: 2
+                })
+              }
+            })
+            .catch(err => this.requestFailed(err))
+            .finally(() => {
               state.loginBtn = false
-            }, 600)
-          }
+            })
+        } else {
+          setTimeout(() => {
+            state.loginBtn = false
+          }, 600)
+        }
+      })
+    },
+    loginSuccess (res) {
+      this.$router.push('/dashboard')
+      // 延迟 1 秒显示欢迎信息
+      setTimeout(() => {
+        this.$notification.success({
+          message: '欢迎',
+          description: `${timeFix()}，欢迎回来`
         })
-      },
-      loginSuccess (res) {
-        this.$router.push('/dashboard')
-        // 延迟 1 秒显示欢迎信息
-        setTimeout(() => {
-          this.$notification.success({
-            message: '欢迎',
-            description: `${timeFix()}，欢迎回来`
-          })
-        }, 1000)
-      },
-      requestFailed (err) {
-        this.$notification['error']({
-          message: '错误',
-          description: ((err.response || {}).data || {}).message || '请求出现错误，请稍后再试',
-          duration: 4
-        })
-      }
+      }, 1000)
+    },
+    requestFailed (err) {
+      this.$notification['error']({
+        message: '错误',
+        description: ((err.response || {}).data || {}).message || '请求出现错误，请稍后再试',
+        duration: 4
+      })
     }
   }
+}
 </script>
 
 <style lang="less" scoped>

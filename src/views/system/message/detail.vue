@@ -67,10 +67,10 @@ export default {
   },
   methods: {
     onAfterOpen () {
-  // 事件处理代码
+      // 事件处理代码
     },
     afterOpen () {
-			this.onAfterOpen()
+      this.onAfterOpen()
     }
   }
 }

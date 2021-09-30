@@ -59,11 +59,11 @@ var TreeNode = {
 
   inject: {
     vcTree: { 'default': function _default () {
-        return {}
-      } },
+      return {}
+    } },
     vcTreeNode: { 'default': function _default () {
-        return {}
-      } }
+      return {}
+    } }
   },
   provide: function provide () {
     return {
@@ -74,7 +74,7 @@ var TreeNode = {
   // Isomorphic needn't load data in server side
   mounted: function mounted () {
     var eventKey = this.eventKey
-        var registerTreeNode = this.vcTree.registerTreeNode
+    var registerTreeNode = this.vcTree.registerTreeNode
 
     this.syncLoadData(this.$props)
     registerTreeNode && registerTreeNode(eventKey, this)
@@ -84,7 +84,7 @@ var TreeNode = {
   },
   beforeDestroy: function beforeDestroy () {
     var eventKey = this.eventKey
-        var registerTreeNode = this.vcTree.registerTreeNode
+    var registerTreeNode = this.vcTree.registerTreeNode
 
     registerTreeNode && registerTreeNode(eventKey, null)
   },
@@ -118,7 +118,7 @@ var TreeNode = {
       if (this.isDisabled()) return
 
       var disableCheckbox = this.disableCheckbox
-          var checked = this.checked
+      var checked = this.checked
       var onNodeCheck = this.vcTree.onNodeCheck
 
       if (!this.isCheckable() || disableCheckbox) return
@@ -228,7 +228,7 @@ var TreeNode = {
     },
     isLeaf2: function isLeaf2 () {
       var isLeaf = this.isLeaf
-          var loaded = this.loaded
+      var loaded = this.loaded
       var loadData = this.vcTree.loadData
 
       var hasChildren = this.getNodeChildren().length !== 0
@@ -262,11 +262,11 @@ var TreeNode = {
     // Load data to avoid default expanded tree without data
     syncLoadData: function syncLoadData (props) {
       var expanded = props.expanded
-          var loading = props.loading
-          var loaded = props.loaded
+      var loading = props.loading
+      var loaded = props.loaded
       var _vcTree = this.vcTree
-          var loadData = _vcTree.loadData
-          var onNodeLoad = _vcTree.onNodeLoad
+      var loadData = _vcTree.loadData
+      var onNodeLoad = _vcTree.onNodeLoad
 
       if (loading) return
       // read from state to avoid loadData at same time
@@ -314,7 +314,7 @@ var TreeNode = {
       return h(
         'span',
         { key: 'switcher',
-on: {
+          on: {
             'click': this.onExpand
           },
           'class': switcherCls },
@@ -326,8 +326,8 @@ on: {
     renderCheckbox: function renderCheckbox () {
       var h = this.$createElement
       var checked = this.checked
-          var halfChecked = this.halfChecked
-          var disableCheckbox = this.disableCheckbox
+      var halfChecked = this.halfChecked
+      var disableCheckbox = this.disableCheckbox
       var prefixCls = this.vcTree.prefixCls
 
       var disabled = this.isDisabled()
@@ -364,16 +364,16 @@ on: {
     // Icon + Title
     renderSelector: function renderSelector (h) {
       var selected = this.selected
-          var loading = this.loading
-          var dragNodeHighlight = this.dragNodeHighlight
+      var loading = this.loading
+      var dragNodeHighlight = this.dragNodeHighlight
 
       var icon = getComponentFromProp(this, 'icon', {}, false)
       var _vcTree2 = this.vcTree
-          var prefixCls = _vcTree2.prefixCls
-          var showIcon = _vcTree2.showIcon
-          var treeIcon = _vcTree2.icon
-          var draggable = _vcTree2.draggable
-          var loadData = _vcTree2.loadData
+      var prefixCls = _vcTree2.prefixCls
+      var showIcon = _vcTree2.showIcon
+      var treeIcon = _vcTree2.icon
+      var draggable = _vcTree2.draggable
+      var loadData = _vcTree2.loadData
 
       var disabled = this.isDisabled()
       var title = getComponentFromProp(this, 'title', {}, false)
@@ -415,7 +415,7 @@ on: {
             'aria-grabbed': !disabled && draggable || undefined
           },
           'class': classNames('' + wrapClass, wrapClass + '-' + (this.getNodeState() || 'normal'), !disabled && (selected || dragNodeHighlight) && prefixCls + '-node-selected', !disabled && draggable && 'draggable'),
-on: {
+          on: {
             'mouseenter': this.onMouseEnter,
             'mouseleave': this.onMouseLeave,
             'contextmenu': this.onContextMenu,
@@ -432,12 +432,12 @@ on: {
     renderChildren: function renderChildren () {
       var h = this.$createElement
       var expanded = this.expanded
-          var pos = this.pos
+      var pos = this.pos
       var _vcTree3 = this.vcTree
-          var prefixCls = _vcTree3.prefixCls
-          var openTransitionName = _vcTree3.openTransitionName
-          var openAnimation = _vcTree3.openAnimation
-          var renderTreeNode = _vcTree3.renderTreeNode
+      var prefixCls = _vcTree3.prefixCls
+      var openTransitionName = _vcTree3.openTransitionName
+      var openAnimation = _vcTree3.openAnimation
+      var renderTreeNode = _vcTree3.renderTreeNode
 
       var animProps = {}
       if (openTransitionName) {
@@ -505,19 +505,19 @@ on: {
     var _ref
 
     var _$props = this.$props
-        var dragOver = _$props.dragOver
-        var dragOverGapTop = _$props.dragOverGapTop
-        var dragOverGapBottom = _$props.dragOverGapBottom
-        var isLeaf = _$props.isLeaf
-        var expanded = _$props.expanded
-        var selected = _$props.selected
-        var checked = _$props.checked
-        var halfChecked = _$props.halfChecked
-        var loading = _$props.loading
+    var dragOver = _$props.dragOver
+    var dragOverGapTop = _$props.dragOverGapTop
+    var dragOverGapBottom = _$props.dragOverGapBottom
+    var isLeaf = _$props.isLeaf
+    var expanded = _$props.expanded
+    var selected = _$props.selected
+    var checked = _$props.checked
+    var halfChecked = _$props.halfChecked
+    var loading = _$props.loading
     var _vcTree4 = this.vcTree
-        var prefixCls = _vcTree4.prefixCls
-        var filterTreeNode = _vcTree4.filterTreeNode
-        var draggable = _vcTree4.draggable
+    var prefixCls = _vcTree4.prefixCls
+    var filterTreeNode = _vcTree4.filterTreeNode
+    var draggable = _vcTree4.draggable
 
     var disabled = this.isDisabled()
     // eslint-disable-next-line no-return-assign

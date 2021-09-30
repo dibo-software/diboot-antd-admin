@@ -30,76 +30,76 @@
 </template>
 
 <script>
-  import { dibootApi } from '@/utils/request'
-  import _ from 'lodash'
+import { dibootApi } from '@/utils/request'
+import _ from 'lodash'
 
-  export default {
-    name: 'ErrorApi',
-    data () {
-      return {
-        isOperate: false,
-        baseUrl: '/iam/resourcePermission',
-        replaceApi: null,
-        currentApiSetList: this.apiSetList
+export default {
+  name: 'ErrorApi',
+  data () {
+    return {
+      isOperate: false,
+      baseUrl: '/iam/resourcePermission',
+      replaceApi: null,
+      currentApiSetList: this.apiSetList
+    }
+  },
+  methods: {
+    async handleUpdate () {
+      if (!this.replaceApi) {
+        this.$message.warn('请选择接口后更新！')
+        return
       }
-    },
-    methods: {
-      async handleUpdate () {
-        if (!this.replaceApi) {
-          this.$message.warn('请选择接口后更新！')
-          return
-        }
-        try {
-          const tempApiSet = _.cloneDeep(this.currentApiSetList)
-          const index = tempApiSet.indexOf(this.api)
-          console.log(index)
-          console.log(tempApiSet)
-          console.log(tempApiSet)
-          if (index > -1) {
-            tempApiSet.splice(index, 1, this.replaceApi)
-            const res = await dibootApi.post(`${this.baseUrl}/modifyPermission`, {
-              id: this.resourcePermissionId,
-              apiSetList: tempApiSet
-            })
-            if (res.code === 0) {
-              this.$message.success('更新权限成功！')
-              this.replaceApi = null
-              this.isOperate = false
-              this.$emit('refresh')
-            } else {
-              this.$message.error('更新权限失败！')
-            }
+      try {
+        const tempApiSet = _.cloneDeep(this.currentApiSetList)
+        const index = tempApiSet.indexOf(this.api)
+        console.log(index)
+        console.log(tempApiSet)
+        console.log(tempApiSet)
+        if (index > -1) {
+          tempApiSet.splice(index, 1, this.replaceApi)
+          const res = await dibootApi.post(`${this.baseUrl}/modifyPermission`, {
+            id: this.resourcePermissionId,
+            apiSetList: tempApiSet
+          })
+          if (res.code === 0) {
+            this.$message.success('更新权限成功！')
+            this.replaceApi = null
+            this.isOperate = false
+            this.$emit('refresh')
           } else {
-            this.$message.error('当前Api不存在！')
+            this.$message.error('更新权限失败！')
           }
-        } catch (e) {
-          console.log(e)
+        } else {
+          this.$message.error('当前Api不存在！')
         }
-      },
-      handleCancel () {
-        this.isOperate = !this.isOperate
-        this.replaceApi = null
+      } catch (e) {
+        console.log(e)
       }
     },
-    props: {
-      api: {
-        type: String,
-        required: true
-      },
-      apiSetList: {
-        type: Array,
-        required: true
-      },
-      resourcePermissionId: {
-        type: [String, Number],
-        required: true
-      },
-      apiTreeList: {
-        type: Array,
-        required: true
-      }
+    handleCancel () {
+      this.isOperate = !this.isOperate
+      this.replaceApi = null
+    }
+  },
+  props: {
+    api: {
+      type: String,
+      required: true
+    },
+    apiSetList: {
+      type: Array,
+      required: true
+    },
+    resourcePermissionId: {
+      type: [String, Number],
+      required: true
+    },
+    apiTreeList: {
+      type: Array,
+      required: true
     }
   }
+}
 </script>
 
 <style scoped lang="less" rel="stylesheet/less">

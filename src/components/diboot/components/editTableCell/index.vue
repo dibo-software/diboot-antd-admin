@@ -29,12 +29,12 @@
             :key="index"
             :value="item.v"
           >
-            {{item.k}}
+            {{ item.k }}
           </a-select-option>
         </a-select>
       </template>
       <template v-else-if="formType === 'SWITCH'">
-        <a-switch  @change="changeValue" v-model="tempValue"/>
+        <a-switch @change="changeValue" v-model="tempValue"/>
       </template>
       <template v-else-if="formType === 'DATEPICKER'">
         <a-date-picker
@@ -52,7 +52,7 @@
     </div>
     <div v-else :class="{'text-ellipsis': ellipsis, 'editable-cell-text-wrapper': true}">
       <template v-if="label">
-        {{label}}
+        {{ label }}
       </template>
       <template v-else>
         {{ (isBoolean ? (tempValue ? '是' : '否') : tempValue) || '-' }}

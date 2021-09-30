@@ -56,9 +56,9 @@ export function getNodeChildren () {
 
 export function isCheckDisabled (node) {
   var _ref = getOptionProps(node) || {}
-      var disabled = _ref.disabled
-      var disableCheckbox = _ref.disableCheckbox
-      var checkable = _ref.checkable
+  var disabled = _ref.disabled
+  var disableCheckbox = _ref.disableCheckbox
+  var checkable = _ref.checkable
 
   return !!(disabled || disableCheckbox) || checkable === false
 }
@@ -113,8 +113,8 @@ export function mapChildren () {
 
 export function getDragNodesKeys (treeNodes, node) {
   var _getOptionProps = getOptionProps(node)
-      var eventKey = _getOptionProps.eventKey
-      var pos = _getOptionProps.pos
+  var eventKey = _getOptionProps.eventKey
+  var pos = _getOptionProps.pos
 
   var dragNodesKeys = []
 
@@ -131,9 +131,9 @@ export function calcDropPosition (event, treeNode) {
   var clientY = event.clientY
 
   var _treeNode$$refs$selec = treeNode.$refs.selectHandle.getBoundingClientRect()
-      var top = _treeNode$$refs$selec.top
-      var bottom = _treeNode$$refs$selec.bottom
-      var height = _treeNode$$refs$selec.height
+  var top = _treeNode$$refs$selec.top
+  var bottom = _treeNode$$refs$selec.bottom
+  var height = _treeNode$$refs$selec.height
 
   var des = Math.max(height * DRAG_SIDE_RANGE, DRAG_MIN_GAP)
 
@@ -193,13 +193,13 @@ export function convertDataToTree (h, treeData, processor) {
   if (!treeData) return []
 
   var _ref3 = processor || {}
-      var _ref3$processProps = _ref3.processProps
-      var processProps = _ref3$processProps === undefined ? internalProcessProps : _ref3$processProps
+  var _ref3$processProps = _ref3.processProps
+  var processProps = _ref3$processProps === undefined ? internalProcessProps : _ref3$processProps
 
   var list = Array.isArray(treeData) ? treeData : [treeData]
   return list.map(function (_ref4) {
     var children = _ref4.children
-        var props = _objectWithoutProperties(_ref4, ['children'])
+    var props = _objectWithoutProperties(_ref4, ['children'])
 
     var childrenNodes = convertDataToTree(h, children, processor)
     return h(
@@ -218,9 +218,9 @@ export function convertDataToTree (h, treeData, processor) {
  */
 export function convertTreeToEntities (treeNodes) {
   var _ref5 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {}
-      var initWrapper = _ref5.initWrapper
-      var processEntity = _ref5.processEntity
-      var onProcessFinished = _ref5.onProcessFinished
+  var initWrapper = _ref5.initWrapper
+  var processEntity = _ref5.processEntity
+  var onProcessFinished = _ref5.onProcessFinished
 
   var posEntities = new Map()
   var keyEntities = new Map()
@@ -235,10 +235,10 @@ export function convertTreeToEntities (treeNodes) {
 
   traverseTreeNodes(treeNodes, function (item) {
     var node = item.node
-        var index = item.index
-        var pos = item.pos
-        var key = item.key
-        var parentPos = item.parentPos
+    var index = item.index
+    var pos = item.pos
+    var key = item.key
+    var parentPos = item.parentPos
 
     var entity = { node: node, index: index, key: key, pos: pos }
 
@@ -327,8 +327,8 @@ export function conductCheck (keyList, isCheck, keyEntities) {
     if (!entity) return
 
     var children = entity.children
-        var parent = entity.parent
-        var node = entity.node
+    var parent = entity.parent
+    var node = entity.node
 
     if (isCheckDisabled(node)) return
 
@@ -369,7 +369,7 @@ export function conductCheck (keyList, isCheck, keyEntities) {
     if (!entity) return
 
     var children = entity.children
-        var node = entity.node
+    var node = entity.node
 
     if (isCheckDisabled(node)) return
 
@@ -388,8 +388,8 @@ export function conductCheck (keyList, isCheck, keyEntities) {
       return
     }
     var children = entity.children
-        var parent = entity.parent
-        var node = entity.node
+    var parent = entity.parent
+    var node = entity.node
 
     checkedKeys.set(key, isCheck)
 
@@ -507,7 +507,7 @@ export function conductExpandParent (keyList, keyEntities) {
     expandedKeys.set(key, true)
 
     var parent = entity.parent
-        var node = entity.node
+    var node = entity.node
 
     var props = getOptionProps(node)
     if (props && props.disabled) return

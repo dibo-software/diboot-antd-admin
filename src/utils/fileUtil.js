@@ -7,9 +7,9 @@ const downloadFileFromPath = function (path) {
         downloadFileFromRes(res)
         resolve(res)
       }).catch(err => {
-      console.log(err)
-      reject(err)
-    })
+        console.log(err)
+        reject(err)
+      })
   })
 }
 

@@ -25,103 +25,103 @@
 </template>
 
 <script>
-  import { dibootApi } from '@/utils/request'
-  import correctPermissionItem from './correctPermissionItem'
-  import { apiListFormatter } from '@/utils/treeDataUtil'
-  export default {
-    name: 'CorrectPermissionIndex',
-    data () {
-      return {
-        visible: false,
-        spinning: false,
-        baseUrl: '/iam/resourcePermission',
-        diffDataList: [],
-        diffDataIdList: [],
-        apiTreeList: [],
-        refresh: true
-      }
+import { dibootApi } from '@/utils/request'
+import correctPermissionItem from './correctPermissionItem'
+import { apiListFormatter } from '@/utils/treeDataUtil'
+export default {
+  name: 'CorrectPermissionIndex',
+  data () {
+    return {
+      visible: false,
+      spinning: false,
+      baseUrl: '/iam/resourcePermission',
+      diffDataList: [],
+      diffDataIdList: [],
+      apiTreeList: [],
+      refresh: true
+    }
+  },
+  components: {
+    correctPermissionItem
+  },
+  methods: {
+    open () {
+      this.visible = true
+      this.getDiffPermissions()
+      this.getApiList()
     },
-    components: {
-      correctPermissionItem
+    handleRefresh () {
+      this.getDiffPermissions()
     },
-    methods: {
-      open () {
-        this.visible = true
-        this.getDiffPermissions()
-        this.getApiList()
-      },
-      handleRefresh () {
-        this.getDiffPermissions()
-      },
-      /**
+    /**
        * 获取有问题的权限
        */
-      async getDiffPermissions () {
-        this.spinning = true
-        try {
-          const res = await dibootApi.get(`${this.baseUrl}/apiDiff`)
-          if (res.code === 0) {
-            this.diffDataList = res.data.diffDataList || []
-            this.diffDataIdList = res.data.diffDataIdList || []
-            this.refresh = !this.refresh
-          } else {
-            this.$notification.error({
-              message: '获取权限失败',
-              description: res.msg
-            })
-          }
-        } finally {
-          this.spinning = false
-        }
-      },
-      async getApiList () {
-        const resApiList = await dibootApi.get(`${this.baseUrl}/apiList`)
-        if (resApiList.code === 0) {
-          this.apiTreeList = apiListFormatter(resApiList.data)
+    async getDiffPermissions () {
+      this.spinning = true
+      try {
+        const res = await dibootApi.get(`${this.baseUrl}/apiDiff`)
+        if (res.code === 0) {
+          this.diffDataList = res.data.diffDataList || []
+          this.diffDataIdList = res.data.diffDataIdList || []
+          this.refresh = !this.refresh
         } else {
-          this.$message.error(resApiList.msg)
+          this.$notification.error({
+            message: '获取权限失败',
+            description: res.msg
+          })
         }
-      },
-      async handleBatchDelete () {
-        const _this = this
-        _this.$confirm({
-          title: '删除',
-          content: `删除将删除所有错误权限及其子权限；\n您确定删除吗？`,
-          okText: '确定',
-          okType: 'danger',
-          cancelText: '取消',
-          onOk () {
-            dibootApi.post(`${_this.baseUrl}/batchDeleteInvalidPermissionList`, _this.diffDataIdList).then(async (res) => {
-              if (res.code === 0) {
-                _this.$notification.success({
-                  message: '删除成功',
-                  description: '已批量删除权限'
-                })
-                _this.close()
-                _this.$emit('complete')
-              } else {
-                _this.$notification.error({
-                  message: '删除失败',
-                  description: res.msg
-                })
-              }
-            }).catch(err => {
+      } finally {
+        this.spinning = false
+      }
+    },
+    async getApiList () {
+      const resApiList = await dibootApi.get(`${this.baseUrl}/apiList`)
+      if (resApiList.code === 0) {
+        this.apiTreeList = apiListFormatter(resApiList.data)
+      } else {
+        this.$message.error(resApiList.msg)
+      }
+    },
+    async handleBatchDelete () {
+      const _this = this
+      _this.$confirm({
+        title: '删除',
+        content: `删除将删除所有错误权限及其子权限；\n您确定删除吗？`,
+        okText: '确定',
+        okType: 'danger',
+        cancelText: '取消',
+        onOk () {
+          dibootApi.post(`${_this.baseUrl}/batchDeleteInvalidPermissionList`, _this.diffDataIdList).then(async (res) => {
+            if (res.code === 0) {
+              _this.$notification.success({
+                message: '删除成功',
+                description: '已批量删除权限'
+              })
+              _this.close()
+              _this.$emit('complete')
+            } else {
               _this.$notification.error({
                 message: '删除失败',
-                description: err.msg
+                description: res.msg
               })
+            }
+          }).catch(err => {
+            _this.$notification.error({
+              message: '删除失败',
+              description: err.msg
             })
-          }
-        })
-      },
-      close () {
-        this.visible = false
-        this.diffDataList = []
-        this.diffDataIdList = []
-        this.apiTreeList = []
-      }
+          })
+        }
+      })
+    },
+    close () {
+      this.visible = false
+      this.diffDataList = []
+      this.diffDataIdList = []
+      this.apiTreeList = []
     }
   }
+}
 </script>
 
 <style scoped lang="less" rel="stylesheet/less">
