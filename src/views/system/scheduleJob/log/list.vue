@@ -10,25 +10,12 @@
         <a-form layout="inline" :labelCol="{span: 6}" :wrapperCol="{span: 18}">
           <a-row :gutter="18">
             <a-col :md="8" :sm="24">
-              <a-form-item
-                label="任务"
-                :labelCol="{span: 6}"
-                :wrapperCol="{span: 18}">
-                <a-select
-                  @change="onSearch"
+              <a-form-item label="任务">
+                <a-input
                   v-model="queryParam.jobName"
-                  :getPopupContainer="getPopupContainer"
                   allowClear
-                  placeholder="请选择任务"
-                >
-                  <a-select-option
-                    v-for="(item, index) in jobList"
-                    :key="index"
-                    :value="item.jobName"
-                  >
-                    {{ item.jobName }}
-                  </a-select-option>
-                </a-select>
+                  @keyup.enter.native="onSearch"
+                />
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
@@ -140,27 +127,10 @@ export default {
       ],
       listState: {
         visible: false
-      },
-      jobList: []
+      }
     }
   },
-  created () {
-    this.loadJobs()
-  },
   methods: {
-
-    /**
-     * 加载job
-     * @returns {Promise<void>}
-     */
-    async loadJobs () {
-      const res = await this.$http.get('/scheduleJob/allJobs')
-      if (res.code === 0) {
-        this.jobList = res.data || []
-      } else {
-        this.$message.error('无可执行定时任务！')
-      }
-    },
     open () {
       this.listState.visible = true
       this.getList()
