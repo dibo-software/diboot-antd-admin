@@ -76,7 +76,7 @@
       ref="positionForm"></position-form>
 
     <div class="drawer-footer">
-      <a-button :style="{marginRight: '8px'}" @click="close">取消</a-button>
+      <a-button @click="close">取消</a-button>
       <a-button @click="onSubmit" type="primary" :loading="state.confirmLoading" :disabled="state.confirmLoading">确定</a-button>
     </div>
   </a-drawer>

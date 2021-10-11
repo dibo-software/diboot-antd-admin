@@ -49,7 +49,7 @@
       </a-descriptions-item>
     </a-descriptions>
     <div class="drawer-footer">
-      <a-button :style="{marginRight: '8px'}" @click="close">关闭</a-button>
+      <a-button @click="close">关闭</a-button>
     </div>
   </a-drawer>
 </template>

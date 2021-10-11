@@ -224,7 +224,7 @@
       </a-row>
     </a-form>
     <div class="drawer-footer">
-      <a-button :style="{marginRight: '8px'}" @click="close">取消</a-button>
+      <a-button @click="close">取消</a-button>
       <a-button @click="onSubmit" type="primary" :loading="state.confirmSubmit" :disabled="state.confirmSubmit">确定</a-button>
     </div>
     <user-select-modal ref="userSelectModal" @select="record => selectReportManager(record)"></user-select-modal>
