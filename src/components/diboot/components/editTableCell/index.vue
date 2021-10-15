@@ -2,13 +2,17 @@
   <div class="editable-cell">
     <div v-if="editable" class="editable-cell-input-wrapper">
       <template v-if="formType === 'INPUT'">
-        <a-input v-model="tempValue" @change="(e) => changeValue(e.target.value)"/>
+        <a-input
+          v-model="tempValue"
+          :placeholder="placeholder"
+          @change="(e) => changeValue(e.target.value)"/>
       </template>
       <template v-if="formType === 'INPUT_NUMBER'">
         <a-input-number
           v-model="tempValue"
           controls-position="right"
           @change="changeValue"
+          :placeholder="placeholder"
         />
       </template>
       <template v-else-if="formType === 'TEXTAREA'">
@@ -16,6 +20,7 @@
           @change="(e) => changeValue(e.target.value)"
           type="textarea"
           v-model="tempValue"
+          :placeholder="placeholder"
         />
       </template>
       <template v-else-if="formType === 'S_SELECT'">
@@ -23,6 +28,7 @@
           filterable
           @change="changeValue"
           v-model="tempValue"
+          :placeholder="placeholder"
         >
           <a-select-option
             v-for="(item, index) in options || []"
@@ -40,12 +46,14 @@
         <a-date-picker
           v-model="tempValue"
           @change="changeValue"
+          :placeholder="placeholder"
           valueFormat="YYYY-MM-DD"/>
       </template>
       <template v-else-if="formType === 'DATETIMEPICKER'">
         <a-date-picker
           v-model="tempValue"
           @change="changeValue"
+          :placeholder="placeholder"
           :showTime="{ format: 'HH:mm:ss' }"
           valueFormat="YYYY-MM-DD HH:mm:ss"/>
       </template>
@@ -98,6 +106,10 @@ export default {
     ellipsis: {
       type: Boolean,
       default: false
+    },
+    placeholder: {
+      type: String,
+      default: ''
     }
   },
   data () {
