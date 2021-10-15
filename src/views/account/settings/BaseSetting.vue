@@ -17,7 +17,6 @@
           </a-form-item>
           <a-form-item label="性别">
             <a-select
-              v-if="more.genderKvList"
               :getPopupContainer="getPopupContainer"
               placeholder="请选择"
               v-decorator="[
@@ -29,11 +28,11 @@
               ]"
             >
               <a-select-option
-                v-for="(gender, index) in more.genderKvList"
+                v-for="(gender, index) in more.genderOptions"
                 :key="index"
-                :value="gender.v"
+                :value="gender.value"
               >
-                {{ gender.k }}
+                {{ gender.label }}
               </a-select-option>
             </a-select>
           </a-form-item>
@@ -96,7 +95,12 @@ export default {
   data () {
     return {
       baseApi: '/iam/user',
-      more: {},
+      attachMoreList: [
+        {
+          type: 'D',
+          target: 'GENDER'
+        }
+      ],
       model: {},
       form: this.$form.createForm(this),
       // cropper
@@ -150,20 +154,12 @@ export default {
         description: result.msg
       })
       this.$store.commit('SET_NAME', { name: this.form.getFieldValue('realname'), welcome: '' })
-    },
-    async loadMore () {
-      const res = await dibootApi.get('/iam/user/attachMore')
-      if (res.code === 0) {
-        this.more = res.data
-      } else {
-        this.$message.error('获取关联列表数据失败')
-      }
     }
   },
   mixins: [ form ],
   async mounted () {
     await this.getCurrentUserInfo()
-    await this.loadMore()
+    await this.attachMore()
   }
 }
 </script>

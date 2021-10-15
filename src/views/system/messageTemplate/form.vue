@@ -60,7 +60,7 @@
                 </a-tooltip>
               </span>
               <div class="variable-container">
-                <a-tag @click="handleInsertIntoContent(item)" class="variable-tag" color="blue" v-for="(item, index) in more.templateTemplateVariableList" :key="index">
+                <a-tag @click="handleInsertIntoContent(item)" class="variable-tag" color="blue" v-for="(item, index) in more.templateVariableList" :key="index">
                   {{ item }}
                 </a-tag>
               </div>

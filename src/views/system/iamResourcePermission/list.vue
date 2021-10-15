@@ -128,7 +128,6 @@ export default {
       canCorrectPermission: process.env.NODE_ENV !== 'production',
       customQueryParam: { displayType: 'MENU' },
       allowCanceledDelete: false,
-      getMore: true,
       formParentId: '0',
       columns: [
         {

@@ -99,8 +99,6 @@ export default {
   data () {
     return {
       baseApi: '/messageTemplate',
-      getListFromMixin: true,
-      getMore: true,
       columns: [
         {
           title: '模版编码',

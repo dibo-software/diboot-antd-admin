@@ -82,7 +82,6 @@
         <a-col :span="12">
           <a-form-item label="角色">
             <a-select
-              v-if="more.iamRoleKvList"
               :getPopupContainer="getPopupContainer"
               mode="multiple"
               placeholder="请选择角色"
@@ -95,11 +94,11 @@
               ]"
             >
               <a-select-option
-                v-for="(role, index) in more.iamRoleKvList"
+                v-for="(role, index) in more.iamRoleOptions"
                 :key="index"
-                :value="`${role.v}`"
+                :value="`${role.value}`"
               >
-                {{ role.k }}
+                {{ role.label }}
               </a-select-option>
             </a-select>
           </a-form-item>
@@ -109,7 +108,6 @@
         <a-col :span="12">
           <a-form-item label="性别">
             <a-select
-              v-if="more.genderKvList"
               :getPopupContainer="getPopupContainer"
               placeholder="请选择"
               v-decorator="[
@@ -121,11 +119,11 @@
               ]"
             >
               <a-select-option
-                v-for="(gender, index) in more.genderKvList"
+                v-for="(gender, index) in more.genderOptions"
                 :key="index"
-                :value="gender.v"
+                :value="gender.value"
               >
-                {{ gender.k }}
+                {{ gender.label }}
               </a-select-option>
             </a-select>
           </a-form-item>
@@ -133,7 +131,6 @@
         <a-col :span="12">
           <a-form-item label="状态">
             <a-select
-              v-if="more.userStatusKvList"
               :getPopupContainer="getPopupContainer"
               placeholder="请选择"
               v-decorator="[
@@ -145,11 +142,11 @@
               ]"
             >
               <a-select-option
-                v-for="(status, index) in more.userStatusKvList"
+                v-for="(status, index) in more.userStatusOptions"
                 :key="index"
-                :value="status.v"
+                :value="status.value"
               >
-                {{ status.k }}
+                {{ status.label }}
               </a-select-option>
             </a-select>
           </a-form-item>
@@ -239,7 +236,7 @@ export default {
         {
           type: 'T',
           target: 'iamRole',
-          key: 'name',
+          label: 'name',
           value: 'id'
         }
       ]

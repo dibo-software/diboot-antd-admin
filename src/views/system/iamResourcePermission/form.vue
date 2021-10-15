@@ -125,7 +125,7 @@
                   <a-row type="flex" align="middle" :gutter="16">
                     <a-col :span="19">
                       <a-select
-                        v-if="more.resourcePermissionCodeKvList && isSelect"
+                        v-if="isSelect"
                         showSearch
                         :filterOption="(input, option) => filterPermissionCodeOption(permission, input, option)"
                         @change="value => changePermissionName(permission, value)"
@@ -133,16 +133,16 @@
                         v-model="permission.resourceCode"
                       >
                         <a-select-option
-                          v-for="(item, i) in more.resourcePermissionCodeKvList"
-                          v-if="!existPermissionCodes.includes(item.v) || permission.resourceCode === item.v"
+                          v-for="(item, i) in more.resourcePermissionCodeOptions"
+                          v-if="!existPermissionCodes.includes(item.value) || permission.resourceCode === item.value"
                           :key="i"
-                          :value="item.v"
+                          :value="item.value"
                         >
-                          {{ item.k }}[{{ item.v }}]
+                          {{ item.label }}[{{ item.value }}]
                         </a-select-option>
                       </a-select>
                       <a-input
-                        v-if="!isSelect"
+                        v-else
                         placeholder="请输入按钮/权限名称"
                         v-model="permission.resourceCode"
                       />
@@ -216,6 +216,12 @@ export default {
       baseApi: '/iam/resourcePermission',
       form: this.$form.createForm(this),
       getMore: true,
+      attachMoreList: [
+        {
+          type: 'D',
+          target: 'RESOURCE_PERMISSION_CODE'
+        }
+      ],
       currentPermissionActiveKey: 0,
       currentMenu: '',
       apiSetList: [],
@@ -282,6 +288,7 @@ export default {
         if (currentMenu === undefined) {
           return false
         }
+        console.log(currentMenu)
         // 自动设置菜单名称与菜单编码
         this.form.setFieldsValue({
           resourceCode: currentMenu.value,
@@ -385,12 +392,12 @@ export default {
       this.permissionList.push(newPermission)
       this.currentPermissionActiveKey = this.permissionList.length - 1
       // 自动补全编码选项
-      if (this.more && this.more.resourcePermissionCodeKvList) {
-        const validKv = this.more.resourcePermissionCodeKvList.find(kv => {
-          return !this.existPermissionCodes.includes(kv.v)
+      if (this.more && this.more.resourcePermissionCodeOptions) {
+        const validOption = this.more.resourcePermissionCodeOptions.find(kv => {
+          return !this.existPermissionCodes.includes(kv.value)
         })
-        newPermission.resourceCode = validKv.v
-        this.changePermissionName(newPermission, validKv.v)
+        newPermission.resourceCode = validOption.value
+        this.changePermissionName(newPermission, validOption.value)
       }
     },
     removePermission (index) {
@@ -410,12 +417,12 @@ export default {
       return false
     },
     changePermissionName (permission, value) {
-      const validKv = this.more.resourcePermissionCodeKvList.find(item => {
-        return item.v === value
+      const validOption = this.more.resourcePermissionCodeOptions.find(item => {
+        return item.value === value
       })
       // 自动补全按钮/权限名称
-      if (validKv !== undefined) {
-        permission.displayName = validKv['k']
+      if (validOption !== undefined) {
+        permission.displayName = validOption['label']
       }
       // 自动补全接口列表
       permission.apiSetList = []
@@ -493,8 +500,8 @@ export default {
     },
     menuTreeData: function () {
       let menuTreeData = []
-      if (this.more && this.more.menuList) {
-        menuTreeData = treeListFormatter(this.more.menuList, 'id', 'displayName', true)
+      if (this.more && this.more.menuTree) {
+        menuTreeData = treeListFormatter(this.more.menuTree, 'id', 'displayName', true)
       }
       menuTreeData.splice(0, 0, { key: '0', value: '0', title: '顶级菜单' })
       return menuTreeData

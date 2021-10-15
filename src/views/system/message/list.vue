@@ -7,18 +7,17 @@
             <a-form-item label="信息模版">
               <a-select
                 @change="onSearch"
-                v-if="more.messageTemplateKvList"
                 :getPopupContainer="getPopupContainer"
                 allowClear
                 placeholder="请选择信息模版"
                 v-model="queryParam.templateId"
               >
                 <a-select-option
-                  v-for="(item, index) in more.messageTemplateKvList"
+                  v-for="(item, index) in more.messageTemplateOptions"
                   :key="index"
-                  :value="item.v"
+                  :value="item.value"
                 >
-                  {{ item.k }}
+                  {{ item.label }}
                 </a-select-option>
               </a-select>
             </a-form-item>
@@ -31,11 +30,11 @@
                 allowClear
                 placeholder="请选择发送通道">
                 <a-select-option
-                  v-for="kv in more.messageChannelKvList"
-                  :key="kv.v"
-                  :value="kv.v"
+                  v-for="item in more.messageChannelOptions"
+                  :key="item.value"
+                  :value="item.value"
                 >
-                  {{ kv.k }}
+                  {{ item.label }}
                 </a-select-option>
               </a-select>
             </a-form-item>
@@ -49,11 +48,11 @@
                   allowClear
                   placeholder="请选择消息状态">
                   <a-select-option
-                    v-for="kv in more.messageStatusKvList"
-                    :key="kv.v"
-                    :value="kv.v"
+                    v-for="item in more.messageStatusOptions"
+                    :key="item.value"
+                    :value="item.value"
                   >
-                    {{ kv.k }}
+                    {{ item.label }}
                   </a-select-option>
                 </a-select>
               </a-form-item>
@@ -124,7 +123,6 @@ export default {
   data () {
     return {
       baseApi: '/message',
-      getListFromMixin: true,
       // 消息状态颜色
       messageStatusColor: {
         SENDING: 'blue',
@@ -137,7 +135,7 @@ export default {
         {
           type: 'T',
           target: 'message_template',
-          key: 'title',
+          label: 'title',
           value: 'id'
         },
         {

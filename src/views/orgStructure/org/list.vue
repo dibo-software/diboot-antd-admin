@@ -13,14 +13,6 @@
       @change="handleTableChange"
       rowKey="id"
     >
-      <span slot="type" slot-scope="text">
-        <template v-if="text && more.orgTypeKvMap && more.orgTypeKvMap[text]">
-          <a-tag :color="text==='COMP' ? 'blue' : 'cyan'" >{{ more.orgTypeKvMap[text]['k'] }}</a-tag>
-        </template>
-        <template v-else>
-          <span>-</span>
-        </template>
-      </span>
       <span slot="action" slot-scope="text, record">
         <a v-action:detail href="javascript:;" @click="$refs.detail.open(record.id)">详情</a>
         <a-divider v-action:detail v-permission="['update', 'delete']" type="vertical" />
@@ -61,7 +53,6 @@ export default {
   data () {
     return {
       baseApi: '/iam/org',
-      getMore: false,
       customQueryParam: { parentId: '0' },
       // 表头
       columns: [

@@ -85,8 +85,6 @@ export default {
   data () {
     return {
       baseApi: '/iam/position',
-      listApi: '',
-      getListFromMixin: false,
       // 表头
       columns: [
         {
@@ -117,29 +115,6 @@ export default {
         }
       ]
     }
-  },
-  methods: {
-    afterLoadList () {
-    }
-  },
-  watch: {
-    currentNodeId: function (val) {
-      if (val && val !== '0' && val !== 0) {
-        this.listApi = `${this.baseApi}/list/${val}`
-      } else {
-        this.listApi = `${this.baseApi}/list`
-      }
-      this.getList()
-    }
-  },
-  props: {
-    currentNodeId: {
-      type: String,
-      default: '0'
-    }
-  },
-  created () {
-    this.getList()
   }
 }
 </script>

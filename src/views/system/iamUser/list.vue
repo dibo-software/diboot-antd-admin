@@ -21,11 +21,11 @@
                 default-value=""
                 v-model="queryParam.status">
                 <a-select-option
-                  v-for="(status, index) in more.userStatusKvList"
+                  v-for="(status, index) in more.userStatusOptions"
                   :key="index"
-                  :value="status.v"
+                  :value="status.value"
                 >
-                  {{ status.k }}
+                  {{ status.label }}
                 </a-select-option>
               </a-select>
             </a-form-item>
@@ -118,17 +118,7 @@ export default {
       attachMoreList: [
         {
           type: 'D',
-          target: 'GENDER'
-        },
-        {
-          type: 'D',
           target: 'USER_STATUS'
-        },
-        {
-          type: 'T',
-          target: 'iamRole',
-          key: 'name',
-          value: 'id'
         }
       ],
       columns: [

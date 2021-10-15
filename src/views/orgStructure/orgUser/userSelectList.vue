@@ -30,11 +30,11 @@
                   allowClear
                   placeholder="请选择">
                   <a-select-option
-                    v-for="(gender, index) in more.genderKvList"
+                    v-for="(gender, index) in more.genderOptions"
                     :key="index"
-                    :value="gender.v"
+                    :value="gender.value"
                   >
-                    {{ gender.k }}
+                    {{ gender.label }}
                   </a-select-option>
                 </a-select>
               </a-form-item>
@@ -99,8 +99,12 @@ export default {
   data () {
     return {
       baseApi: '/iam/user',
-      getMore: true,
-      getListFromMixin: true,
+      attachMoreList: [
+        {
+          type: 'D',
+          target: 'USER_STATUS'
+        }
+      ],
       // 表头
       columns: [
         {

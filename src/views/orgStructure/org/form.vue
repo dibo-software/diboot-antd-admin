@@ -84,7 +84,6 @@
         <a-col :span="12">
           <a-form-item label="类型">
             <a-select
-              v-if="more.orgTypeKvList !== undefined"
               :getPopupContainer="getPopupContainer"
               placeholder="请选择类型"
               v-decorator="[
@@ -96,11 +95,11 @@
               ]"
             >
               <a-select-option
-                v-for="(type, index) in more.orgTypeKvList"
+                v-for="(type, index) in more.orgTypeOptions"
                 :key="index"
-                :value="type.v"
+                :value="type.value"
               >
-                {{ type.k }}
+                {{ type.label }}
               </a-select-option>
             </a-select>
           </a-form-item>
@@ -160,7 +159,12 @@ export default {
   data () {
     return {
       baseApi: '/iam/org',
-      getMore: true,
+      attachMoreList: [
+        {
+          type: 'D',
+          target: 'ORG_TYPE'
+        }
+      ],
       form: this.$form.createForm(this),
       orgList: []
     }

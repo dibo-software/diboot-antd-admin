@@ -116,7 +116,6 @@ export default {
   data () {
     return {
       baseApi: '/scheduleJob',
-      getListFromMixin: true,
       columns: [
         {
           title: '任务名称',
