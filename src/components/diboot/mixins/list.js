@@ -3,7 +3,10 @@ import { dibootApi } from '@/utils/request'
 import moment from 'moment'
 import _ from 'lodash'
 import { downloadFileFromRes } from '@/utils/fileUtil'
+import more from './more'
+
 export default {
+  mixins: [more],
   data () {
     return {
       primaryKey: 'id',
@@ -23,14 +26,8 @@ export default {
       advanced: false,
       // 列表数据
       data: [],
-      // 关联相关的更多数据
-      more: {},
-      // 获取关联数据列表的配置列表
-      attachMoreList: [],
       // 是否从mixin中自动获取初始的列表数据
       getListFromMixin: true,
-      // 是否使mixin在当前业务的attachMore接口中自动获取关联数据
-      getMore: false,
       // 是否重新加载
       reload: false,
       // 是否编辑
@@ -207,23 +204,6 @@ export default {
      */
     rebuildQuery (query) {
       return query
-    },
-
-    /**
-     * 加载当前页面关联的对象或者字典
-     * @returns {Promise<*>}
-     */
-    async attachMore () {
-      const reqList = []
-      // 个性化接口
-      this.getMore === true && reqList.push(dibootApi.get(`${this.baseApi}/attachMore`))
-      // 通用获取当前对象关联的数据的接口
-      this.attachMoreList.length > 0 && reqList.push(dibootApi.post('/common/attachMore', this.attachMoreList))
-      if (reqList.length > 0) {
-        const resList = await Promise.all(reqList)
-        resList.forEach(res => res.code === 0 && Object.keys(res.data).forEach(key => { this.more[key] = res.data[key] }))
-        this.$forceUpdate()
-      }
     },
     /**
      * 重置
@@ -446,7 +426,6 @@ export default {
     if (this.getListFromMixin === true) {
       await this.getList()
     }
-    await this.attachMore()
   },
   computed: {
     tableScrollData: function () {
