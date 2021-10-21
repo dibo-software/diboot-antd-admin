@@ -288,7 +288,6 @@ export default {
         if (currentMenu === undefined) {
           return false
         }
-        console.log(currentMenu)
         // 自动设置菜单名称与菜单编码
         this.form.setFieldsValue({
           resourceCode: currentMenu.value,
@@ -393,11 +392,13 @@ export default {
       this.currentPermissionActiveKey = this.permissionList.length - 1
       // 自动补全编码选项
       if (this.more && this.more.resourcePermissionCodeOptions) {
-        const validOption = this.more.resourcePermissionCodeOptions.find(kv => {
-          return !this.existPermissionCodes.includes(kv.value)
+        const validOption = this.more.resourcePermissionCodeOptions.find(option => {
+          return !this.existPermissionCodes.includes(option.value)
         })
-        newPermission.resourceCode = validOption.value
-        this.changePermissionName(newPermission, validOption.value)
+        if (validOption) {
+          newPermission.resourceCode = validOption.value
+          this.changePermissionName(newPermission, validOption.value)
+        }
       }
     },
     removePermission (index) {
@@ -422,7 +423,7 @@ export default {
       })
       // 自动补全按钮/权限名称
       if (validOption !== undefined) {
-        permission.displayName = validOption['label']
+        permission.displayName = validOption.label
       }
       // 自动补全接口列表
       permission.apiSetList = []

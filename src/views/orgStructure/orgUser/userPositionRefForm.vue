@@ -24,10 +24,10 @@
               style="width: 160px;"
             >
               <a-select-option
-                v-for="item in more.iamPositionOptions"
-                :key="item.value"
-                :value="item.value">
-                {{ item.label }}
+                v-for="(option, index) in more.iamPositionOptions"
+                :key="index"
+                :value="option.value">
+                {{ option.label }}
               </a-select-option>
             </a-select>
           </a-form-model-item>
@@ -41,7 +41,7 @@
               :dropdownStyle="{ maxHeight: '400px', overflow: 'auto' }"
               :treeData="orgTreeList"
               treeNodeFilterProp="title"
-              showSearch
+              :showSearch="true"
               treeDefaultExpandAll
               v-model="item.orgId"
               style="width: 200px;"
@@ -99,7 +99,7 @@ export default {
   name: 'UserPositionRefForm',
   data () {
     return {
-      baseApi: 'iam/userPosition',
+      baseApi: '/iam/userPosition',
       attachMoreList: [
         {
           type: 'T',
