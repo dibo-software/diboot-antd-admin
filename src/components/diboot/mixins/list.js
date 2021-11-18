@@ -98,23 +98,12 @@ export default {
      * @returns {Promise<any>}
      */
     postList () {
-      this.dateRange2queryParam()
       return new Promise((resolve, reject) => {
         this.loadingData = true
-        // 转化包含moment的时间类型
-        this.contentTransform(this.queryParam)
-        // 过滤掉不存在值的属性
-        let tempQueryParam = {}
-        // 合并自定义查询参数
-        merge(tempQueryParam, this.customQueryParam)
-        // 合并搜索参数
-        merge(tempQueryParam, this.queryParam)
-        // 改造查询条件（用于列表页扩展）
-        tempQueryParam = this.rebuildQuery(tempQueryParam)
         // 使用post方式请求列表数据（多用于复杂参数通过json对象进行传输到后端进行筛选）
         dibootApi.post(
           this.listApi ? this.listApi : `${this.baseApi}/list`,
-          tempQueryParam
+          this.buildQueryParam()
         )
           .then(res => {
             this.loadingData = false
@@ -153,22 +142,11 @@ export default {
      * @returns {Promise<any>}
      */
     getList () {
-      this.dateRange2queryParam()
       return new Promise((resolve, reject) => {
         this.loadingData = true
-        // 转化包含moment的时间类型
-        this.contentTransform(this.queryParam)
-        // 过滤掉不存在值的属性
-        let tempQueryParam = {}
-        // 合并自定义查询参数
-        merge(tempQueryParam, this.customQueryParam)
-        // 合并搜索参数
-        merge(tempQueryParam, this.queryParam)
-        // 改造查询条件（用于列表页扩展）
-        tempQueryParam = this.rebuildQuery(tempQueryParam)
         dibootApi.get(
           this.listApi ? this.listApi : `${this.baseApi}/list`,
-          tempQueryParam
+          this.buildQueryParam()
         ).then(res => {
           this.loadingData = false
           if (res.code === 0) {
@@ -312,6 +290,22 @@ export default {
      * 导出数据至excel
      */
     exportData () {
+      const exportApi = this.exportApi ? this.exportApi : '/excel/export'
+      dibootApi.download(`${this.baseApi}${exportApi}`, this.buildQueryParam()).then(res => {
+        if (res.filename) {
+          this.downloadFile(res)
+        } else {
+          var decoder = new TextDecoder('utf-8')
+          var result = JSON.parse(decoder.decode(new Uint8Array(res)))
+          this.$message.error(result.msg)
+        }
+      })
+    },
+    /**
+     * 构建查询参数
+     */
+    buildQueryParam () {
+      this.dateRange2queryParam()
       // 转化包含moment的时间类型
       this.contentTransform(this.queryParam)
       let tempQueryParam = {}
@@ -321,16 +315,7 @@ export default {
       merge(tempQueryParam, this.queryParam)
       // 改造查询条件（用于列表页扩展）
       tempQueryParam = this.rebuildQuery(tempQueryParam)
-      const exportApi = this.exportApi ? this.exportApi : '/excel/export'
-      dibootApi.download(`${this.baseApi}${exportApi}`, tempQueryParam).then(res => {
-        if (res.filename) {
-          this.downloadFile(res)
-        } else {
-          var decoder = new TextDecoder('utf-8')
-          var result = JSON.parse(decoder.decode(new Uint8Array(res)))
-          this.$message.error(result.msg)
-        }
-      })
+      return tempQueryParam
     },
     /**
      * 编辑表格结束后触发
