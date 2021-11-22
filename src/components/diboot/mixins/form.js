@@ -107,6 +107,16 @@ export default {
       this.form.resetFields()
       this.afterClose()
     },
+    /**
+     * 点击级联类型后，加载select数据
+     */
+    handleCascaderSelectNext (data, clearParams = []) {
+      // 将级联已经选中的统一清理
+      clearParams.forEach(param => delete this.queryParam[param])
+      // 选中的数据初始化
+      Object.assign(this.more, data)
+      this.$forceUpdate()
+    },
     /***
      * 提交前的验证流程
      * @returns {Promise<any>}
