@@ -52,7 +52,7 @@ export default {
       type: String,
       required: true
     },
-    allColumnUrl: {
+    tableHeadUrl: {
       type: String,
       required: true
     },
@@ -132,7 +132,7 @@ export default {
         this.visible = true
         if (this.tableHead.length === 0) {
           this.tableLoading = true
-          dibootApi.get(this.allColumnUrl)
+          dibootApi.get(this.tableHeadUrl)
             .then(res => {
               this.tableHead = res.data
               this.tableLoading = false
