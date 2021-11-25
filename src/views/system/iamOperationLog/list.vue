@@ -164,7 +164,8 @@ export default {
         },
         {
           title: '请求URI',
-          dataIndex: 'requestUri'
+          dataIndex: 'requestUri',
+          ellipsis: true
         },
         {
           title: '状态码',
@@ -178,7 +179,7 @@ export default {
         },
         {
           title: '操作',
-          width: '150px',
+          width: '100px',
           dataIndex: 'action',
           scopedSlots: { customRender: 'action' }
         }
