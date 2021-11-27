@@ -44,7 +44,7 @@
       <a-row v-if="errMsg">
         <a-col :span="24">
           <br>
-          <a-alert type="error" banner >
+          <a-alert type="error" banner>
             <div slot="message">
               <b>请检查Excel文件，错误信息: </b><br>
               {{ errMsg }}
@@ -53,7 +53,7 @@
         </a-col>
       </a-row>
     </div>
-    <div v-if="data && data.totalCount > 0">
+    <div v-if="data">
       <a-divider/>
       <div class="alert alert-info">
         Excel文件解析成功，共有 <strong>{{ data.totalCount }}</strong> 条数据
@@ -127,7 +127,7 @@ export default {
       /**
        * 请求返回数据
        */
-      data: {}
+      data: null
     }
   },
   methods: {
@@ -173,8 +173,7 @@ export default {
       this.fileList = newFileList
       this.previewDisabled = this.fileList.length === 0
       this.uploadDisabled = this.fileList.length === 0
-      this.importFileNameObj = {}
-      this.data = {}
+      this.data = null
     },
     /**
      * 上传之前操作
@@ -184,7 +183,7 @@ export default {
       this.previewDisabled = this.fileList.length === 0
       this.uploadDisabled = this.fileList.length === 0
       console.log('this.refs==>', this.$refs)
-      this.data = {}
+      this.data = null
       return false
     },
     /**
@@ -281,7 +280,7 @@ export default {
       this.comment = null
       this.previewDisabled = true
       this.uploadDisabled = true
-      this.data = {}
+      this.data = null
     }
   },
   props: {
