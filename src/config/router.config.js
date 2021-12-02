@@ -108,9 +108,9 @@ export const asyncRouterMap = [
           },
           {
             path: '/system/uploadFile/list',
-            name: 'uploadFileCopy1List',
+            name: 'UploadFileList',
             component: () => import('@/views/system/uploadFile/list'),
-            meta: { title: '上传文件管理', keepAlive: true, permission: ['UploadFileCopy1'] }
+            meta: { title: '上传文件管理', keepAlive: true, permission: ['UploadFile'] }
           },
           {
             path: '/system/iamOperationLog/list',
