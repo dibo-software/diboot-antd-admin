@@ -31,17 +31,15 @@
         <a-col :span="12">
           <a-form-item label="当前菜单选取">
             <a-tree-select
-              v-if="routerTreeList.length > 0"
               placeholder="请选取当前菜单"
               :dropdownStyle="{ maxHeight: '400px', overflow: 'auto' }"
-              :treeData="routerTreeList"
+              :treeData="allRouterTreeList"
               treeNodeFilterProp="title"
               showSearch
               treeDefaultExpandAll
               v-model="currentMenu"
               @change="onMenuNameChange"
-            >
-            </a-tree-select>
+            />
           </a-form-item>
         </a-col>
       </a-row>
@@ -160,7 +158,6 @@
                 </a-form-item>
                 <a-form-item label="当前按钮/权限所需接口列表">
                   <a-tree-select
-                    v-if="routerTreeList.length > 0"
                     placeholder="当前按钮/权限所需接口列表"
                     :dropdownStyle="{ maxHeight: '400px', overflow: 'auto' }"
                     :treeData="apiTreeList"
@@ -171,8 +168,7 @@
                     allowClear
                     @change="value => {permission.apiSetList = value; $forceUpdate()}"
                     v-model="permission.apiSetList"
-                  >
-                  </a-tree-select>
+                  />
                 </a-form-item>
               </a-tab-pane>
             </a-tabs>
@@ -194,6 +190,7 @@
 <script>
 import form from '@/components/diboot/mixins/form'
 import { dibootApi } from '@/utils/request'
+import { asyncRouterMap } from '@/config/router.config'
 import { treeListFormatter, routersFormatter, treeList2list, apiListFormatter } from '@/utils/treeDataUtil'
 import { mapState } from 'vuex'
 import _ from 'lodash'
@@ -493,8 +490,11 @@ export default {
     routerTreeList: function () {
       return routersFormatter(this.addRouters)
     },
+    allRouterTreeList () {
+      return routersFormatter(asyncRouterMap)
+    },
     routerList: function () {
-      return treeList2list(_.cloneDeep(this.routerTreeList))
+      return treeList2list(_.cloneDeep(this.allRouterTreeList))
     },
     apiList: function () {
       return treeList2list(_.cloneDeep(this.apiTreeList))

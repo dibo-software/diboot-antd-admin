@@ -57,13 +57,13 @@
           <a v-action:detail href="javascript:;" @click="$refs.detail.open(record.id)">详情</a>
           <a-divider type="vertical" />
           <a v-action:update href="javascript:;" @click="handleExecuteOnce(record.jobId)">运行一次</a>
-          <a-divider v-action:detail v-permission="['update', 'delete']" type="vertical" />
-          <a-dropdown v-permission="['update', 'delete']">
+          <a-divider v-action:detail v-permission="['logDelete']" type="vertical" />
+          <a-dropdown v-permission="['logDelete']">
             <a class="ant-dropdown-link">
               更多 <a-icon type="down"/>
             </a>
             <a-menu slot="overlay">
-              <a-menu-item v-action:delete>
+              <a-menu-item v-action:logDelete>
                 <a href="javascript:;" @click="remove(record.id)">删除</a>
               </a-menu-item>
             </a-menu>

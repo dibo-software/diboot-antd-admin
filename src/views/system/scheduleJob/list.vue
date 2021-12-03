@@ -77,7 +77,6 @@
         <a-divider v-action:detail v-permission="['executeOnce', 'update', 'delete']" type="vertical" />
         <a v-action:executeOnce href="javascript:;" @click="handleExecuteOnce(record.id)">运行一次</a>
         <a-divider v-action:executeOnce v-permission="['update', 'delete']" type="vertical" />
-        <a-divider v-action:executeOnce v-permission="['update', 'delete']" type="vertical" />
         <a-dropdown v-permission="['update', 'delete']">
           <a class="ant-dropdown-link">
             更多 <a-icon type="down"/>
