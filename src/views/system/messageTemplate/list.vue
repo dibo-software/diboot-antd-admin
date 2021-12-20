@@ -23,13 +23,26 @@
           </a-col>
           <template v-if="advanced">
             <a-col :md="8" :sm="24">
-              <a-form-item label="创建时间">
-                <a-date-picker
+              <a-form-item label="创建人">
+                <a-select
+                  v-model="queryParam.createBy"
+                  placeholder=""
+                  allow-clear
+                  show-search
+                  :show-arrow="false"
+                  :filter-option="false"
+                  @search="value => attachMoreFilter(value, 'iamUser')"
                   @change="onSearch"
-                  allowClear
-                  format="YYYY-MM-DD"
-                  v-model="queryParam.createTime"
-                />
+                >
+                  <a-spin v-if="attachMoreLoading" slot="notFoundContent" size="small" />
+                  <a-select-option
+                    v-for="(item, index) in more.iamUserOptions || []"
+                    :key="index"
+                    :value="item.value"
+                  >
+                    {{ item.label }}
+                  </a-select-option>
+                </a-select>
               </a-form-item>
             </a-col>
           </template>
@@ -109,8 +122,16 @@ export default {
           dataIndex: 'title'
         },
         {
+          title: '创建人',
+          dataIndex: 'createByName'
+        },
+        {
           title: '创建时间',
           dataIndex: 'createTime'
+        },
+        {
+          title: '更新时间',
+          dataIndex: 'updateTime'
         },
         {
           title: '操作',
@@ -118,10 +139,16 @@ export default {
           dataIndex: 'action',
           scopedSlots: { customRender: 'action' }
         }
-      ]
+      ],
+      attachMoreLoader: {
+        iamUser: {
+          target: 'IamUser',
+          label: 'realname',
+          value: 'id'
+        }
+      }
     }
   }
-
 }
 </script>
 <style lang="less" scoped>

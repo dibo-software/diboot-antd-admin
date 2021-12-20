@@ -1,4 +1,5 @@
 import { asyncRouterMap, constantRouterMap } from '@/config/router.config'
+import _ from 'lodash'
 
 /**
  * 过滤账户是否拥有某一个权限，并将菜单从加载列表移除
@@ -65,7 +66,7 @@ const permission = {
     GenerateRoutes ({ commit }, data) {
       return new Promise(resolve => {
         const { role } = data
-        const accessedRouters = filterAsyncRouter(asyncRouterMap, role)
+        const accessedRouters = filterAsyncRouter(_.cloneDeep(asyncRouterMap), role)
         commit('SET_ROUTERS', accessedRouters)
         resolve()
       })

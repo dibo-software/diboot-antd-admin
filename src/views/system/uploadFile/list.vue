@@ -74,20 +74,8 @@
     >
       <span slot="action" slot-scope="text, record">
         <a v-action:detail href="javascript:;" @click="$refs.detail.open(record.uuid)">详情</a>
-        <a-divider v-action:detail v-permission="['update', 'delete']" type="vertical"/>
-        <a-dropdown v-permission="['update', 'delete']">
-          <a class="ant-dropdown-link">
-            更多 <a-icon type="down"/>
-          </a>
-          <a-menu slot="overlay">
-            <a-menu-item v-action:update>
-              <a @click="$refs.form.open(record.uuid)">编辑</a>
-            </a-menu-item>
-            <a-menu-item v-action:delete>
-              <a @click="remove(record.uuid)">删除</a>
-            </a-menu-item>
-          </a-menu>
-        </a-dropdown>
+        <a-divider v-action:detail v-permission="['update']" type="vertical"/>
+        <a v-action:update href="javascript:;" @click="$refs.form.open(record.uuid)">编辑</a>
       </span>
     </a-table>
     <diboot-form ref="form" @complete="getList"></diboot-form>
@@ -113,10 +101,6 @@ export default {
     return {
       baseApi: '/uploadFile',
       columns: [
-        {
-          title: '应用模块',
-          dataIndex: 'appModule'
-        },
         {
           title: '关联对象类',
           dataIndex: 'relObjType'

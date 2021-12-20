@@ -8,9 +8,6 @@
     :body-style="{ paddingBottom: '80px' }"
   >
     <a-descriptions :column="1">
-      <a-descriptions-item label="应用模块">
-        {{ model.appModule }}
-      </a-descriptions-item>
       <a-descriptions-item label="关联对象类">
         {{ model.relObjType }}
       </a-descriptions-item>
