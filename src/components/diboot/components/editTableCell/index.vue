@@ -60,7 +60,7 @@
       <template v-else-if="formType === 'TREE'">
         <a-tree-select
           v-if="treeData.length > 0"
-          placeholder="请选择父级"
+          :placeholder="placeholder"
           :dropdownStyle="{ maxHeight: '400px', overflow: 'auto' }"
           :treeData="treeData"
           treeNodeFilterProp="name"
@@ -140,6 +140,16 @@ export default {
     fullUrl: {
       type: String,
       default: ''
+    },
+    // 树的value字段
+    treeValueField: {
+      type: String,
+      default: 'id'
+    },
+    // 树的显示字段
+    treeTitleField: {
+      type: String,
+      default: 'label'
     }
   },
   data () {
@@ -166,7 +176,7 @@ export default {
         if (res.code === 0) {
           const data = res.data || []
           if (data.length > 0) {
-            this.treeData = treeListFormatter(data, 'id', 'name', true)
+            this.treeData = treeListFormatter(data, this.treeValueField, this.treeTitleField, true)
           }
           this.treeData.splice(0, 0, {
             key: '0',
