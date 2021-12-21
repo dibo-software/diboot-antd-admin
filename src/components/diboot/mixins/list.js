@@ -325,7 +325,8 @@ export default {
     async handleEditTableRow (model) {
       if (this.currentPrimaryValue) {
         try {
-          const res = await dibootApi.put(`${this.baseApi}/${model[this.primaryKey]}`, model)
+          const findModel = this.data.find(e => e[this.primaryKey] === this.currentPrimaryValue)
+          const res = await dibootApi.put(`${this.baseApi}/${findModel[this.primaryKey]}`, findModel)
           if (res.code === 0) {
             await this.getList()
           } else {
@@ -335,8 +336,10 @@ export default {
           this.$message.warning('网络异常')
         } finally {
           this.reload = !this.reload
-          this.currentPrimaryValue = ''
         }
+      }
+      if (this.currentPrimaryValue === model[this.primaryKey]) {
+        this.currentPrimaryValue = ''
       } else {
         this.currentPrimaryValue = model[this.primaryKey]
       }
