@@ -39,7 +39,7 @@ export default {
       // 窗口高度
       windowHeight: 240,
       // 是否允许撤回删除
-      allowCanceledDelete: true,
+      allowCanceledDelete: false,
       // 分页数据
       pagination: {
         pageSize: 10,
