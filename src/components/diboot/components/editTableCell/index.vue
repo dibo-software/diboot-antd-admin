@@ -57,10 +57,27 @@
           :showTime="{ format: 'HH:mm:ss' }"
           valueFormat="YYYY-MM-DD HH:mm:ss"/>
       </template>
+      <template v-else-if="formType === 'TREE'">
+        <a-tree-select
+          v-if="treeData.length > 0"
+          :placeholder="placeholder"
+          :dropdownStyle="{ maxHeight: '400px', overflow: 'auto' }"
+          :treeData="treeData"
+          treeNodeFilterProp="name"
+          showSearch
+          treeDefaultExpandAll
+          @change="changeValue"
+          v-model="tempValue"
+        >
+        </a-tree-select>
+      </template>
     </div>
     <div v-else :class="{'text-ellipsis': ellipsis, 'editable-cell-text-wrapper': true}">
       <template v-if="label">
         {{ label }}
+      </template>
+      <template v-else-if="!label && formType === 'TREE'">
+        -
       </template>
       <template v-else>
         {{ (isBoolean ? (tempValue ? '是' : '否') : tempValue) || '-' }}
@@ -70,6 +87,9 @@
 </template>
 
 <script>
+import { dibootApi } from '@/utils/request'
+import { treeListFormatter } from '@/utils/treeDataUtil'
+
 export default {
   name: 'EditTableCell',
   // 文本值， 表单类型， 选择类型的数据集
@@ -110,16 +130,61 @@ export default {
     placeholder: {
       type: String,
       default: ''
+    },
+    // 基础请求路径
+    baseUrl: {
+      type: String,
+      default: ''
+    },
+    // 完整请求路径
+    fullUrl: {
+      type: String,
+      default: ''
+    },
+    // 树的value字段
+    treeValueField: {
+      type: String,
+      default: 'id'
+    },
+    // 树的显示字段
+    treeTitleField: {
+      type: String,
+      default: 'label'
     }
   },
   data () {
     return {
-      tempValue: this.value
+      tempValue: this.value,
+      treeData: []
+    }
+  },
+  watch: {
+    editable (val) {
+      val && this.reloadData()
     }
   },
   methods: {
     changeValue (val) {
       this.$emit('input', val)
+    },
+    /**
+     * 重新加载数据
+     */
+    async reloadData () {
+      if (this.formType === 'TREE') {
+        const res = await dibootApi.get(this.fullUrl ? this.fullUrl : `${this.baseUrl}/list`)
+        if (res.code === 0) {
+          const data = res.data || []
+          if (data.length > 0) {
+            this.treeData = treeListFormatter(data, this.treeValueField, this.treeTitleField, true)
+          }
+          this.treeData.splice(0, 0, {
+            key: '0',
+            value: '0',
+            title: '-- 无 --'
+          })
+        }
+      }
     }
   }
 }
