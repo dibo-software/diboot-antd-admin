@@ -18,6 +18,8 @@
     "ant-design-vue": "^1.7.2",
     "axios": "^0.21.1",
     "core-js": "^3.1.2",
+    "echarts": "^5.2.2",
+    "element-resize-detector": "^1.2.3",
     "enquire.js": "^2.1.6",
     "lodash.clonedeep": "^4.5.0",
     "lodash.foreach": "^4.5.0",
