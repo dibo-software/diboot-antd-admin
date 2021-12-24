@@ -101,7 +101,6 @@ export default {
       baseApi: '/iam/user',
       attachMoreList: [
         {
-          type: 'D',
           target: 'USER_STATUS'
         }
       ],

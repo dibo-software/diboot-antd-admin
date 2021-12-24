@@ -138,7 +138,6 @@ export default {
       exportApi: '/excel/export',
       attachMoreList: [
         {
-          type: 'D',
           target: 'GENDER'
         }
       ],
