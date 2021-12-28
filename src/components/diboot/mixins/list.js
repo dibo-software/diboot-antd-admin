@@ -4,6 +4,7 @@ import moment from 'moment'
 import _ from 'lodash'
 import { downloadFileFromRes } from '@/utils/fileUtil'
 import more from './more'
+import { list2tree } from '@/utils/treeDataUtil'
 
 export default {
   mixins: [more],
@@ -52,7 +53,7 @@ export default {
     }
   },
   methods: {
-
+    list2tree,
     /**
      * 分页、排序、筛选变化时触发
      * @param pagination 分页
