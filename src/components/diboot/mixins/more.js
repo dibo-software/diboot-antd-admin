@@ -51,7 +51,7 @@ export default {
       this.attachMoreLoading = true
       const moreLoader = this.attachMoreLoader[loader]
       moreLoader.keyword = value
-      this.$set(this.more, `${loader}Options`, await this.LoadAttachMore(moreLoader))
+      this.$set(this.more, `${loader}Options`, await this.loadAttachMore(moreLoader))
       this.attachMoreLoading = false
     },
     /**
@@ -60,7 +60,7 @@ export default {
      * @param moreLoader 加载器
      * @param node 节点（可空）
      */
-    async LoadAttachMore (moreLoader, node = {}) {
+    async loadAttachMore (moreLoader, node = {}) {
       if (moreLoader.disabled) {
         return
       }
@@ -85,7 +85,7 @@ export default {
       const targetNode = node[node.length - 1]
       targetNode.loading = true
       const moreLoader = this.attachMoreLoader[loader]
-      const dataLsit = await this.LoadAttachMore(moreLoader, targetNode) || []
+      const dataLsit = await this.loadAttachMore(moreLoader, targetNode) || []
       dataLsit.length === 0 && moreLoader.next != null && this.$set(targetNode, 'disabled', true)
       targetNode.children = dataLsit.map(e => {
         e.isLeaf = e.isLeaf || false
@@ -111,7 +111,7 @@ export default {
         const obj = {}
         obj[name] = undefined
         this.form.setFieldsValue(obj)
-        !lazy && this.$set(this.more, `${loader}Options`, isNull ? [] : await this.LoadAttachMore(moreLoader))
+        !lazy && this.$set(this.more, `${loader}Options`, isNull ? [] : await this.loadAttachMore(moreLoader))
       }
       controlItem instanceof Array ? controlItem.forEach(item => execute(item)) : execute(controlItem || {})
     }
