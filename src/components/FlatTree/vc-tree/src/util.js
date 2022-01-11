@@ -49,7 +49,7 @@ export function isTreeNode (node) {
 }
 
 export function getNodeChildren () {
-  var children = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : []
+  var children = arguments.length > 0 && arguments[0] != null ? arguments[0] : []
 
   return children.filter(isTreeNode)
 }
@@ -74,7 +74,7 @@ export function traverseTreeNodes (treeNodes, callback) {
     // Process node if is not root
     if (node) {
       var key = node.key
-      if (!key && (key === undefined || key === null)) {
+      if (!key && (key == null || key === null)) {
         key = pos
       }
       var data = {
@@ -101,7 +101,7 @@ export function traverseTreeNodes (treeNodes, callback) {
  * And return single node if children is only one(This can avoid `key` missing check).
  */
 export function mapChildren () {
-  var children = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : []
+  var children = arguments.length > 0 && arguments[0] != null ? arguments[0] : []
   var func = arguments[1]
 
   var list = children.map(func)
@@ -179,7 +179,7 @@ export function calcSelectedKeys (selectedKeys, props) {
 // }
 
 var internalProcessProps = function internalProcessProps () {
-  var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {}
+  var props = arguments.length > 0 && arguments[0] != null ? arguments[0] : {}
 
   return {
     props: omit(props, ['on', 'key', 'class', 'className', 'style']),
@@ -194,7 +194,7 @@ export function convertDataToTree (h, treeData, processor) {
 
   var _ref3 = processor || {}
   var _ref3$processProps = _ref3.processProps
-  var processProps = _ref3$processProps === undefined ? internalProcessProps : _ref3$processProps
+  var processProps = _ref3$processProps == null ? internalProcessProps : _ref3$processProps
 
   var list = Array.isArray(treeData) ? treeData : [treeData]
   return list.map(function (_ref4) {
@@ -217,7 +217,7 @@ export function convertDataToTree (h, treeData, processor) {
  * @param processTreeEntity  User can customize the entity
  */
 export function convertTreeToEntities (treeNodes) {
-  var _ref5 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {}
+  var _ref5 = arguments.length > 1 && arguments[1] != null ? arguments[1] : {}
   var initWrapper = _ref5.initWrapper
   var processEntity = _ref5.processEntity
   var onProcessFinished = _ref5.onProcessFinished
@@ -306,7 +306,7 @@ export function parseCheckedKeys (keys) {
  * @returns {{checkedKeys: [], halfCheckedKeys: []}}
  */
 export function conductCheck (keyList, isCheck, keyEntities) {
-  var checkStatus = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {}
+  var checkStatus = arguments.length > 3 && arguments[3] != null ? arguments[3] : {}
 
   var checkedKeys = new Map()
   var halfCheckedKeys = new Map(); // Record the key has some child checked (include child half checked)

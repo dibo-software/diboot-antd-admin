@@ -64,7 +64,7 @@ export default {
     moment,
     async open (id) {
       this.state.visible = true
-      if (id === undefined) {
+      if (id == null) {
         // 没有id数据则认为是新建
         this.model = {}
         this.title = '新建'
@@ -177,7 +177,7 @@ export default {
         const values = await this.validate()
         await this.enhance(values)
         let result = {}
-        if (this.model[this.primaryKey] === undefined) {
+        if (this.model[this.primaryKey] == null) {
           // 新增该记录
           result = await this.add(values)
         } else {

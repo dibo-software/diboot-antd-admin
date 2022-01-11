@@ -71,7 +71,7 @@ export default {
      * @param sorter
      */
     appendSorterParam (sorter) {
-      if (sorter !== undefined && sorter.field !== undefined) {
+      if (sorter != null && sorter.field != null) {
         const field = sorter.field
         const order = sorter.order === 'ascend' ? 'ASC' : 'DESC'
         const orderBy = `${field}:${order}`
@@ -267,7 +267,7 @@ export default {
      * @returns {boolean}
      */
     batchRemove () {
-      if (this.selectedRowKeys === undefined || this.selectedRowKeys.length === 0) {
+      if (this.selectedRowKeys == null || this.selectedRowKeys.length === 0) {
         this.$message.error('请选择需要操作的行')
         return false
       }

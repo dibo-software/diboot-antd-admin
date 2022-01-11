@@ -22,7 +22,7 @@
                   'orgId',
                   {
                     rules: [{ required: true, message: '请选择上级部门' }],
-                    initialValue: model.orgId !== undefined ? `${model.orgId}` : currentNodeId
+                    initialValue: model.orgId != null ? `${model.orgId}` : currentNodeId
                   }
                 ]"
               >
@@ -242,7 +242,7 @@ export default {
   methods: {
     async afterOpen (id) {
       // 新建显示密码填写，更新隐藏密码填写
-      if (id === undefined) {
+      if (id == null) {
         this.setPassword = true
       } else {
         this.setPassword = false
@@ -262,7 +262,7 @@ export default {
     },
     async loadUsername () {
       const id = this.model.id
-      if (id !== undefined) {
+      if (id != null) {
         const res = await dibootApi.get(`${this.baseApi}/getUsername/${id}`)
         if (res.code === 0 && res.data) {
           this.systemUser = true
@@ -304,7 +304,7 @@ export default {
   },
   computed: {
     orgTreeList: function () {
-      if (this.orgList === undefined || this.orgList.length === 0) {
+      if (this.orgList == null || this.orgList.length === 0) {
         return []
       }
       const orgTreeList = treeListFormatter(_.cloneDeep(this.orgList), 'id', 'shortName', true)

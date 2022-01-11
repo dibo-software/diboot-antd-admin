@@ -7,7 +7,7 @@
  * @returns {[]|undefined}
  */
 const treeListFormatter = function (treeList, valueField, titleField, toString) {
-  if (treeList === undefined || treeList.length === 0) {
+  if (treeList == null || treeList.length === 0) {
     return undefined
   }
 
@@ -41,7 +41,7 @@ const treeListFormatter = function (treeList, valueField, titleField, toString) 
  * @param treeList
  */
 const clearNullChildren = function (treeList) {
-  if (treeList === undefined || treeList.length === 0) {
+  if (treeList == null || treeList.length === 0) {
     return undefined
   }
   treeList.forEach(item => {
@@ -56,12 +56,12 @@ const clearNullChildren = function (treeList) {
  * @returns {[]|*[]}
  */
 const treeList2list = function (treeList) {
-  if (treeList === undefined || treeList.length === 0) {
+  if (treeList == null || treeList.length === 0) {
     return []
   }
   const allList = []
   treeList.forEach(item => {
-    if (item.children !== undefined && item.children.length > 0) {
+    if (item.children != null && item.children.length > 0) {
       allList.push(...treeList2list(item.children))
       delete item.children
     }
@@ -71,10 +71,10 @@ const treeList2list = function (treeList) {
 }
 
 const treeList2IndentList = function (treeList, level) {
-  if (treeList === undefined || treeList.length === 0) {
+  if (treeList == null || treeList.length === 0) {
     return []
   }
-  level = level === undefined ? 0 : level
+  level = level == null ? 0 : level
   const allList = []
   let prefix = ''
   for (let i = 0; i < level; i++) {
@@ -98,12 +98,12 @@ const treeList2IndentList = function (treeList, level) {
  */
 const list2childrenMap = function (list) {
   const childrenMap = {}
-  if (list === undefined || list.length === 0) {
+  if (list == null || list.length === 0) {
     return childrenMap
   }
   list.forEach(item => {
     let children = childrenMap[item.parentId]
-    if (children === undefined) {
+    if (children == null) {
       children = []
       childrenMap[item.parentId] = children
     }
@@ -118,7 +118,7 @@ const list2childrenMap = function (list) {
  * @returns {[]|undefined}
  */
 const routersFormatter = function (routers) {
-  if (routers === undefined || routers.length === 0) {
+  if (routers == null || routers.length === 0) {
     return undefined
   }
 
@@ -131,7 +131,7 @@ const routersFormatter = function (routers) {
         value: code,
         title: `${item.meta.title}`
       }
-      if (item.children !== undefined && item.children.length > 0) {
+      if (item.children != null && item.children.length > 0) {
         formatterItem.children = routersFormatter(item.children)
       }
       formatterList.push(formatterItem)
@@ -141,7 +141,7 @@ const routersFormatter = function (routers) {
 }
 
 const apiListFormatter = function (apiList) {
-  if (apiList === undefined || apiList.length === 0) {
+  if (apiList == null || apiList.length === 0) {
     return undefined
   }
 
@@ -176,7 +176,7 @@ const apiListFormatter = function (apiList) {
  * @returns {[]|undefined}
  */
 const permissionTreeListFormatter = function (treeList, valueField, titleField) {
-  if (treeList === undefined || treeList.length === 0) {
+  if (treeList == null || treeList.length === 0) {
     return undefined
   }
 
@@ -212,7 +212,7 @@ const permissionTreeListFormatter = function (treeList, valueField, titleField) 
  * @returns {undefined}
  */
 const sortTreeListFormatter = function (treeList, valueField, titleField) {
-  if (treeList === undefined || treeList.length === 0) {
+  if (treeList == null || treeList.length === 0) {
     return undefined
   }
 
@@ -227,7 +227,7 @@ const sortTreeListFormatter = function (treeList, valueField, titleField) {
       value: item[valueField],
       title: item[titleField]
     }
-    if (item.children !== undefined && item.children.length > 0) {
+    if (item.children != null && item.children.length > 0) {
       formatterItem.children = sortTreeListFormatter(item.children, valueField, titleField)
     }
     formatterList.push(formatterItem)

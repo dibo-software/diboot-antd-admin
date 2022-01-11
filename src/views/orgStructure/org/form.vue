@@ -22,7 +22,7 @@
                 'parentId',
                 {
                   rules: [{ required: true, message: '请选择上级部门' }],
-                  initialValue: model.parentId !== undefined ? `${model.parentId}` : currentNodeId
+                  initialValue: model.parentId != null ? `${model.parentId}` : currentNodeId
                 }
               ]"
             >
@@ -201,13 +201,13 @@ export default {
   },
   computed: {
     parentId: function () {
-      if (this.model === undefined || !this.model.parentId) {
+      if (this.model == null || !this.model.parentId) {
         return this.currentNodeId.toString(10)
       }
       return this.model.parentId.toString(10)
     },
     orgTreeList: function () {
-      if (this.orgList === undefined || this.orgList.length === 0) {
+      if (this.orgList == null || this.orgList.length === 0) {
         return []
       }
       const orgTreeList = treeListFormatter(_.cloneDeep(this.orgList), 'id', 'shortName', true)

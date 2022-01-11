@@ -12,7 +12,7 @@ Vue.filter('NumberFormat', function (value) {
 })
 
 Vue.filter('BooleanFormat', function (value) {
-  if (value === undefined) {
+  if (value == null) {
     return ''
   }
   if (value === true || value === 'true') {

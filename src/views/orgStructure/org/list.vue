@@ -90,7 +90,7 @@ export default {
       // 通知上层组件列表已更新
       if (this.data && this.data.length > 0) {
         this.data.forEach(item => {
-          if (item.children !== undefined) {
+          if (item.children != null) {
             delete item.children
           }
         })

@@ -33,7 +33,7 @@ export default {
       if (this.model[this.primaryKey]) {
         this._protect = true
         const keyEdit = this.model[`${key}_edit`]
-        keyEdit === undefined && this.switchEdit(key, false)
+        keyEdit == null && this.switchEdit(key, false)
         return !keyEdit
       }
       return false

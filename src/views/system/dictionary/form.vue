@@ -147,7 +147,7 @@ export default {
   mixins: [ form ],
   methods: {
     async afterOpen (id) {
-      if (id === undefined) {
+      if (id == null) {
         return
       }
       const res = await dibootApi.get(`${this.baseApi}/${id}`)
@@ -222,7 +222,7 @@ export default {
         this.$message.warning('数据字典子项编码不建议包含英文逗号')
       }
 
-      if (this.childrenBtnConfig.currentIndex === undefined ||
+      if (this.childrenBtnConfig.currentIndex == null ||
         this.childrenBtnConfig.currentIndex >= this.children.length) {
         this.children.push(this.childItem)
       } else {

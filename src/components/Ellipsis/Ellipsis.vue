@@ -2,7 +2,7 @@
 import Tooltip from 'ant-design-vue/es/tooltip'
 import { cutStrByFullLength, getStrFullLength } from '@/components/_util/util'
 /*
-    const isSupportLineClamp = document.body.style.webkitLineClamp !== undefined;
+    const isSupportLineClamp = document.body.style.webkitLineClamp != null;
 
     const TooltipOverlayStyle = {
       overflowWrap: 'break-word',

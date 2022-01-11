@@ -173,7 +173,7 @@ export default {
         formatterItem.title = item[this.nodeName]
         formatterItem.scopedSlots = { title: 'title' }
         const children = this.treeListFormatter(item.children)
-        if (children !== undefined) {
+        if (children != null) {
           formatterItem.children = children
         }
         formatterItemList.push(formatterItem)
@@ -186,7 +186,7 @@ export default {
   },
   computed: {
     dataList: function () {
-      if (this.treeList === undefined || this.treeList.length === 0) {
+      if (this.treeList == null || this.treeList.length === 0) {
         return []
       }
       return treeList2list(_.cloneDeep(this.treeList))
@@ -194,7 +194,7 @@ export default {
     currentNode: function () {
       if (this.dataList.length === 0 ||
             this.currentNodeId === 0 || this.currentNodeId === '0' ||
-            this.currentNodeId === undefined || this.currentNodeId === '') {
+            this.currentNodeId == null || this.currentNodeId === '') {
         return {}
       }
       return this.dataList.find(item => {

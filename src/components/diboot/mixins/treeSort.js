@@ -85,7 +85,7 @@ export default {
         const dropItem = this.dataList.find(item => {
           return item.value === dropKey
         })
-        if (dragItem === undefined || dropItem === undefined) {
+        if (dragItem == null || dropItem == null) {
           this.levelChangeWarning()
           return false
         } else if (dragItem.parentId !== dropItem.parentId) {
@@ -114,20 +114,20 @@ export default {
       this.treeList = data
     },
     treeListFormatter (treeList, valueField, titleField) {
-      if (treeList === undefined || treeList.length === 0) {
+      if (treeList == null || treeList.length === 0) {
         return undefined
       }
       const formatterList = []
       treeList.forEach(item => {
         const formatterItem = {
-          parentId: item.parentId === undefined ? '' : `${item.parentId}`,
-          id: item.id === undefined ? '' : `${item.id}`,
-          sortId: item.sortId === undefined ? '' : `${item.sortId}`,
-          key: item[valueField] === undefined ? '' : `${item[valueField]}`,
-          value: item[valueField] === undefined ? '' : `${item[valueField]}`,
-          title: item[titleField] === undefined ? '' : `${item[titleField]}`
+          parentId: item.parentId == null ? '' : `${item.parentId}`,
+          id: item.id == null ? '' : `${item.id}`,
+          sortId: item.sortId == null ? '' : `${item.sortId}`,
+          key: item[valueField] == null ? '' : `${item[valueField]}`,
+          value: item[valueField] == null ? '' : `${item[valueField]}`,
+          title: item[titleField] == null ? '' : `${item[titleField]}`
         }
-        if (item.children !== undefined && item.children.length > 0) {
+        if (item.children != null && item.children.length > 0) {
           formatterItem.children = this.treeListFormatter(item.children, valueField, titleField)
         }
         formatterList.push(formatterItem)
