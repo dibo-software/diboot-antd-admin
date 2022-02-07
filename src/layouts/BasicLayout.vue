@@ -18,6 +18,15 @@
         <h1>{{ title }}</h1>
       </div>
     </template>
+
+    <!--  tabs  -->
+    <span v-if="settings.multiTab">
+      <multi-tab :style="settings.fixedHeader ? { position : 'fixed', zIndex: 1 , width: sideCollapsed ? 'calc(100% - 80px)' : 'calc(100% - 255px)' } : {}"/>
+      <a-layout-content :style="{ paddingTop: settings.fixedHeader ? '42px' : '0' }">
+        <transition name="page-transition"/>
+      </a-layout-content>
+    </span>
+
     <!-- 1.0.0+ 版本 pro-layout 提供 API,
           增加 Header 左侧内容区自定义
     -->
@@ -55,6 +64,7 @@ import defaultSettings from '@/config/defaultSettings'
 import RightContent from '@/components/GlobalHeader/RightContent'
 import GlobalFooter from '@/components/GlobalFooter'
 import LogoSvg from '../assets/logo.svg?inline'
+import MultiTab from '@/components/MultiTab'
 
 export default {
   name: 'BasicLayout',
@@ -62,7 +72,8 @@ export default {
     SettingDrawer,
     RightContent,
     GlobalFooter,
-    LogoSvg
+    LogoSvg,
+    MultiTab
   },
   data () {
     return {
@@ -84,6 +95,7 @@ export default {
         theme: defaultSettings.navTheme,
         // 主色调
         primaryColor: defaultSettings.primaryColor,
+        multiTab: defaultSettings.multiTab,
         fixedHeader: defaultSettings.fixedHeader,
         fixSiderbar: defaultSettings.fixSiderbar,
         colorWeak: defaultSettings.colorWeak,
@@ -101,7 +113,8 @@ export default {
   computed: {
     ...mapState({
       // 动态主路由
-      mainMenu: state => state.permission.addRouters
+      mainMenu: state => state.permission.addRouters,
+      sideCollapsed: state => state.app.sideCollapsed
     })
   },
   created () {

@@ -1,10 +1,5 @@
 // eslint-disable-next-line
-import { UserLayout, PageView, BasicLayout, BlankLayout } from '@/layouts'
-
-const RouteView = {
-  name: 'RouteView',
-  render: h => h('router-view')
-}
+import { UserLayout, PageView, BasicLayout, RouteView } from '@/layouts'
 
 export const asyncRouterMap = [
   {
@@ -61,7 +56,7 @@ export const asyncRouterMap = [
       {
         path: '/system',
         redirect: '/system/dictionary/list',
-        component: PageView,
+        component: RouteView,
         meta: { title: '系统管理', icon: 'setting', permission: ['system'] },
         children: [
           {
