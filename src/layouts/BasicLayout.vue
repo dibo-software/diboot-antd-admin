@@ -21,7 +21,7 @@
 
     <!--  tabs  -->
     <span v-if="settings.multiTab">
-      <multi-tab :style="settings.fixedHeader ? { position : 'fixed', zIndex: 1 , width: sideCollapsed ? 'calc(100% - 80px)' : 'calc(100% - 255px)' } : {}"/>
+      <multi-tab :style="settings.fixedHeader ? { position : 'fixed', zIndex: 5 , width: sideCollapsed ? 'calc(100% - 80px)' : 'calc(100% - 255px)' } : {}"/>
       <a-layout-content :style="{ paddingTop: settings.fixedHeader ? '42px' : '0' }">
         <transition name="page-transition"/>
       </a-layout-content>
