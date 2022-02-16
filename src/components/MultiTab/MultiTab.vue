@@ -19,11 +19,9 @@ export default {
       }
       this.activeKey = val
     }).$on('close', val => {
-      if (!val) {
-        this.closeThat(this.activeKey)
-        return
-      }
-      this.closeThat(val)
+      const targetKey = !val ? this.activeKey : val
+      this.closeThat(targetKey)
+      this.autoSelectedPath(targetKey)
     }).$on('rename', ({ key, name }) => {
       console.log('rename', key, name)
       try {
@@ -36,24 +34,24 @@ export default {
 
     this.pages.push(this.$route)
     this.fullPathList.push(this.$route.fullPath)
-    this.selectedLastPath()
+    this.autoSelectedPath()
   },
   methods: {
     onEdit (targetKey, action) {
       this[action](targetKey)
+      this.autoSelectedPath(targetKey)
     },
     remove (targetKey) {
       this.pages = this.pages.filter(page => page.fullPath !== targetKey)
       this.fullPathList = this.fullPathList.filter(path => path !== targetKey)
-      // 判断当前标签是否关闭，若关闭则跳转到最后一个还存在的标签页
+    },
+    autoSelectedPath (targetKey) {
+      // 判断当前标签是否关闭，若关闭则跳转标签页
       if (!this.fullPathList.includes(this.activeKey)) {
-        this.selectedLastPath()
+        // 点击标签存在，则跳转当前点击页签，反之跳转最后一个页签
+        this.activeKey = this.fullPathList.includes(targetKey) ? targetKey : this.fullPathList[this.fullPathList.length - 1]
       }
     },
-    selectedLastPath () {
-      this.activeKey = this.fullPathList[this.fullPathList.length - 1]
-    },
-
     // content menu
     closeThat (e) {
       // 判断是否为最后一个标签页，如果是最后一个，则无法被关闭
@@ -87,7 +85,7 @@ export default {
         this.$message.info('右侧没有标签')
       }
     },
-    closeAll (e) {
+    closeOther (e) {
       const currentIndex = this.fullPathList.indexOf(e)
       this.fullPathList.forEach((item, index) => {
         if (index !== currentIndex) {
@@ -97,14 +95,15 @@ export default {
     },
     closeMenuClick (key, route) {
       this[key](route)
+      this.autoSelectedPath(route)
     },
     renderTabPaneMenu (e) {
       return (
         <a-menu {...{ on: { click: ({ key, item, domEvent }) => { this.closeMenuClick(key, e) } } }}>
-          <a-menu-item key="closeThat">关闭当前标签</a-menu-item>
-          <a-menu-item key="closeRight">关闭右侧</a-menu-item>
-          <a-menu-item key="closeLeft">关闭左侧</a-menu-item>
-          <a-menu-item key="closeAll">关闭全部</a-menu-item>
+          <a-menu-item key="closeThat">关闭当前页签</a-menu-item>
+          <a-menu-item key="closeOther">关闭其他页签</a-menu-item>
+          <a-menu-item key="closeRight">关闭右侧页签</a-menu-item>
+          <a-menu-item key="closeLeft">关闭左侧页签</a-menu-item>
         </a-menu>
       )
     },
