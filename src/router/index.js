@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import { constantRouterMap } from '@/config/router.config'
+import { isEnableSso } from '@/utils/sso'
 
 // hack router push callback
 const originalPush = Router.prototype.push
@@ -12,6 +13,6 @@ Router.prototype.push = function push (location, onResolve, onReject) {
 Vue.use(Router)
 
 export default new Router({
-  mode: 'hash',
+  mode: isEnableSso() ? 'history' : 'hash', // 使用SSO时只能是history模式
   routes: constantRouterMap
 })

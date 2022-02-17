@@ -72,6 +72,14 @@
           :disabled="state.loginBtn"
         >确定</a-button>
       </a-form-item>
+      <a-form-item style="margin-top:24px" v-if="enableSso">
+        <a-button
+          size="large"
+          type="danger"
+          class="login-button"
+          @click="ssoLogin"
+        >SSO 登录</a-button>
+      </a-form-item>
     </a-form>
   </div>
 </template>
@@ -80,6 +88,7 @@
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
 import { baseURL } from '@/utils/request'
+import { login, isEnableSso } from '@/utils/sso'
 
 export default {
   data () {
@@ -99,10 +108,15 @@ export default {
         smsSendBtn: false
       },
       baseURL,
-      captchaParam: 0
+      captchaParam: 0,
+      // 启用SSO
+      enableSso: isEnableSso()
     }
   },
   methods: {
+    ssoLogin () {
+      login()
+    },
     ...mapActions(['Login', 'Logout', 'GetInfo']),
     // handler
     userNameValidator (rule, value, callback) {

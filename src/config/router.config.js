@@ -1,5 +1,6 @@
 // eslint-disable-next-line
 import { UserLayout, PageView, BasicLayout, RouteView } from '@/layouts'
+import { callback } from '@/utils/sso'
 
 export const asyncRouterMap = [
   {
@@ -210,13 +211,28 @@ export const constantRouterMap = [
     redirect: '/user/login',
     hidden: true,
     children: [
-      { path: 'login',
+      {
+        path: 'login',
         name: 'login',
         component: () => import(/* webpackChunkName: "user" */ '@/views/user/Login')
       }
     ]
   },
-
+  {
+    path: '/callback',
+    name: 'callback',
+    component: {
+      created () {
+        callback()
+      },
+      render: h => h('h2', {
+        style: {
+          lineHeight: '100vh',
+          textAlign: 'center'
+        }
+      }, '登录中……')
+    }
+  },
   {
     path: '/404',
     redirect: '/'
