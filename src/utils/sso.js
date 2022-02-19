@@ -44,12 +44,10 @@ export function callback () {
   }
   // 获取token后回滚
   dibootApi.get(`/auth/token`, { code: getQueryVariable('code') }).then(res => {
-    // setLoginResult(res.data)
-    // alert('登录成功' + res.data)
     storage.set(ACCESS_TOKEN, res.data, 7 * 24 * 60 * 60 * 1000)
     store.commit('SET_TOKEN', res.data)
-    const uri = sessionStorage.getItem('refererUri') || '/'
-    window.location = uri.includes('login') ? '/' : uri
+    const uri = sessionStorage.getItem('refererUri') || process.env.BASE_URL
+    window.location = uri.includes('login') ? process.env.BASE_URL : uri
   }).catch(() => {
     alert('获取token异常')
   })
@@ -59,10 +57,7 @@ export function callback () {
  * 注销
  */
 export function logout () {
-  const accessToken = storage.get(ACCESS_TOKEN)
-  // clearLoginResult()
   this.$store.dispatch('user/logout')
-  window.location = authCenterUrl + '/logout?redirect_uri=' + clientUrl + '/&access_token=' + accessToken
 }
 
 /**

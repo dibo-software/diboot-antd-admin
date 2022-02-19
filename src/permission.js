@@ -17,10 +17,6 @@ const defaultRoutePath = '/dashboard'
 router.beforeEach((to, from, next) => {
   NProgress.start() // start progress bar
   to.meta && (typeof to.meta.title !== 'undefined' && setDocumentTitle(`${i18nRender(to.meta.title)} - ${domTitle}`))
-  // 在免登录名单，直接进入
-  if (allowList.includes(to.name)) {
-    next()
-  } else
   /* has token */
   if (storage.get(ACCESS_TOKEN)) {
     if (to.path === loginRoutePath) {
@@ -65,8 +61,13 @@ router.beforeEach((to, from, next) => {
       }
     }
   } else {
-    next({ path: loginRoutePath, query: { redirect: to.fullPath } })
-    NProgress.done() // if current page is login will not trigger afterEach hook, so manually handle it
+    if (allowList.includes(to.name)) {
+      // 在免登录名单，直接进入
+      next()
+    } else {
+      next({ path: loginRoutePath, query: { redirect: to.fullPath } })
+      NProgress.done() // if current page is login will not trigger afterEach hook, so manually handle it
+    }
   }
 })
 
