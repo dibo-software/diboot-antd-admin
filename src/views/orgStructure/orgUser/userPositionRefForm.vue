@@ -206,7 +206,12 @@ export default {
         })
       })
     },
-    afterClose () {
+    close () {
+      this.state.visible = false
+      this.state.formDataLoading = false
+      this.model = {}
+      this.__defaultFileWrapperKeys__()
+      this.$refs.form.resetFields()
       this.user = {}
       this.more.iamPositionOptions = []
       this.orgList = []
