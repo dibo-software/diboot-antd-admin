@@ -426,6 +426,7 @@ export default {
     if (this.getListFromMixin === true) {
       await this.getList()
     }
+    await this.attachMore()
   },
   computed: {
     tableScrollData: function () {
