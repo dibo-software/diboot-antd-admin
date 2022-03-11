@@ -1,7 +1,7 @@
 <template>
   <a-modal
     :visible="listState.visible"
-    width="70%"
+    width="80%"
     :footer="null"
     @cancel="handleCancel"
   >
@@ -45,7 +45,7 @@
       </div>
       <a-table
         ref="table"
-        size="default"
+        size="middle"
         :columns="columns"
         :dataSource="data"
         :pagination="pagination"
@@ -116,7 +116,8 @@ export default {
         },
         {
           title: '执行结果信息',
-          dataIndex: 'executeMsg'
+          dataIndex: 'executeMsg',
+          ellipsis: true
         },
         {
           title: '操作',

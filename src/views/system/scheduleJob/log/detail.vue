@@ -27,7 +27,7 @@
         {{ model.elapsedSeconds }}
       </a-descriptions-item>
       <a-descriptions-item label="执行结果信息">
-        {{ model.executeMsg }}
+        <p style="max-width: 300px"> {{ model.executeMsg }} </p>
       </a-descriptions-item>
       <a-descriptions-item label="创建时间">
         {{ model.createTime }}
@@ -52,5 +52,3 @@ export default {
   }
 }
 </script>
-<style lang="less" scoped>
-</style>
