@@ -131,8 +131,78 @@ ol {
     }
   }
 }
+
 .text-ellipsis {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+
+// header 高度（默认高度64px）
+.ant-layout-header, .ant-pro-global-header,.ant-pro-global-header-trigger {
+  height: 40px;
+  line-height: 40px;
+
+  .ant-pro-global-header-index-right .antd-pro-global-header-index-avatar{
+    margin: calc((40px - 24px) / 2) 10px; // （默认值: calc((64px - 24px) / 2) 0）
+  }
+}
+// 菜单logo高度（默认高度64px）
+.ant-pro-sider-menu-logo{
+  height: 40px;
+  line-height: 40px;
+}
+
+// tab 位置调整 （默认值：-24px -24px 24px;）
+.ant-pro-multi-tab {
+  margin: -10px -10px 10px;
+
+  .ant-tabs.ant-tabs-card .ant-tabs-card-bar {
+    .ant-tabs-nav-container{
+      height: 35px !important; // 40
+      line-height: 35px; // 40
+    }
+    .ant-tabs-tab {
+      height: 30px; // 40
+      line-height: 28px; // 38
+      font-size: 13px; //14
+    }
+  }
+}
+
+// 布局内容边距（默认边距20px）
+.ant-pro-basicLayout-content {
+  margin: 10px;
+}
+
+// 卡片 body 内边距（默认内边距24px）
+.ant-card-body{
+  padding: 12px;
+  //zoom: 0.9;
+}
+
+// 数据表格内边距（默认内边距16px）
+.ant-table-thead > tr > th, .ant-table-tbody > tr > td {
+  padding: 10px;
+}
+
+// 抽屉内边距（默认内边距24px）
+.ant-drawer-body{
+  padding: 16px;
+  //zoom: 0.9;
+}
+
+// 搜索区域间距缩进（24px）
+.table-page-search-wrapper{
+  .ant-form-inline .ant-form-item{
+    margin-bottom: 12px;
+  }
+  .table-page-search-submitButtons{
+    margin-bottom: 12px;
+  }
+}
+
+// 分页边距调整（默认值：16px 0）
+.ant-table-pagination.ant-pagination{
+  margin: 10px 0 0;
 }
