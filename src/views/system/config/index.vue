@@ -1,6 +1,7 @@
 <template>
   <a-card :bordered="false">
-    <a-tabs v-model="type">
+    <a-empty v-if="!type" description="无系统配置项"/>
+    <a-tabs v-else v-model="type">
       <a-button
         slot="tabBarExtraContent"
         v-if="editable"
@@ -110,10 +111,14 @@ export default {
   created () {
     dibootApi.get(`${this.baseApi}/typeList`).then(res => {
       this.typeList = res.data
-      this.type = res.data[0].value
-      res.data.forEach(e => {
-        e.ext && this.$set(e, 'data', {})
-      })
+      if (this.typeList && this.typeList.length > 0) {
+        this.type = res.data[0].value
+        res.data.forEach(e => {
+          if (e.ext) {
+            this.$set(e, 'data', {})
+          }
+        })
+      }
     })
   },
   methods: {
