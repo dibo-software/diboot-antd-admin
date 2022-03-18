@@ -138,6 +138,7 @@ ol {
   text-overflow: ellipsis;
 }
 
+// =============================  布局紧凑化调整 =============================
 // header 高度（默认高度64px）
 .ant-layout-header, .ant-pro-global-header,.ant-pro-global-header-trigger {
   height: 40px;
@@ -175,6 +176,11 @@ ol {
   margin: 10px;
 }
 
+// 内容中tabs下边距去除（默认值：0 0 16px 0;）
+.ant-pro-grid-content .ant-tabs-bar {
+  margin: -12px 0 8px;
+}
+
 // 卡片 body 内边距（默认内边距24px）
 .ant-card-body{
   padding: 12px;
@@ -200,6 +206,11 @@ ol {
   .table-page-search-submitButtons{
     margin-bottom: 12px;
   }
+}
+
+// 数据列表 操作（默认值：18px）
+.table-operator {
+  margin-bottom: 8px;
 }
 
 // 分页边距调整（默认值：16px 0）
