@@ -4,6 +4,7 @@ import { ACCESS_TOKEN } from '@/store/mutation-types'
 import { permissionListToPermissions } from '@/utils/permissions'
 import { welcome } from '@/utils/util'
 import defaultAvatar from '@/assets/logo.png'
+import { logout as ssoLogout } from '@/utils/sso'
 
 const user = {
   state: {
@@ -86,6 +87,7 @@ const user = {
 
     // 登出
     Logout ({ commit, state }) {
+      ssoLogout()
       return new Promise((resolve) => {
         const reset = () => {
           commit('SET_TOKEN', '')
