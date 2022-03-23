@@ -140,18 +140,19 @@ ol {
 
 // =============================  布局紧凑化调整 =============================
 // header 高度（默认高度64px）
-.ant-layout-header, .ant-pro-global-header,.ant-pro-global-header-trigger {
-  height: 40px;
-  line-height: 40px;
+.ant-layout-header, .ant-pro-global-header, .ant-pro-global-header-trigger {
+  height: 45px;
+  line-height: 45px;
 
-  .ant-pro-global-header-index-right .antd-pro-global-header-index-avatar{
-    margin: calc((40px - 24px) / 2) 10px; // （默认值: calc((64px - 24px) / 2) 0）
+  .ant-pro-global-header-index-right .antd-pro-global-header-index-avatar {
+    margin: calc((45px - 24px) / 2) 10px; // （默认值: calc((64px - 24px) / 2) 0）
   }
 }
+
 // 菜单logo高度（默认高度64px）
-.ant-pro-sider-menu-logo{
-  height: 40px;
-  line-height: 40px;
+.ant-pro-sider-menu-logo {
+  height: 45px;
+  line-height: 45px;
 }
 
 // tab 位置调整 （默认值：-24px -24px 24px;）
@@ -159,10 +160,11 @@ ol {
   margin: -10px -10px 10px;
 
   .ant-tabs.ant-tabs-card .ant-tabs-card-bar {
-    .ant-tabs-nav-container{
+    .ant-tabs-nav-container {
       height: 35px !important; // 40
       line-height: 35px; // 40
     }
+
     .ant-tabs-tab {
       height: 30px; // 40
       line-height: 28px; // 38
@@ -177,14 +179,15 @@ ol {
 }
 
 // 内容中tabs下边距去除（默认值：0 0 16px 0;）
-.ant-pro-grid-content .ant-tabs-bar {
-  margin: -12px 0 8px;
+.ant-pro-grid-content, .ant-drawer-body {
+  .ant-tabs-bar {
+    margin: -6px 0 8px;
+  }
 }
 
 // 卡片 body 内边距（默认内边距24px）
-.ant-card-body{
+.ant-card-body {
   padding: 12px;
-  //zoom: 0.9;
 }
 
 // 数据表格内边距（默认内边距16px）
@@ -193,17 +196,17 @@ ol {
 }
 
 // 抽屉内边距（默认内边距24px）
-.ant-drawer-body{
+.ant-drawer-body {
   padding: 16px;
-  //zoom: 0.9;
 }
 
 // 搜索区域间距缩进（24px）
-.table-page-search-wrapper{
-  .ant-form-inline .ant-form-item{
+.table-page-search-wrapper {
+  .ant-form-inline .ant-form-item {
     margin-bottom: 12px;
   }
-  .table-page-search-submitButtons{
+
+  .table-page-search-submitButtons {
     margin-bottom: 12px;
   }
 }
@@ -214,6 +217,16 @@ ol {
 }
 
 // 分页边距调整（默认值：16px 0）
-.ant-table-pagination.ant-pagination{
+.ant-table-pagination.ant-pagination {
   margin: 10px 0 0;
+}
+
+// 内容等比缩放
+.ant-card-body, .ant-drawer-body, .ant-select-dropdown, .ant-dropdown {
+  //zoom: 0.9;
+}
+
+// 避免等比缩放后下拉选项错位
+.ant-card-body .ant-select-dropdown, .ant-drawer-body .ant-select-dropdown {
+  zoom: 1;
 }
