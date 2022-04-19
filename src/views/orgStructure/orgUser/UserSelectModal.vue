@@ -20,7 +20,7 @@
           <a-card :bordered="false">
             <a-tabs defaultActiveKey="1">
               <a-tab-pane :tab="tabTitle" key="1">
-                <user-select-list :current-node-id="currentNodeId" ref="userSelectList" @select="records => selectUsers(records)"/>
+                <user-select-list :current-node-id="currentNodeId" ref="userSelectList" @select="record => selectUser(record)"/>
               </a-tab-pane>
             </a-tabs>
           </a-card>
