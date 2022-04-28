@@ -7,7 +7,6 @@
       :form="form"
       @submit="handleSubmit"
     >
-
       <a-form-item>
         <a-input
           size="large"
@@ -55,8 +54,8 @@
         </a-col>
         <a-col class="gutter-row" :span="8">
           <img
-            :src="`${baseURL}/auth/captcha?p=${captchaParam}`"
-            @click="++captchaParam"
+            :src="`${baseURL}/auth/captcha?traceId=${traceId}`"
+            @click="refreshTraceId()"
             alt="验证码"
             style="height: 40px; cursor: pointer;">
         </a-col>
@@ -108,7 +107,7 @@ export default {
         smsSendBtn: false
       },
       baseURL,
-      captchaParam: 0,
+      traceId: Math.random().toString(36).slice(-8) + Date.parse(new Date()),
       // 启用SSO
       enableSso: isEnableSso()
     }
@@ -140,7 +139,8 @@ export default {
       const {
         form: { validateFields },
         state,
-        Login
+        Login,
+        traceId
       } = this
 
       state.loginBtn = true
@@ -149,13 +149,13 @@ export default {
 
       validateFields(validateFieldsKey, { force: true }, (err, values) => {
         if (!err) {
-          const loginParams = { ...values }
+          const loginParams = { ...values, traceId }
           Login(loginParams)
             .then((res) => {
               if (res.code === 0) {
                 this.loginSuccess(res)
               } else {
-                ++this.captchaParam
+                this.refreshTraceId()
                 this.$notification.error({
                   message: '登录失败',
                   description: res.msg,
@@ -190,6 +190,9 @@ export default {
         description: ((err.response || {}).data || {}).message || '请求出现错误，请稍后再试',
         duration: 4
       })
+    },
+    refreshTraceId () {
+      this.traceId = Math.random().toString(36).slice(-8) + Date.parse(new Date())
     }
   }
 }
