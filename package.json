@@ -21,6 +21,7 @@
     "echarts": "^5.2.2",
     "element-resize-detector": "^1.2.3",
     "enquire.js": "^2.1.6",
+    "fuse.js": "^6.5.3",
     "lodash.clonedeep": "^4.5.0",
     "lodash.foreach": "^4.5.0",
     "lodash.get": "^4.4.2",
