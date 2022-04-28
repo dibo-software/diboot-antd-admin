@@ -104,7 +104,7 @@
             </a-row>
             <a-row :gutter="16">
               <a-col :span="24">
-                <a-card size="small" title="按钮/权限列表">
+                <a-card size="small" title="按钮权限列表">
                   <a-button-group slot="extra">
                     <a-button
                       @click="addNewPermission"
@@ -254,7 +254,7 @@ export default {
       isSelect: true,
       originApiList: [],
       currentPermissionTitle: '菜单页面接口配置',
-      currentConfigCode: 'Menu',
+      currentConfigCode: '',
       currentPermissionCodes: [],
       showPermission: false
     }
