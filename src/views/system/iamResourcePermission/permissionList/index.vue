@@ -195,7 +195,7 @@ export default {
 <style scoped lang="less" rel="stylesheet/less">
 .permission-list-container {
   .permission-list-groups {
-    height: calc(100vh - 240px);
+    height: calc(100vh - 260px);
     overflow: hidden;
     overflow-y: auto;
     &__head {
