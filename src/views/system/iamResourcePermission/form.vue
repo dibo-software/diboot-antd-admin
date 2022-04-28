@@ -250,7 +250,6 @@ export default {
       currentMenu: '',
       permissionCodes: [],
       permissionList: [],
-      apiTreeList: [],
       isSelect: true,
       originApiList: [],
       currentPermissionTitle: '菜单页面接口配置',
@@ -323,9 +322,11 @@ export default {
           resourceCode: currentMenu.value,
           displayName: currentMenu.title
         })
-        // 自动设置菜单页面所需接口
+        // 重置接口权限
         this.permissionCodes = []
         this.currentPermissionCodes = []
+        this.permissionList = []
+        this.currentConfigCode = 'Menu'
       }
     },
     /***
@@ -378,8 +379,8 @@ export default {
             const permissionList = _.cloneDeep(this.permissionList)
             // 整理所有按钮/权限列表的可用接口列表，并设置菜单的id为当前的parentId
             permissionList.forEach(permission => {
-              permission.permissionCodes = permission.permissionCodes.filter(api => {
-                return api != null && api !== ''
+              permission.permissionCodes = permission.permissionCodes.filter(permissionCode => {
+                return permissionCode != null && permissionCode !== ''
               })
               if (this.model && this.model.id) {
                 permission.parentId = this.model.id
@@ -423,6 +424,7 @@ export default {
     removePermission (index) {
       this.permissionList.splice(index, 1)
       this.currentPermissionActiveKey = this.currentPermissionActiveKey > 0 ? --this.currentPermissionActiveKey : 0
+      this.changePermissionConfig(this.permissionList[this.currentPermissionActiveKey])
     },
     filterPermissionCodeOption (permission, input, option) {
       const text = option.componentOptions.children[0].text.toLowerCase()
@@ -525,11 +527,10 @@ export default {
     afterClose () {
       this.permissionCodes = []
       this.permissionList = []
-      this.permissionList = []
       this.currentPermissionActiveKey = 0
       this.currentMenu = ''
       this.currentPermissionTitle = '菜单页面接口配置'
-      this.currentConfigCode = 'Menu'
+      this.currentConfigCode = ''
       this.currentPermissionCodes = []
       this.showPermission = false
       this.$refs.permissionList.handleSearchChange()
