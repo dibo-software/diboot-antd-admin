@@ -15,7 +15,7 @@
           <template v-if="model.permissionCodes && model.permissionCodes.length > 0">
             <template v-for="permissionCode in model.permissionCodes">
               <template v-if="permissionCodeApiMap[permissionCode] && permissionCodeApiMap[permissionCode].length > 0">
-                <a-tag color="green" :key="`menu_permission_${i}`" v-for="(apiUri, i) in permissionCodeApiMap[permissionCode]">
+                <a-tag color="green" :key="`menu_permission_${i}_${apiUri.method}${apiUri.uri}`" v-for="(apiUri, i) in permissionCodeApiMap[permissionCode]">
                   {{apiUri.method}}:{{apiUri.uri}}（{{apiUri.label}}）
                 </a-tag>
               </template>
@@ -43,7 +43,7 @@
               <template v-if="p.permissionCodes && p.permissionCodes.length > 0">
                 <template v-for="permissionCode in p.permissionCodes">
                   <template v-if="permissionCodeApiMap[permissionCode] && permissionCodeApiMap[permissionCode].length > 0">
-                    <a-tag color="green" :key="`permission_${i}`" v-for="(apiUri, i) in permissionCodeApiMap[permissionCode]">
+                    <a-tag color="green" :key="`permission_${p.resourceCode}_${i}_${apiUri.method}${apiUri.uri}`" v-for="(apiUri, i) in permissionCodeApiMap[permissionCode]">
                       {{apiUri.method}}:{{apiUri.uri}}（{{apiUri.label}}）
                     </a-tag>
                   </template>
