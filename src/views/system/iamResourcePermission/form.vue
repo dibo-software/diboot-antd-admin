@@ -90,6 +90,7 @@
                     <a-button size="small" style="float: right" type="primary" @click="goPermissionConfig('Menu')">配置</a-button>
                   </div>
                   <div class="permission-tag-container" :gutter="12">
+                  <template v-if="permissionCodes && permissionCodes.length > 0">
                     <a-tag
                       v-for="(permissionCode, index) in permissionCodes"
                       style="margin-bottom: 3px"
@@ -98,6 +99,10 @@
                       closable
                       @close.stop.prevent="(e) => handleRemovePermissionCode(permissionCode)"
                     >{{permissionCode}}</a-tag>
+                  </template>
+                    <template v-else>
+                      <span style="color: #d3d3d3">请点击右侧"配置按钮"选择权限接口</span>
+                    </template>
                   </div>
                 </a-form-item>
               </a-col>
@@ -174,7 +179,9 @@
                           <span>按钮权限接口配置</span>
                           <a-button size="small" style="float: right" type="primary" @click="goPermissionConfig('Permission')">配置</a-button>
                         </div>
-                        <div class="permission-tag-container" :gutter="12">
+
+                        <div class="permission-tag-container">
+                          <template v-if="permission.permissionCodes && permission.permissionCodes.length > 0">
                           <a-tag
                             v-for="(permissionCode, index) in permission.permissionCodes"
                             style="margin-bottom: 3px"
@@ -183,6 +190,10 @@
                             closable
                             @close.stop.prevent="handleRemovePermissionCode(permissionCode, permission)"
                           >{{permissionCode}}</a-tag>
+                        </template>
+                        <template v-else>
+                          <span style="color: #d3d3d3">请点击右侧"配置按钮"选择权限接口</span>
+                        </template>
                         </div>
                       </a-form-item>
                     </a-tab-pane>
@@ -202,6 +213,7 @@
           :title="currentPermissionTitle"
           :current-permission-codes="currentPermissionCodes"
           :config-code="currentConfigCode"
+          :menu-resource-code="form.getFieldValue('resourceCode')"
           :origin-api-list="originApiList"
           @changePermissionCodes="handleChangePermissionCodes"
         />
@@ -229,7 +241,7 @@ const NEW_PERMISSION_ITEM = {
   id: undefined,
   parentId: '',
   displayType: 'PERMISSION',
-  displayName: '新按钮/权限',
+  displayName: '新按钮权限',
   resourceCode: '',
   permissionCodes: []
 }
@@ -327,6 +339,7 @@ export default {
         this.currentPermissionCodes = []
         this.permissionList = []
         this.currentConfigCode = 'Menu'
+        this.$refs.permissionList.goScrollIntoView(this.$refs.permissionList.getAnchor())
       }
     },
     /***
@@ -490,6 +503,9 @@ export default {
       this.currentPermissionTitle = '菜单页面接口配置'
       this.currentConfigCode = 'Menu'
       this.currentPermissionCodes = this.permissionCodes
+      if (!this.permissionCodes || this.permissionCodes.length === 0) {
+        this.$refs.permissionList.goScrollIntoView(this.$refs.permissionList.getAnchor())
+      }
     },
     /**
      * 更改值，tag回显位置跟着调整

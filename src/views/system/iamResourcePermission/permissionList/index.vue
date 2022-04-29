@@ -83,11 +83,10 @@ export default {
       this.permissionCodeList = val
     },
     configCode () {
-      if (this.permissionCodeList && this.permissionCodeList.length > 0) {
-        this.goScrollIntoView(this.permissionCodeList[0])
-      } else {
-        this.goScrollIntoView()
-      }
+      this.goScrollIntoView(this.getAnchor())
+    },
+    menuResourceCode () {
+      this.goScrollIntoView(this.getAnchor())
     }
   },
   mounted () {
@@ -135,7 +134,6 @@ export default {
       this.$emit('changePermissionCodes', this.permissionCodeList)
     },
     handleSearch (value) {
-      console.log(value)
       this.searchOptions = value !== '' ? this.fuse.search(value) : []
     },
     /**
@@ -158,6 +156,23 @@ export default {
       this.searchVal = value
     },
     /**
+     * 获取锚点
+     */
+    getAnchor () {
+      let anchor = ''
+      if (this.permissionCodeList && this.permissionCodeList.length > 0) {
+        anchor = this.permissionCodeList[0]
+      } else {
+        if (this.menuResourceCode) {
+          const searchResult = this.fuse.search(this.menuResourceCode)
+          if (searchResult && searchResult.length > 0) {
+            anchor = searchResult[0].item.permissionCode
+          }
+        }
+      }
+      return anchor
+    },
+    /**
      * 前往指定的位置
      * @param value
      */
@@ -177,6 +192,10 @@ export default {
       required: true
     },
     configCode: {
+      type: String,
+      required: true
+    },
+    menuResourceCode: {
       type: String,
       required: true
     },
