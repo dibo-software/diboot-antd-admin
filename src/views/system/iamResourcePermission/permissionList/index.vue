@@ -1,23 +1,27 @@
 <template>
-  <el-card :header="title" shadow="never" class="permission-list-container">
+  <a-card :title="title" class="permission-list-container">
     <div class="permission-list-header">
-      <el-select
-        remote
+      <a-select
+        show-search
         :value="searchVal"
         placeholder="搜索需要设置的接口：支持标题、权限码、接口地址模糊搜索"
         style="width: 100%"
-        filterable
-        clearable
-        :remote-method="handleSearch"
+        :default-active-first-option="false"
+        :show-arrow="false"
+        :filter-option="false"
+        :not-found-content="null"
+        allowClear
+        @search="handleSearch"
         @change="handleSearchChange"
       >
-        <el-option
-          v-for="(options, index) in searchOptions"
+        <a-select-option
           :key="`search_${index}`"
-          :label="options.title"
-          :value="`${options.permissionCode}#${options.title}`"
-        />
-      </el-select>
+          :value="`${options.item.permissionCode}#${options.item.title}`"
+          v-for="(options, index) in searchOptions"
+        >
+          {{ options.item.title }}
+        </a-select-option>
+      </a-select>
     </div>
     <div class="permission-list-groups">
       <div id="permissionListGroups">
@@ -31,7 +35,7 @@
         </template>
       </div>
     </div>
-  </el-card>
+  </a-card>
 </template>
 
 <script>
@@ -41,7 +45,7 @@ import Fuse from 'fuse.js'
 export default {
   name: 'PermissionListIndex',
   components: { PermissionGroup },
-  data() {
+  data () {
     return {
       permissionCodeList: this.currentPermissionCodes,
       searchVal: undefined,
@@ -50,7 +54,7 @@ export default {
     }
   },
   computed: {
-    fusePermissionDatas() {
+    fusePermissionDatas () {
       const fusePermissionDatas = []
       this.originApiList.forEach(item => {
         const permissionGroup = `${item.name}（${item.code}）`
@@ -75,21 +79,21 @@ export default {
     }
   },
   watch: {
-    currentPermissionCodes(val) {
+    currentPermissionCodes (val) {
       this.permissionCodeList = val
     },
-    configCode() {
+    configCode () {
       this.goScrollIntoView(this.getAnchor())
     },
-    menuResourceCode() {
+    menuResourceCode () {
       this.goScrollIntoView(this.getAnchor())
     }
   },
-  mounted() {
+  mounted () {
     this.initFuse()
   },
   methods: {
-    initFuse() {
+    initFuse () {
       this.fuse = new Fuse(this.fusePermissionDatas, {
         // 是否按优先级进行排序
         shouldSort: true,
@@ -121,7 +125,7 @@ export default {
     /**
      * 更改权限码（添加或删除）
      */
-    handleChangePermissionCode(type, code) {
+    handleChangePermissionCode (type, code) {
       if (type === 'add') {
         this.permissionCodeList.push(code)
       } else {
@@ -129,14 +133,14 @@ export default {
       }
       this.$emit('changePermissionCodes', this.permissionCodeList)
     },
-    handleSearch(value) {
+    handleSearch (value) {
       this.searchOptions = value !== '' ? this.fuse.search(value) : []
     },
     /**
      * 根据值跳转至指定内容区域
      * @param value
      */
-    handleSearchChange(value) {
+    handleSearchChange (value) {
       if (value && value.includes('#')) {
         const id = value.split('#')[0]
         this.goScrollIntoView(id)
@@ -154,7 +158,7 @@ export default {
     /**
      * 获取锚点
      */
-    getAnchor() {
+    getAnchor () {
       let anchor = ''
       if (this.permissionCodeList && this.permissionCodeList.length > 0) {
         anchor = this.permissionCodeList[0]
@@ -162,7 +166,7 @@ export default {
         if (this.menuResourceCode) {
           const searchResult = this.fuse.search(this.menuResourceCode)
           if (searchResult && searchResult.length > 0) {
-            anchor = searchResult[0].permissionCode
+            anchor = searchResult[0].item.permissionCode
           }
         }
       }
@@ -172,7 +176,7 @@ export default {
      * 前往指定的位置
      * @param value
      */
-    goScrollIntoView(value) {
+    goScrollIntoView (value) {
       this.$nextTick(() => {
         if (value) {
           document.getElementById(value).scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' })
@@ -207,13 +211,10 @@ export default {
 }
 </script>
 
-<style scoped lang="scss" rel="stylesheet/scss">
+<style scoped lang="less" rel="stylesheet/less">
 .permission-list-container {
-  .permission-list-header {
-    margin-bottom: 10px;
-  }
   .permission-list-groups {
-    height: calc(70vh - 260px);
+    height: calc(100vh - 260px);
     overflow: hidden;
     overflow-y: auto;
     &__head {
