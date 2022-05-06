@@ -1,109 +1,98 @@
 <template>
-  <a-drawer
-    :title="title"
-    width="720"
-    :visible="visible"
-    @close="close"
-    :body-style="{ paddingBottom: '80px' }"
+  <el-dialog
+    class="detailModal"
+    :visible.sync="visible"
+    :fullscreen="fullscreen"
+    :custom-class="!fullscreen ? 'custom-height': 'custom-fullscreen'"
+    :show-close="false"
   >
-    <a-spin :spinning="spinning">
-      <a-descriptions :column="1">
-        <a-descriptions-item label="上级菜单">{{ model.parentDisplayName ? model.parentDisplayName : '无' }}</a-descriptions-item>
-        <a-descriptions-item label="菜单名称">{{ model.displayName }}</a-descriptions-item>
-        <a-descriptions-item label="菜单编码">{{ model.resourceCode }}</a-descriptions-item>
-        <a-descriptions-item label="页面接口列表">
-          <template v-if="model.permissionCodes && model.permissionCodes.length > 0">
-            <template v-for="permissionCode in model.permissionCodes">
-              <template v-if="permissionCodeApiMap[permissionCode] && permissionCodeApiMap[permissionCode].length > 0">
-                <a-tag color="green" :key="`menu_permission_${i}_${apiUri.method}${apiUri.uri}`" v-for="(apiUri, i) in permissionCodeApiMap[permissionCode]">
-                  {{apiUri.method}}:{{apiUri.uri}}（{{apiUri.label}}）
-                </a-tag>
+    <el-row slot="title" type="flex">
+      <el-col :span="20">查看详情</el-col>
+      <el-col :span="4" style="text-align: right">
+        <svg-icon
+          :icon-class="!fullscreen ? 'fullscreen': 'exit-fullscreen'"
+          style="cursor: pointer; margin-right: 10px"
+          @click="() => {fullscreen = !fullscreen}"
+        />
+        <i class="el-icon-close" style="cursor: pointer" @click="close" />
+      </el-col>
+    </el-row>
+    <el-descriptions class="permission-detail" :column="1">
+      <el-descriptions-item label="上级菜单">{{ model.parentDisplayName ? model.parentDisplayName : '无' }}</el-descriptions-item>
+      <el-descriptions-item label="菜单名称">{{ model.displayName }}</el-descriptions-item>
+      <el-descriptions-item label="菜单编码">{{ model.resourceCode }}</el-descriptions-item>
+      <el-descriptions-item label="菜单权限编码">
+        <template v-if="model.permissionCodes && model.permissionCodes.length > 0">
+          <template v-for="permissionCode in model.permissionCodes">
+            <el-tag
+              :key="`menu_permission_${permissionCode}`"
+              size="small"
+              type="primary"
+            >
+              {{ permissionCode }}
+            </el-tag>
+          </template>
+        </template>
+        <template v-else>
+          无
+        </template>
+      </el-descriptions-item>
+    </el-descriptions>
+    <el-tabs v-if="model.permissionList && model.permissionList.length > 0" type="border-card">
+      <el-tab-pane
+        v-for="(p,i) in model.permissionList"
+        :key="i"
+        :label="p.displayName"
+      >
+        <el-descriptions :column="1">
+          <el-descriptions-item label="名称">{{ p.displayName }}</el-descriptions-item>
+          <el-descriptions-item label="编码">{{ p.resourceCode }}</el-descriptions-item>
+          <el-descriptions-item label="按钮权限编码" content-class-name="flex-wrap">
+            <template v-if="p.permissionCodes && p.permissionCodes.length > 0">
+              <template v-for="permissionCode in p.permissionCodes">
+                <el-tag
+                  :key="`permission_${permissionCode}`"
+                  size="small"
+                  type="primary"
+                >
+                  {{ permissionCode }}
+                </el-tag>
               </template>
             </template>
-          </template>
-          <template v-else>
-            无
-          </template>
-        </a-descriptions-item>
-        <a-descriptions-item label="页面资源权限">
-          <template v-if="!model.permissionList || model.permissionList.length === 0">
-            无
-          </template>
-        </a-descriptions-item>
-      </a-descriptions>
-      <a-tabs :default-active-key="0" v-if="model.permissionList && model.permissionList.length > 0">
-        <a-tab-pane
-          v-for="(p, i) in model.permissionList"
-          :key="i"
-          :tab="p.displayName">
-          <a-descriptions :column="1">
-            <a-descriptions-item label="名称">{{ p.displayName }}</a-descriptions-item>
-            <a-descriptions-item label="编码">{{ p.resourceCode }}</a-descriptions-item>
-            <a-descriptions-item label="接口列表">
-              <template v-if="p.permissionCodes && p.permissionCodes.length > 0">
-                <template v-for="permissionCode in p.permissionCodes">
-                  <template v-if="permissionCodeApiMap[permissionCode] && permissionCodeApiMap[permissionCode].length > 0">
-                    <a-tag color="green" :key="`permission_${p.resourceCode}_${i}_${apiUri.method}${apiUri.uri}`" v-for="(apiUri, i) in permissionCodeApiMap[permissionCode]">
-                      {{apiUri.method}}:{{apiUri.uri}}（{{apiUri.label}}）
-                    </a-tag>
-                  </template>
-                </template>
-              </template>
-              <template v-else>
-                无
-              </template>
-            </a-descriptions-item>
-          </a-descriptions>
-        </a-tab-pane>
-      </a-tabs>
-    </a-spin>
+            <template v-else>
+              无
+            </template>
+          </el-descriptions-item>
+        </el-descriptions>
+      </el-tab-pane>
+    </el-tabs>
 
-    <div class="drawer-footer">
-      <a-button @click="close">关闭</a-button>
-    </div>
-  </a-drawer>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="close">
+        取消
+      </el-button>
+      <el-button type="primary" @click="close">确定</el-button>
+    </span>
+  </el-dialog>
 </template>
-
 <script>
 import detail from '@/components/diboot/mixins/detail'
-import { dibootApi } from '@/utils/request'
 export default {
   name: 'IamResourcePermissionDetail',
-  data () {
+  mixins: [detail],
+  data() {
     return {
-      baseApi: '/iam/resourcePermission',
-      originApiList: []
-    }
-  },
-  mixins: [ detail ],
-  computed: {
-    permissionCodeApiMap () {
-      const map = {}
-      this.originApiList.forEach(item => {
-        const apiPermissionList = item.apiPermissionList
-        if (apiPermissionList && apiPermissionList.length > 0) {
-          apiPermissionList.forEach(apiPermission => {
-            const permissionCode = apiPermission.code
-            map[permissionCode] = apiPermission.apiUriList
-          })
-        }
-      })
-      return map
-    }
-  },
-  methods: {
-    afterOpen () {
-      dibootApi.get(`${this.baseApi}/apiList`).then(res => {
-        if (res.code === 0) {
-          this.originApiList = res.data
-        } else {
-          this.$message.error(res.msg)
-        }
-      })
+      baseApi: '/iam/resourcePermission'
     }
   }
 }
 </script>
-
-<style scoped>
+<style lang="scss">
+.el-tag + .el-tag {
+  margin-left: 5px;
+  margin-bottom: 5px;
+}
+.flex-wrap {
+  flex-wrap: wrap;
+}
 </style>

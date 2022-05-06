@@ -1,43 +1,35 @@
 <template>
-  <a-descriptions class="permission-group" :title="`${permissionGroup.name}（${permissionGroup.code}）`" bordered :column="1" size="small">
-    <a-descriptions-item  :key="`group-item-${_uid}_${index}`" v-for="(apiPermission, index) in permissionGroup.apiPermissionList">
-      <div :id="apiPermission.code" class="permission-group-code permission-group-text-overflow" slot="label">
-        <a-checkbox :checked="permissionCodeList.includes(apiPermission.code)" @change="(e) => changeCheck(apiPermission.code)">
-          <a-tooltip>
-            <template slot="title">
-              {{apiPermission.code}} （{{apiPermission.label}}）
+  <el-descriptions class="permission-group" :title="`${permissionGroup.name}（${permissionGroup.code}）`" border :column="1" size="small">
+    <el-descriptions-item v-for="(apiPermission, index) in permissionGroup.apiPermissionList" :key="`group-item-${_uid}_${index}`">
+      <div :id="apiPermission.code" slot="label" class="permission-group-code permission-group-text-overflow" @click.stop.prevent="() => changeCheck(apiPermission.code)">
+        <el-checkbox :value="permissionCodeList.includes(apiPermission.code)">
+          <el-tooltip placement="top">
+            <template slot="content">
+              {{ apiPermission.code }} （{{ apiPermission.label }}）
             </template>
-            {{apiPermission.code}}
-          </a-tooltip>
-        </a-checkbox>
+            <span>{{ apiPermission.code }}</span>
+          </el-tooltip>
+        </el-checkbox>
       </div>
       <template v-if="apiPermission.apiUriList && apiPermission.apiUriList.length > 0">
-        <div @click.stop="changeCheck(apiPermission.code)">
-          <div class="permission-group-api permission-group-text-overflow" :key="`${apiPermission.code}_api-uri-${index}`" v-for="(apiUri, index) in apiPermission.apiUriList">
-            <a-tooltip>
-              <template slot="title">
-                {{apiUri.method}}:{{apiUri.uri}}（{{apiUri.label}}）
+        <div @click.stop.prevent="changeCheck(apiPermission.code)">
+          <div v-for="(apiUri, i) in apiPermission.apiUriList" :key="`${apiPermission.code}_api-uri-${i}`" class="permission-group-api permission-group-text-overflow">
+            <el-tooltip placement="top">
+              <template slot="content">
+                {{ apiUri.method }}:{{ apiUri.uri }}（{{ apiUri.label }}）
               </template>
-              {{apiUri.method}}:{{apiUri.uri}}（{{apiUri.label}}）
-            </a-tooltip>
+              <span>{{ apiUri.method }}:{{ apiUri.uri }}（{{ apiUri.label }}）</span>
+            </el-tooltip>
           </div>
         </div>
       </template>
-    </a-descriptions-item>
-  </a-descriptions>
+    </el-descriptions-item>
+  </el-descriptions>
 </template>
 
 <script>
 export default {
   name: 'PermissionGroup',
-  methods: {
-    changeCheck (code) {
-      this.$emit('changePermissionCode',
-        this.permissionCodeList.includes(code) ? 'remove' : 'add',
-        code
-      )
-    }
-  },
   props: {
     permissionGroup: {
       type: Object,
@@ -47,21 +39,23 @@ export default {
       type: Array,
       default: () => []
     }
+  },
+  methods: {
+    changeCheck(code) {
+      this.$emit('changePermissionCode',
+        this.permissionCodeList.includes(code) ? 'remove' : 'add',
+        code
+      )
+    }
   }
 }
 </script>
 
-<style scoped lang="less" rel="stylesheet/less">
-/deep/.ant-descriptions-item {
-  cursor: pointer;
-}
+<style scoped lang="scss" rel="stylesheet/scss">
 .permission-group {
-  /deep/.ant-descriptions-title {
-    margin: 5px 0;
-  }
-  /deep/.ant-descriptions-view > table {
+  /deep/.el-descriptions__body > table {
     table-layout: fixed;
-    .ant-descriptions-item-content {
+    .el-descriptions-item__content {
       padding: 0;
     }
   }
