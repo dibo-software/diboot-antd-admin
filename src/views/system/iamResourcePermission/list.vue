@@ -96,7 +96,6 @@
     <diboot-form ref="form" @complete="getList" :initParentId="formParentId"></diboot-form>
     <diboot-detail ref="detail"></diboot-detail>
     <permission-tree-sort ref="sort" @complete="getList"></permission-tree-sort>
-    <correct-permission ref="correct" @complete="getList"></correct-permission>
   </a-card>
 </template>
 
