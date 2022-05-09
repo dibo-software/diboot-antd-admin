@@ -140,19 +140,42 @@ ol {
 
 // =============================  布局紧凑化调整 =============================
 // header 高度（默认高度64px）
+@header-height: 45px;
 .ant-layout-header, .ant-pro-global-header, .ant-pro-global-header-trigger {
-  height: 45px;
-  line-height: 45px;
+  height: @header-height;
+  line-height: @header-height;
 
   .ant-pro-global-header-index-right .antd-pro-global-header-index-avatar {
-    margin: calc((45px - 24px) / 2) 10px; // （默认值: calc((64px - 24px) / 2) 0）
+    margin: calc((@header-height - 24px) / 2) 10px; // （默认值: calc((64px - 24px) / 2) 0）
+  }
+
+  .ant-pro-top-nav-header {
+    height: @header-height;
+
+    .ant-pro-top-nav-header-main {
+      height: @header-height;
+
+      .ant-pro-top-nav-header-logo {
+        height: @header-height;
+        line-height: @header-height;
+      }
+
+      .ant-menu.ant-menu-horizontal {
+        height: @header-height;
+        line-height: @header-height;
+
+        .ant-menu-submenu.ant-menu-submenu-horizontal {
+          line-height: @header-height;
+        }
+      }
+    }
   }
 }
 
 // 菜单logo高度（默认高度64px）
 .ant-pro-sider-menu-logo {
-  height: 45px;
-  line-height: 45px;
+  height: @header-height;
+  line-height: @header-height;
 }
 
 // tab 位置调整 （默认值：-24px -24px 24px;）
