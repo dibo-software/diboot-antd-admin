@@ -91,7 +91,7 @@
 import { dibootApi } from '@/utils/request'
 import form from '@/components/diboot/mixins/form'
 import FlatTree from '@/components/FlatTree'
-import { permissionTreeListFormatter, treeList2list, tree2List, list2childrenMap } from '@/utils/treeDataUtil'
+import { permissionTreeListFormatter, treeList2list, tree2List } from '@/utils/treeDataUtil'
 import _ from 'lodash'
 /**
  * 收集树节点上所有父节点
@@ -176,10 +176,11 @@ export default {
     onNodeCheck (checkedKeys, e) {
       const { value } = e.node
       const checked = e.checked
+      // 将原始的节点树转化成list
       const originList = tree2List(this.originTreeList)
+      // 获取当前节点，及当前节点的子节点
       const currentNode = originList.find(item => item.id === value)
       const result = [currentNode]
-      // 获取当前节点，及当前节点的子节点
       const currentChildrenResult = tree2List(currentNode.children || []) || []
       result.push(...currentChildrenResult)
       if (checked === true) {
@@ -267,10 +268,6 @@ export default {
         return []
       }
       return treeList2list(_.cloneDeep(this.permissionTreeList))
-    },
-    childrenMap: function () {
-      console.log(this.originTreeList)
-      return list2childrenMap(this.originTreeList)
     }
   }
 }
