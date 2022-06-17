@@ -190,14 +190,15 @@ export default {
           this.autoCheckNode(item.id)
         })
       } else {
+        const currentWithChildrenIdResult = collectFieldList(result, 'id')
         const parentResult = []
         // 收集当前父节点
         collectDeepParent(currentNode.parentId, originList, parentResult)
         const parentIdResult = collectFieldList(parentResult, 'id')
-        const currentWithChildrenIdResult = collectFieldList(result, 'id')
+        // 合并相当点击的节点的子项和父级节点id
+        const mergeValues = [...currentWithChildrenIdResult, ...parentIdResult]
         // 查找父项下的所有子项(包含父项)
         const allParentWithChildrenData = tree2List(parentResult)
-        const mergeValues = [...currentWithChildrenIdResult, ...parentIdResult]
         // 获取抛开当前节点下的所有子项和当前节点下所有父项 的剩余项
         const remainValues = collectFieldList(allParentWithChildrenData, 'id').filter(
           val => !mergeValues.includes(val)
