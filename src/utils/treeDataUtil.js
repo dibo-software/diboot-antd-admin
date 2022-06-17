@@ -1,3 +1,4 @@
+import _ from 'lodash'
 /***
  * 将不标准的树结构数据转化为组件能够使用的标准结构
  * @param treeList
@@ -277,6 +278,24 @@ const list2tree = (data = [], rootId = '0', value = 'value', label = 'label', pa
   })
   return treeData.length === 0 ? data : treeData
 }
+/**
+ * tree转化为list
+ * @param tree
+ */
+const tree2List = (tree, children = 'children') => {
+  const list = []
+  const cloneData = _.cloneDeep(tree)
+  for (const node of cloneData) {
+    const nodeChildren = node[children] || []
+    if (nodeChildren && nodeChildren.length > 0) {
+      for (const nodeChild of tree2List(nodeChildren)) {
+        list.push(nodeChild)
+      }
+    }
+    list.push(node)
+  }
+  return list
+}
 
 export {
   treeListFormatter,
@@ -289,5 +308,6 @@ export {
   permissionTreeListFormatter,
   sortTreeListFormatter,
   getDeepExpandKeys,
-  list2tree
+  list2tree,
+  tree2List
 }
