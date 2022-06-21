@@ -1,21 +1,21 @@
 <template>
-  <div>
+  <div class="date-range">
     <a-date-picker
       style="width: calc(50% - 15px);"
       allowClear
       v-model="value[0]"
       :format="format"
-      :shot-time="showTime"
+      :show-time="showTime"
       @change="onChange"
       placeholder="开始日期"
     />
     ~
     <a-date-picker
-      style="width: calc(50% - 15px);"
+      style="width: calc(50% - 10px);"
       allowClear
       v-model="value[1]"
       :format="format"
-      :shot-time="showTime"
+      :show-time="showTime"
       @change="onChange"
       placeholder="结束日期"
     />
@@ -53,6 +53,8 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style>
+.date-range .ant-calendar-picker {
+  min-width: unset !important;
+}
 </style>
