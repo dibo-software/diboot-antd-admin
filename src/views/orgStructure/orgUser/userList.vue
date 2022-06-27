@@ -88,6 +88,15 @@
       @change="handleTableChange"
       rowKey="id"
     >
+      <span slot="realname" slot-scope="text, record">
+        <span v-if="!(record.userPositionList || []).length || record.userPositionList.some(e => e.isPrimaryPosition)">
+          {{ text }}
+        </span>
+        <a-tooltip v-else placement="top">
+          <template #title>兼职</template>
+          <a-badge dot>{{ text }}</a-badge>
+        </a-tooltip>
+      </span>
       <span slot="action" slot-scope="text, record">
         <a v-action:detail @click="$refs.userDetail.open(record.id)">详情</a>
         <a-divider v-action:detail v-permission="['position', 'update', 'delete']" type="vertical" />
@@ -150,7 +159,8 @@ export default {
         },
         {
           title: '姓名',
-          dataIndex: 'realname'
+          dataIndex: 'realname',
+          scopedSlots: { customRender: 'realname' }
         },
         {
           title: '用户编号',
