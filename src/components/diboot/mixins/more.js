@@ -99,8 +99,9 @@ export default {
      *
      * @param value 选项值
      * @param control 控制器名称
+     * @param resetValue 是否需要重置被控属性值
      */
-    controlRelationOptions (value, control, callback) {
+    controlRelationOptions (value, control, resetValue = true) {
       const controlItem = this.control[control]
       const isNull = value == null || value.length === 0
       const execute = async ({ name, loader, condition, lazy }) => {
@@ -108,13 +109,14 @@ export default {
         moreLoader.disabled = isNull
         moreLoader.condition == null && (moreLoader.condition = {})
         moreLoader.condition[condition] = value
-        const obj = {}
-        obj[name] = undefined
-        this.form.setFieldsValue(obj)
-        !lazy && this.$set(this.more, `${loader}Options`, isNull ? [] : await this.loadAttachMore(moreLoader))
+        if (resetValue) {
+          const obj = {}
+          obj[name] = undefined
+          this.form.setFieldsValue(obj)
+        }
+        this.$set(this.more, `${loader}Options`, isNull || lazy ? [] : await this.loadAttachMore(moreLoader))
       }
       controlItem instanceof Array ? controlItem.forEach(item => execute(item)) : execute(controlItem || {})
-      callback && callback()
     }
   }
 }
