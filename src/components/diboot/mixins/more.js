@@ -112,9 +112,9 @@ export default {
         obj[name] = undefined
         this.form.setFieldsValue(obj)
         !lazy && this.$set(this.more, `${loader}Options`, isNull ? [] : await this.loadAttachMore(moreLoader))
-        callback && callback()
       }
       controlItem instanceof Array ? controlItem.forEach(item => execute(item)) : execute(controlItem || {})
+      callback && callback()
     }
   }
 }
