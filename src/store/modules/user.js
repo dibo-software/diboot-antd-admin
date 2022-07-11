@@ -87,12 +87,12 @@ const user = {
 
     // 登出
     Logout ({ commit, state }) {
-      ssoLogout()
       return new Promise((resolve) => {
         const reset = () => {
           commit('SET_TOKEN', '')
           commit('SET_ROLES', [])
           storage.remove(ACCESS_TOKEN)
+          ssoLogout()
           resolve()
         }
 
