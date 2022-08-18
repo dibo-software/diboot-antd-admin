@@ -1,17 +1,20 @@
 <template>
   <div :class="wrpCls">
+    <message-bell/>
     <avatar-dropdown :menu="showMenu" :class="prefixCls" />
     <!--    <select-lang :class="prefixCls" />-->
   </div>
 </template>
 
 <script>
+import MessageBell from './MessageBell'
 import AvatarDropdown from './AvatarDropdown'
 import SelectLang from '@/components/SelectLang'
 
 export default {
   name: 'RightContent',
   components: {
+    MessageBell,
     AvatarDropdown,
     SelectLang
   },
