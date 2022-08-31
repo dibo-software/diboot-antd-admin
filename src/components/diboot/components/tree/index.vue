@@ -83,6 +83,7 @@ export default {
 
     onExpand (expandedKeys) {
       this.expandedKeys = expandedKeys
+      this.autoExpandParent = false
     },
     /**
        * 搜索
