@@ -39,6 +39,23 @@
           </a-select-option>
         </a-select>
       </template>
+      <template v-else-if="formType === 'M_SELECT'">
+        <a-select
+          mode="multiple"
+          filterable
+          @change="changeValue"
+          v-model="tempValue"
+          :placeholder="placeholder"
+        >
+          <a-select-option
+            v-for="(item, index) in options || []"
+            :key="index"
+            :value="item.value"
+          >
+            {{ item.label }}
+          </a-select-option>
+        </a-select>
+      </template>
       <template v-else-if="formType === 'SWITCH'">
         <a-switch @change="changeValue" v-model="tempValue"/>
       </template>
@@ -100,7 +117,7 @@ export default {
     },
     value: {
       // eslint-disable-next-line vue/require-prop-type-constructor
-      type: String | Boolean | Number,
+      type: String | Boolean | Number | Array,
       required: true
     },
     label: {
@@ -154,7 +171,7 @@ export default {
   },
   data () {
     return {
-      tempValue: this.value,
+      tempValue: this.value || undefined,
       treeData: []
     }
   },
