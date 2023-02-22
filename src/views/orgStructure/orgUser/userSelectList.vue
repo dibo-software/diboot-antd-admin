@@ -80,6 +80,7 @@
       :loading="loadingData"
       @change="handleTableChange"
       rowKey="id"
+      :scroll="{ y: '50vh' }"
     >
       <span slot="action" slot-scope="text, record">
         <a-button type="link" @click="$emit('select', record)">选择</a-button>
