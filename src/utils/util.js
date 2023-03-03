@@ -93,3 +93,21 @@ export function scorePassword (pass) {
 
   return parseInt(score)
 }
+
+/**
+ * 获取表格的body高度
+ * @param {*} extraHeight 额外的高度(分页组件等，不传默认 42)
+ */
+export function getTableScroll (extraHeight = 42) {
+  // 版权信息所占高度
+  const copyrightHeight = 74
+  let tHeader = null
+  tHeader = document.getElementsByClassName('ant-table-thead')[0]
+  // 表格内容距离顶部的距离
+  let tBodyToTop = 0
+  if (tHeader) {
+    tBodyToTop = tHeader.getBoundingClientRect().bottom
+  }
+  // 窗体高度-表格内容顶部的高度-额外的高度-版权信息高度
+  return `calc(100vh - ${tBodyToTop + extraHeight + copyrightHeight}px)`
+}
