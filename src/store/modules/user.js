@@ -78,7 +78,7 @@ const user = {
 
           commit('SET_NAME', { name: result.name, welcome: welcome() })
           const isExternal = /^(https?:|mailto:|tel:|\/\/)/.test(result.info.avatarUrl)
-          commit('SET_AVATAR', isExternal ? result.info.avatarUrl : baseURL + result.info.avatarUrl)
+          commit('SET_AVATAR', isExternal ? result.info.avatarUrl : result.info.avatarUrl ? baseURL + result.info.avatarUrl : null)
 
           resolve(response)
         }).catch(error => {
