@@ -97,6 +97,30 @@
           </a-form-item>
         </a-col>
       </a-row>
+      <a-row>
+        <a-col :span="12">
+          <a-form-item label="账号状态" v-if="systemUser">
+            <a-select
+              :getPopupContainer="getPopupContainer"
+              placeholder="请选择"
+              v-decorator="[
+                'accountStatus',
+                {
+                  initialValue: model.accountStatus? model.accountStatus : 'A',
+                }
+              ]"
+            >
+              <a-select-option
+                v-for="(status, index) in more.accountStatusOptions"
+                :key="index"
+                :value="status.value"
+              >
+                {{ status.label }}
+              </a-select-option>
+            </a-select>
+          </a-form-item>
+        </a-col>
+      </a-row>
       <a-row :gutter="16">
         <a-col :span="12">
           <a-form-item label="姓名">
@@ -247,6 +271,9 @@ export default {
       attachMoreList: [
         {
           target: 'USER_STATUS'
+        },
+        {
+          target: 'ACCOUNT_STATUS'
         },
         {
           target: 'GENDER'

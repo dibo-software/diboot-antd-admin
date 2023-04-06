@@ -97,6 +97,14 @@
           <a-badge dot>{{ text }}</a-badge>
         </a-tooltip>
       </span>
+      <span slot="accountStatusLabel" slot-scope="text, record">
+        <a-tag color="green" v-if="record.accountStatus === 'A'">
+          {{ text }}
+        </a-tag>
+        <a-tag color="red" v-else>
+          {{ text }}
+        </a-tag>
+      </span>
       <span slot="action" slot-scope="text, record">
         <a v-action:detail @click="$refs.userDetail.open(record.id)">详情</a>
         <a-divider v-action:detail v-permission="['position', 'update', 'delete']" type="vertical" />
@@ -177,6 +185,11 @@ export default {
         {
           title: '邮箱',
           dataIndex: 'email'
+        },
+        {
+          title: '帐号状态',
+          dataIndex: 'accountStatusLabel',
+          scopedSlots: { customRender: 'accountStatusLabel' }
         },
         {
           title: '操作',

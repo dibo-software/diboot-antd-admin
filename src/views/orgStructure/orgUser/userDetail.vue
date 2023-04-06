@@ -36,6 +36,7 @@
         <a-descriptions-item label="电话">{{ model.mobilePhone || '-' }}</a-descriptions-item>
         <a-descriptions-item label="邮箱">{{ model.email || '-' }}</a-descriptions-item>
         <a-descriptions-item label="状态">{{ model.statusLabel || '-' }}</a-descriptions-item>
+        <a-descriptions-item label="账号状态">{{ model.accountStatusLabel || '-' }}</a-descriptions-item>
       </a-descriptions>
     </a-spin>
 
