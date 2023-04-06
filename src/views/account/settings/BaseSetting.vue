@@ -65,20 +65,19 @@
 
       </a-col>
       <a-col :md="24" :lg="8" :style="{ minHeight: '180px' }">
-        <div class="ant-upload-preview" @click="$refs.modal.edit(1)" style="display: none">
-          <a-icon type="cloud-upload-o" class="upload-icon"/>
+        <input ref="avatarFile" type="file" hidden accept=".jpg,.png" @change="selectFile" />
+        <div class="ant-upload-preview" @click="$refs.avatarFile.click()" >
           <div class="mask">
             <a-icon type="plus" />
           </div>
-          <img :src="option.img"/>
+          <img :src="avatar"/>
         </div>
       </a-col>
 
     </a-row>
 
-    <avatar-modal ref="modal">
+    <avatar-modal ref="modal" @cancel="$refs.avatarFile.value =''" />
 
-    </avatar-modal>
   </div>
 </template>
 
@@ -86,6 +85,7 @@
 import AvatarModal from './AvatarModal'
 import form from '@/components/diboot/mixins/form'
 import { dibootApi } from '@/utils/request'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'BaseSetting',
@@ -121,6 +121,9 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters(['avatar'])
+  },
   methods: {
     async getCurrentUserInfo () {
       const res = await dibootApi.get('/iam/user/getCurrentUserInfo')
@@ -153,6 +156,21 @@ export default {
         description: result.msg
       })
       this.$store.commit('SET_NAME', { name: this.form.getFieldValue('realname'), welcome: '' })
+    },
+    selectFile (event) {
+      const filepath = event.target.value
+      const file = event.target.files[0]
+      const fileTypes = ['.jpg', '.png']
+      const fileEnd = filepath.substring(filepath.lastIndexOf('.'))
+      if (fileTypes.indexOf(fileEnd) > -1) {
+        const reader = new FileReader()
+        reader.readAsDataURL(file)
+        reader.onload = e => {
+          this.$refs.modal.edit(file.name, e.target.result)
+        }
+      } else {
+        this.$message.error('请上传图片文件！')
+      }
     }
   },
   mixins: [ form ],
@@ -165,57 +183,57 @@ export default {
 
 <style lang="less" scoped>
 
-  .avatar-upload-wrapper {
-    height: 200px;
-    width: 100%;
+.avatar-upload-wrapper {
+  height: 200px;
+  width: 100%;
+}
+
+.ant-upload-preview {
+  position: relative;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 180px;
+  border-radius: 50%;
+  box-shadow: 0 0 4px #ccc;
+
+  .upload-icon {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    font-size: 1.4rem;
+    padding: 0.5rem;
+    background: rgba(222, 221, 221, 0.7);
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+  }
+  .mask {
+    opacity: 0;
+    position: absolute;
+    background: rgba(0,0,0,0.4);
+    cursor: pointer;
+    transition: opacity 0.4s;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    i {
+      font-size: 2rem;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-left: -1rem;
+      margin-top: -1rem;
+      color: #d6d6d6;
+    }
   }
 
-  .ant-upload-preview {
-    position: relative;
-    margin: 0 auto;
+  img, .mask {
     width: 100%;
     max-width: 180px;
+    height: 100%;
     border-radius: 50%;
-    box-shadow: 0 0 4px #ccc;
-
-    .upload-icon {
-      position: absolute;
-      top: 0;
-      right: 10px;
-      font-size: 1.4rem;
-      padding: 0.5rem;
-      background: rgba(222, 221, 221, 0.7);
-      border-radius: 50%;
-      border: 1px solid rgba(0, 0, 0, 0.2);
-    }
-    .mask {
-      opacity: 0;
-      position: absolute;
-      background: rgba(0,0,0,0.4);
-      cursor: pointer;
-      transition: opacity 0.4s;
-
-      &:hover {
-        opacity: 1;
-      }
-
-      i {
-        font-size: 2rem;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        margin-left: -1rem;
-        margin-top: -1rem;
-        color: #d6d6d6;
-      }
-    }
-
-    img, .mask {
-      width: 100%;
-      max-width: 180px;
-      height: 100%;
-      border-radius: 50%;
-      overflow: hidden;
-    }
+    overflow: hidden;
   }
+}
 </style>
