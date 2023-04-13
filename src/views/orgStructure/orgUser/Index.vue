@@ -1,12 +1,12 @@
 <template>
   <div class="OrgUserIndex">
     <a-row :gutter="16">
-      <a-col :span="8">
+      <a-col :span="6">
         <a-card :bordered="false">
           <org-tree @changeCurrentNode="node => currentNodeId = `${node.value ? node.value : '0'}`" ref="orgTree"></org-tree>
         </a-card>
       </a-col>
-      <a-col :span="16">
+      <a-col :span="18">
         <a-card :bordered="false">
           <a-tabs defaultActiveKey="1">
             <a-tab-pane :tab="tabTitle" key="1">
