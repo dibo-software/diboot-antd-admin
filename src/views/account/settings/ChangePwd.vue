@@ -26,6 +26,7 @@
                 }
               ]"
             />
+            <password-strength ref="passwordStrength" :password="form.getFieldValue('password')" @confirm="onSubmit" />
           </a-form-item>
           <a-form-item label="确认密码">
             <a-input
@@ -41,7 +42,7 @@
             />
           </a-form-item>
           <a-form-item>
-            <a-button @click="onSubmit" type="primary">更改密码</a-button>
+            <a-button @click="$refs.passwordStrength.checkPasswordStrength()" type="primary">更改密码</a-button>
           </a-form-item>
         </a-form>
       </a-col>
@@ -52,8 +53,13 @@
 <script>
 import form from '@/components/diboot/mixins/form'
 import { dibootApi } from '@/utils/request'
+import passwordStrength from '@/components/diboot/components/passwordStrength'
+
 export default {
   name: 'ChangePwdSettings',
+  components: {
+    passwordStrength
+  },
   data () {
     return {
       baseApi: '/iam/user',

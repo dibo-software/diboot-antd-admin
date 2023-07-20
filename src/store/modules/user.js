@@ -14,7 +14,8 @@ const user = {
     welcome: '',
     avatar: '',
     roles: [],
-    info: {}
+    info: {},
+    allowWeakPassword: true
   },
 
   mutations: {
@@ -37,6 +38,9 @@ const user = {
     },
     SET_INFO: (state, info) => {
       state.info = info
+    },
+    SET_ALLOW_WEAK_PASSWORD: (state, allowWeakPassword) => {
+      state.allowWeakPassword = allowWeakPassword
     }
   },
 

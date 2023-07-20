@@ -199,13 +199,14 @@
                 }
               ]"
             />
+            <password-strength ref="passwordStrength" v-if="setPassword" :password="form.getFieldValue('password')" @confirm="onSubmit" />
           </a-form-item>
         </a-col>
       </a-row>
     </a-form>
     <div class="drawer-footer">
       <a-button @click="close">取消</a-button>
-      <a-button @click="onSubmit" type="primary" :loading="state.confirmSubmit" :disabled="state.confirmSubmit">确定</a-button>
+      <a-button @click="$refs.passwordStrength.checkPasswordStrength()" type="primary" :loading="state.confirmSubmit" :disabled="state.confirmSubmit">确定</a-button>
     </div>
   </a-drawer>
 </template>
@@ -215,9 +216,13 @@ import form from '@/components/diboot/mixins/form'
 import { dibootApi } from '@/utils/request'
 import _ from 'lodash'
 import { treeListFormatter } from '@/utils/treeDataUtil'
+import passwordStrength from '@/components/diboot/components/passwordStrength'
 
 export default {
   name: 'IamUserForm',
+  components: {
+    passwordStrength
+  },
   data () {
     return {
       baseApi: '/iam/user',
