@@ -88,6 +88,16 @@ import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
 import { baseURL } from '@/utils/request'
 import { login, isEnableSso } from '@/utils/sso'
+import JSEncrypt from 'jsencrypt'
+
+const encryptor = new JSEncrypt()
+encryptor.setPublicKey(`MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzPy1UcwzgRT8dRUpAW0H
+eyVvIi4icqiwdBZMrh85+tJEZ/AXjELRzl89m2ZKoMHfoMDkajoxJeaL5IV9UpUl
++1RqWvWqgYL0r859FyDeNg9kiMAfApyIowqFqctDx7k77jDopBvcX8F0shl6SUtE
+Vu96tc7+FrjP4OGwXJeB+b04O2SCV4mHxs8TRn7YsLoA10mjPNnsX0TiYkzSGUP/
+E5OEYt/ixNwO/lC6TdFM9PXRaTjF76e5qHw6ksJU74mb3A9/ZQCb4nzVw15xTxIa
+AnDX7+FqnCgpu26yXMLtVXyEa6CUvBjLLBleJ/cyHuUir7GYutf5LyuIEJPEWgnZ
+BwIDAQAB`)
 
 export default {
   data () {
@@ -149,7 +159,7 @@ export default {
 
       validateFields(validateFieldsKey, { force: true }, (err, values) => {
         if (!err) {
-          const loginParams = { ...values, traceId }
+          const loginParams = { ...values, password: encryptor.encrypt(values.password), traceId }
           Login(loginParams)
             .then((res) => {
               if (res.code === 0) {
