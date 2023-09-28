@@ -199,14 +199,15 @@
                 }
               ]"
             />
-            <password-strength ref="passwordStrength" v-if="setPassword" :password="form.getFieldValue('password')" @confirm="onSubmit" />
+            <password-strength ref="passwordStrength" v-if="setPassword" :password="form.getFieldValue('password')" @confirm="onSubmit(isContinueAdd)" />
           </a-form-item>
         </a-col>
       </a-row>
     </a-form>
     <div class="drawer-footer">
       <a-button @click="close">取消</a-button>
-      <a-button @click="$refs.passwordStrength.checkPasswordStrength()" type="primary" :loading="state.confirmSubmit" :disabled="state.confirmSubmit">确定</a-button>
+      <a-button v-if="!model.id" @click="$refs.passwordStrength.checkPasswordStrength(true)" type="primary" :loading="state.confirmSubmit" :disabled="state.confirmSubmit">保存并继续</a-button>
+      <a-button @click="$refs.passwordStrength.checkPasswordStrength(false)" type="primary" :loading="state.confirmSubmit" :disabled="state.confirmSubmit">保存</a-button>
     </div>
   </a-drawer>
 </template>
@@ -302,9 +303,6 @@ export default {
       } else {
         callback(res.msg.split(':')[1])
       }
-    },
-    afterClose () {
-      this.setPassword = false
     }
   },
   computed: {

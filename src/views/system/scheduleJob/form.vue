@@ -169,7 +169,8 @@
     </a-form>
     <div class="drawer-footer">
       <a-button @click="close">取消</a-button>
-      <a-button @click="onSubmit" type="primary" :loading="state.confirmSubmit" :disabled="state.confirmSubmit">确定</a-button>
+      <a-button v-if="!model.id" @click="onSubmit(true)" type="primary" :loading="state.confirmSubmit" :disabled="state.confirmSubmit">保存并继续</a-button>
+      <a-button @click="onSubmit(false)" type="primary" :loading="state.confirmSubmit" :disabled="state.confirmSubmit">保存</a-button>
     </div>
   </a-drawer>
 </template>
